@@ -1,0 +1,36 @@
+body{
+    display:flex;
+    align-items: center;
+    height: 150vw;
+    width: 150vw;
+    justify-content: center;
+}
+
+/*making each square take up a percentage of the board*/
+
+.square{
+    display:flex;
+    width:12.5% ;
+    height: 12.5% ;
+    float:left;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+
+.Chessboard{
+    display:flex;
+    width: 100vw;
+    height: 100vw;
+    margin: 100px;
+    flex-wrap: wrap;
+}
+
+.white{
+    background-color:pink;
+}
+
+.black{
+    background-color: purple;
+}

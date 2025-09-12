@@ -1,17 +1,17 @@
 body{
     display:flex;
     align-items: center;
-    height: 150vw;
-    width: 150vw;
+    height: 95vh;
     justify-content: center;
+    background-color: darkgray;
 }
 
-/*making each square take up a percentage of the board*/
+
 
 .square{
     display:flex;
-    width:12.5% ;
-    height: 12.5% ;
+    width:12.5% ;  /*making each square take up a percentage of the board*/
+    height: 12.5% ;  /*making each square take up a percentage of the board*/
     float:left;
     justify-content: center;
     align-items: center;
@@ -21,16 +21,51 @@ body{
 
 .Chessboard{
     display:flex;
-    width: 100vw;
-    height: 100vw;
-    margin: 100px;
+    width: 850px;
+    height: 800px;
+    margin: 0 auto;
     flex-wrap: wrap;
 }
 
 .white{
-    background-color:pink;
+    background-color:lightblue;
 }
 
 .black{
-    background-color: purple;
+    background-color:darkcyan;
+}
+
+.letter{                   /* making all containing letter class to be the same and position in the right bottom corner*/
+    display:flex;
+    font-weight: bold;
+    position: absolute;    /* use absolute as it uses the square as an ancestor, therefore easy to move about the contents*/
+    bottom: 3%;            /* positioning letters in bottom right corner*/
+    right:3%;              /* positioning letters in bottom right corner*/
+}
+
+.number{
+    display:flex;
+    font-weight: bold;
+    position:absolute;
+    top:5%;
+    left:5%;
+}
+
+
+.light{
+    color: lightblue;
+}
+
+.dark{
+    color:darkcyan;
+}
+
+.piece img{
+    width:100%;
+    height: 100%;
+}
+
+.piece{
+    width:100%;
+    cursor:grab;
 }

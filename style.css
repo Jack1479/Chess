@@ -37,6 +37,7 @@ body{
 
 .letter{                   /* making all containing letter class to be the same and position in the right bottom corner*/
     display:flex;
+    font-size:20px;
     font-weight: bold;
     position: absolute;    /* use absolute as it uses the square as an ancestor, therefore easy to move about the contents*/
     bottom: 3%;            /* positioning letters in bottom right corner*/
@@ -47,6 +48,7 @@ body{
     display:flex;
     font-weight: bold;
     position:absolute;
+    font-size:20px;
     top:5%;
     left:5%;
 }
@@ -61,11 +63,11 @@ body{
 }
 
 .piece img{
-    width:100%;
-    height: 100%;
+    width:95%;
+    height: 95%;
 }
 
 .piece{
-    width:100%;
+    width:95%;
     cursor:grab;
 }

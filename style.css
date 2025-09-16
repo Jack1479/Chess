@@ -1,7 +1,7 @@
 body{
     display:flex;
     align-items: center;
-    height: 95vh;
+    height: 100vh;
     justify-content: center;
     background-color: darkgray;
 }
@@ -21,7 +21,7 @@ body{
 
 .Chessboard{
     display:flex;
-    width: 850px;
+    width: 800px;
     height: 800px;
     margin: 0 auto;
     flex-wrap: wrap;
@@ -70,4 +70,35 @@ body{
 .piece{
     width:95%;
     cursor:grab;
+}
+
+.Tutorial{
+    border:20px;
+    background-color: darkcyan;
+    color: white;
+    font-weight:bold;
+    font-size: large;
+    padding:25px 35px ;
+    text-align:center;
+    margin: 10px;
+    border: 1px;
+    border-radius:15px;
+    text-decoration: none; /* to remove underline of link*/
+}
+
+.explain{
+    background-color: lightgray;
+    display:flex;
+    width: 850px;
+    height: 800px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    border-radius:15px;
+}
+div.iframe{
+    display:flex;
+    width: 850px;
+    height: 800px;
+    margin: 0 auto;
+    flex-wrap: wrap;
 }

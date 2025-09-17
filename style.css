@@ -95,8 +95,8 @@ body{
 .explain{
     background-color:lightgray;
     display:inside;
-    width:800px;
     height: 730px;
+    width: 900px;
     left:37px;
     border-radius:15px;
     position:relative;
@@ -112,5 +112,11 @@ body{
  .heading{
     font-weight: bold;
     font-family: 'Franklin Gothic Medium';
-;
  }
+
+
+ .text{
+    font-size: small;
+ }
+
+ 

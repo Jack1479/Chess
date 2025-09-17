@@ -227,8 +227,23 @@
          </div>
         </div>
     <div class = 'frame'>
-     <iframe src="Tutorial.html" height = '750' width = '750' style = 'border:none; text-align: center;' ></iframe>
+     <iframe src="Tutorial.html" id = 'tutorial_page' height = '750' width = '750' style = 'border:none; text-align: center; display:none;' ></iframe>
     </div>
-    <button class = 'tutorial'>Tutorial</button>
+    <button class = 'tutorial' id = 'openbutton'>Tutorial</button>
+
+    <script>
+        const btn = document.getElementById('openbutton');
+        const close = document.getElementById('close_button')
+        const tut = document.getElementById('tutorial_page');
+        btn.addEventListener('click' , () => {
+            tut.style.display = 'block'
+            close.style.display = "inline-block";
+        });
+        
+        close_button.addEventListener('click', () => {
+            tut.style.display = "none";
+            close.style.display = "none";
+        });
+    </script>
     </body>
 </html>

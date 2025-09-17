@@ -119,4 +119,12 @@ body{
     font-size: small;
  }
 
+ .exit{
+    position:absolute;
+    background-color: lightgray;
+    font-size: large;
+    left:62%;
+    top: 10%;
+ }
+
  

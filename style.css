@@ -1,9 +1,14 @@
 body{
     display:flex;
     align-items: center;
-    height: 100vh;
+    height: 50%;
+    width:90%;
+    padding:none;
+    margin:none;
     justify-content: center;
-    background-color: darkgray;
+    background-color:darkgray;
+    overflow-y:hidden;
+    overflow-x:hidden;
 }
 
 
@@ -72,9 +77,9 @@ body{
     cursor:grab;
 }
 
-.Tutorial{
+.tutorial{                       /* for button */
     border:20px;
-    background-color: darkcyan;
+    background-color:darkcyan;
     color: white;
     font-weight:bold;
     font-size: large;
@@ -84,21 +89,28 @@ body{
     border: 1px;
     border-radius:15px;
     text-decoration: none; /* to remove underline of link*/
+    
 }
 
 .explain{
-    background-color: lightgray;
-    display:flex;
-    width: 850px;
-    height: 800px;
-    margin: 0 auto;
-    flex-wrap: wrap;
+    background-color:lightgray;
+    display:inside;
+    width:800px;
+    height: 730px;
+    left:37px;
     border-radius:15px;
+    position:relative;
+    text-align: center;
+
 }
-div.iframe{
-    display:flex;
-    width: 850px;
-    height: 800px;
-    margin: 0 auto;
-    flex-wrap: wrap;
+
+.frame{
+    position:fixed; 
+    bottom:18.5%; 
+    left:25.5%; 
 }
+ .heading{
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium';
+;
+ }

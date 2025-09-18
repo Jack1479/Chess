@@ -11,8 +11,6 @@ body{
     overflow-x:hidden;
 }
 
-
-
 .square{
     display:flex;
     width:12.5% ;  /*making each square take up a percentage of the board*/
@@ -22,7 +20,6 @@ body{
     align-items: center;
     position: relative;
 }
-
 
 .Chessboard{
     display:flex;
@@ -57,7 +54,6 @@ body{
     top:5%;
     left:5%;
 }
-
 
 .light{
     color: lightblue;
@@ -101,7 +97,6 @@ body{
     border-radius:15px;
     position:relative;
     text-align: center;
-
 }
 
 .frame{
@@ -123,8 +118,8 @@ body{
     position:absolute;
     background-color: lightgray;
     font-size: large;
-    left:62%;
-    top: 10%;
+    left:61%;
+    top: 6%;
  }
 
  

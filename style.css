@@ -9,6 +9,7 @@ body{
     background-color:darkgray;
     overflow-y:hidden;
     overflow-x:hidden;
+    box-sizing: border-box;
 }
 
 .square{
@@ -82,10 +83,11 @@ body{
     padding:25px 35px ;
     text-align:center;
     margin: 10px;
-    border: 1px;
     border-radius:15px;
     text-decoration: none; /* to remove underline of link*/
-    
+    position:relative;
+    top:-100%;
+    left:-20%;
 }
 
 .explain{
@@ -122,4 +124,18 @@ body{
     top: 6%;
  }
 
- 
+ .timerbtn{
+    border:20px;
+    background-color:darkcyan;
+    color: white;
+    font-weight:bold;
+    font-size: large;
+    padding:25px 35px ;
+    text-align:center;
+    margin: 10px;
+    border-radius:15px;
+    text-decoration: none; /* to remove underline of link*/
+    position:relative;
+    top:-90%;
+    left:-45%;
+ }

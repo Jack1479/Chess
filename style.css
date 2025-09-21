@@ -1,8 +1,7 @@
 body{
     display:flex;
     align-items: center;
-    height: 50%;
-    width:90%;
+    height: 100vh;
     padding:none;
     margin:none;
     justify-content: center;
@@ -10,6 +9,7 @@ body{
     overflow-y:hidden;
     overflow-x:hidden;
     box-sizing: border-box;
+    border-radius: 15px;
 }
 
 .square{
@@ -24,10 +24,12 @@ body{
 
 .Chessboard{
     display:flex;
-    width: 800px;
-    height: 800px;
+    width: 80vw;
+    height: 80vw;
     margin: 0 auto;
     flex-wrap: wrap;
+    display:flex;
+    
 }
 
 .white{
@@ -92,10 +94,9 @@ body{
 
 .explain{
     background-color:lightgray;
-    display:inside;
-    height: 730px;
-    width: 900px;
-    left:37px;
+    display:relative;
+    height: 700px;
+    width: 700px;
     border-radius:15px;
     position:relative;
     text-align: center;
@@ -103,9 +104,10 @@ body{
 
 .frame{
     position:fixed; 
-    bottom:18.5%; 
-    left:25.5%; 
+    left:30.5%;
+    top:10%;
 }
+    
  .heading{
     font-weight: bold;
     font-family: 'Franklin Gothic Medium';
@@ -120,8 +122,8 @@ body{
     position:absolute;
     background-color: lightgray;
     font-size: large;
-    left:61%;
-    top: 6%;
+    left:65%;
+    top: 18%;
  }
 
  .timerbtn{
@@ -138,4 +140,11 @@ body{
     position:relative;
     top:-90%;
     left:-45%;
+ }
+
+ @media (min-width:800px) {
+    .Chessboard{
+        width:800px;
+        height:800px;
+    }
  }

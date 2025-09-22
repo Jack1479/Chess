@@ -1,5 +1,7 @@
 const pieceimg = document.getElementsByTagName('img')
 const allsqures = document.getElementsByClassName('square')
+const rows = document.getElementById('row')
+const columns = document.getElementById('column')
 
 function setup(){
     for(let i=0;1<allsqures.length;i++ ){
@@ -11,3 +13,6 @@ function setup(){
 
 setup()
 
+function coordinate(){
+    
+}

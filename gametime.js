@@ -9,10 +9,12 @@ function setup(){
     pieceimg[i].addEventListener('place' , allowplace)
     allsqures[i].addEventListener('click' , allowclick)
     allsqures[i].addEventListener('place' , allowplace)
+    let row=8-math.floor(i/8)       /*adding row coordinates 1-8*/
+    let column=String.fromCharCode(97+(i%8));     /*adding column coordinates a-h*/
+    let square=allsquares[i];
+    square.id=column+row;
 }}
 
-setup()
+setup();
 
-function coordinate(){
-    
-}
+

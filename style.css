@@ -148,3 +148,6 @@ body{
         height:800px;
     }
  }
+ .piece.highlight{
+    outline: 2px red;
+ }

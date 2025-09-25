@@ -8,49 +8,41 @@ let selected = null;
 
 
 function setup(){
-    for(let i=0;1<allsqures.length;i++ ){
-    allsquares[i].addEventListener('click' , allowplace)
-    let row=8-math.floor(i/8)       /*adding row coordinates 1-8*/
+    for(let i=0;1<allsquares.length;i++ ){
+        allsquares[i].addEventListener('click' , allowplace)
+    }
+    let row=8-math.floor(i/8);       /*adding row coordinates 1-8*/
     let column=String.fromCharCode(97+(i%8));     /*adding column coordinates a-h*/
     let square=allsquares[i];
     square.id=column+row;
-}}
+}
 
 setup();
 
 function setuppieces(){
-    for(let i=0;1<pieces.length;i++ ){
-    pieces[i].addEventListener('click' , allowclick)
-    pieces[i].setAttribute('moveable', true)
-    pieces[i].id=pieces[i].classname.split(' ')[1];  /* giving each piece it name through taking the second part of its class name e.g.brook. for black rook*/
-}
     for(let i=0;1<pieceimg.length;i++ ){
-        pieceimg.setAttribute('moveable', false)  /*making sure the pieces themselves are moving and not just the images*/
-    }}
-
+    pieceimg[i].addEventListener('click', allowclick);
+    pieceimg[i].setAttribute('moveable', true);
+    pieceimg[i].id=pieceimg[i].classname.split(' ')[1];  /* giving each piece it name through taking the second part of its class name e.g.brook. for black rook*/
+}}
+    
 setuppieces();
 
 function allowtake(ev){    /* this function lets a piece be dropped on another piece, as by default it wont let you*/
-    ev.preventdefault()
+    ev.preventdefault();
 }
 
+allowtake()
 
 
-
-
-function click(event){
-    selected = event.currenttarget;
-    selected.classlist.add('highlight');
+function allowclick(){
+    
 }
 
 click()
 
-function place(){
-    if (selected){
-        square.appendchild(selected);
-        selected.classlist.remove('highlight');
-        selected = null;
+function allowplace(){
+    
     } 
-}
 
 place()

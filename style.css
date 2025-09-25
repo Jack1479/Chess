@@ -148,6 +148,10 @@ body{
         height:800px;
     }
  }
- .piece.highlight{
-    outline: 2px red;
+ 
+.piece.highlight{
+  outline: 5px solid gold;
+  outline-offset: 2px;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+  border-radius: 4px;
  }

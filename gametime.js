@@ -1,21 +1,22 @@
 const pieceimg = document.getElementsByTagName('img')
-const allsqures = document.getElementsByClassName('square')
+const allsquares = document.getElementsByClassName('square')
 const pieces = document.getElementsByClassName('piece')
 const rows = document.getElementById('row')
 const columns = document.getElementById('column')
+let selected = null;
 
-setup();
-setuppieces();
+
 
 function setup(){
     for(let i=0;1<allsqures.length;i++ ){
-    allsqures[i].addEventListener('place' , allowplace)
+    allsquares[i].addEventListener('click' , allowplace)
     let row=8-math.floor(i/8)       /*adding row coordinates 1-8*/
     let column=String.fromCharCode(97+(i%8));     /*adding column coordinates a-h*/
     let square=allsquares[i];
     square.id=column+row;
 }}
 
+setup();
 
 function setuppieces(){
     for(let i=0;1<pieces.length;i++ ){
@@ -27,10 +28,29 @@ function setuppieces(){
         pieceimg.setAttribute('moveable', false)  /*making sure the pieces themselves are moving and not just the images*/
     }}
 
+setuppieces();
+
 function allowtake(ev){    /* this function lets a piece be dropped on another piece, as by default it wont let you*/
     ev.preventdefault()
 }
 
-function click(ev){
-    let selected = null;
+
+
+
+
+function click(event){
+    selected = event.currenttarget;
+    selected.classlist.add('highlight');
 }
+
+click()
+
+function place(){
+    if (selected){
+        square.appendchild(selected);
+        selected.classlist.remove('highlight');
+        selected = null;
+    } 
+}
+
+place()

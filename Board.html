@@ -278,7 +278,7 @@
 
 
     function allowclick(e){
-        e.stopPropagation(); 
+        e.stopPropagation();   /* prevents the allowclick and allowplace functions to run at the same time as they are both activated with a click*/
         const piece = e.currentTarget;   /* sets variable piece to be the current target to be moved */
         if(selected === piece){   /* if you click the piece twice then it unselects it */
             unhighlight();        /* function to unselect */

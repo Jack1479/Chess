@@ -254,6 +254,7 @@
 
     let selected = null;
     let from = null;
+    
 
 
     function setup(){
@@ -270,8 +271,9 @@
 
     function setuppieces(){
         for(let i=0;i<pieces.length;i++ ){      /* loops through all pieces on the board and adds an event listener to each one*/
-        pieces[i].addEventListener('click', allowclick);     /* loops through all pieces on the board and adds an event listener to each one*/
+        pieces[i].addEventListener('click', allowclick);     /* loops through all pieces on the board and adds an event listener to each one. when clicked will trigger allowclick function*/
         pieces[i].id=pieces[i].className.split(' ')[1];  /* giving each piece it name through taking the second part of its class name e.g.brook. for black rook*/
+        const pieceid = pieces[i].id;
     }}
     
     setuppieces();
@@ -292,7 +294,7 @@
         highlight();        /* function to highlight selected piece */
     }
 
-    function allowplace(e){
+    function allowplace(e, piececolour){
         const square = e.currentTarget;   /* sets the square you will place on to be the target */
         if (!selected) return;         /* makes sure a piece is selected */
         const targetpiece = square.querySelector('.piece');  /* makes the constant targetpiece  whatever is current on that square e.g. if empty targetpiece = null*/
@@ -312,6 +314,9 @@
     function highlight(){
         if (selected) selected.classList.add('highlight')       /* function to add highlight when function is called */
     }
+
+
+
     </script>
     </body>
 </html>

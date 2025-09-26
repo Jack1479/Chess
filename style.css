@@ -73,7 +73,7 @@ body{
 
 .piece{
     width:95%;
-    cursor:grab;
+    cursor:pointer;
 }
 
 .tutorial{                       /* for button */
@@ -150,8 +150,9 @@ body{
  }
  
 .piece.highlight{
-  outline: 5px solid gold;
-  outline-offset: 2px;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
-  border-radius: 4px;
+  background-color: red;
+  border-radius:20px;
  }
+
+
+

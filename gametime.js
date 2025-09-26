@@ -22,7 +22,7 @@ let from = null;
 
 
 
-function setup() {
+function setupboard() {
     for (let i = 0; i < allsquares.length; i++) {    /* loops through all squares on the board and adds an event listener to each one*/
         allsquares[i].addEventListener('click', allowplace); /* loops through all squares on the board and adds an event listener to each one*/
         let row = 8 - Math.floor(i / 8);       /*adding row coordinates 1-8*/
@@ -32,7 +32,7 @@ function setup() {
     }
 }
 
-setup();
+setupboard();
 
 function setuppieces() {
     for (let i = 0; i < pieces.length; i++) {      /* loops through all pieces on the board and adds an event listener to each one*/

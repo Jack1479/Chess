@@ -19,7 +19,7 @@ const columns = document.getElementById('column')
 
 let selected = null;
 let from = null;
-
+let whiteturn = true;
 
 
 function setupboard() {
@@ -38,7 +38,6 @@ function setuppieces() {
     for (let i = 0; i < pieces.length; i++) {      /* loops through all pieces on the board and adds an event listener to each one*/
         pieces[i].addEventListener('click', allowclick);     /* loops through all pieces on the board and adds an event listener to each one. when clicked will trigger allowclick function*/
         pieces[i].id = pieces[i].className.split(' ')[1];  /* giving each piece it name through taking the second part of its class name e.g.brook. for black rook*/
-        const pieceid = pieces[i].id;
     }
 }
 
@@ -46,31 +45,37 @@ setuppieces();
 
 
 function allowclick(e) {
-    e.stopPropagation();   /* prevents the allowclick and allowplace functions to run at the same time as they are both activated with a click*/
     const piece = e.currentTarget;   /* sets variable piece to be the current target to be moved */
-    if (selected === piece) {   /* if you click the piece twice then it unselects it */
-        unhighlight();        /* function to unselect */
-        selected = null;      /* reset to nothing selected */
-        from = null;          /* reset to nothing selected */
-        return;
+    const piececolour = piece.getAttribute('colour')
+    if ((whiteturn && piececolour == 'white')||(!whiteturn && piececolour == 'black')){
+        e.stopPropagation();
+        if (selected === piece) {   /* if you click the piece twice then it unselects it */
+            unhighlight();        /* function to unselect */
+            selected = null;      /* reset to nothing selected */
+            from = null;          /* reset to nothing selected */
+            return;
+        }
+        unhighlight();
+        selected = piece;
+        from = piece.parentElement;   /* this variable holds the position that piece came from which will be useful for validation */
+        highlight();        /* function to highlight selected piece */
     }
-    unhighlight();
-    selected = piece;
-    from = piece.parentElement;   /* this variable holds the position that piece came from which will be useful for validation */
-    highlight();        /* function to highlight selected piece */
 }
 
-function allowplace(e, piececolour) {
+function allowplace(e) {
     const square = e.currentTarget;   /* sets the square you will place on to be the target */
     if (!selected) return;         /* makes sure a piece is selected */
+    if(from === square) return;     /*so you cant capture yourself*/
     const targetpiece = square.querySelector('.piece');  /* makes the constant targetpiece  whatever is current on that square e.g. if empty targetpiece = null*/
-    if (targetpiece && targetpiece !== selected) {         /* makes sure you cant put the piece you are moving ontop of itsself */
+    targetcolour = targetpiece.getAttribute('colour');
+    if (targetpiece && targetpiece !== selected && (targetcolour =! null)) {         /* makes sure you cant put the piece you are moving ontop of itsself */
         targetpiece.remove();                           /* removes the current piece on that square */
     }
     square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
     unhighlight();                  /* unhighlights once piece is moved */
     selected = null     /* resets once piece is moved */
     from = null          /* resets once piece is moved */
+    whiteturn =! whiteturn;
 }
 
 function unhighlight() {
@@ -80,3 +85,6 @@ function unhighlight() {
 function highlight() {
     if (selected) selected.classList.add('highlight')       /* function to add highlight when function is called */
 }
+
+
+

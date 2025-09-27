@@ -44,9 +44,9 @@ body{
     display:flex;
     font-size:20px;
     font-weight: bold;
-    position: absolute;    /* use absolute as it uses the square as an ancestor, therefore easy to move about the contents*/
-    bottom: 3%;            /* positioning letters in bottom right corner*/
-    right:3%;              /* positioning letters in bottom right corner*/
+    position:absolute;    /* use absolute as it uses the square as an ancestor, therefore easy to move about the contents*/
+    bottom:5%;            /* positioning letters in bottom right corner*/
+    right:5%;              /* positioning letters in bottom right corner*/
 }
 
 .number{
@@ -149,10 +149,53 @@ body{
     }
  }
  
-.piece.highlight{
-  background-color: red;
-  border-radius:20px;
- }
+.highlight{
+    box-shadow: 0 0 12px 6px rgba(255, 0, 0);
+    border-radius: 4px;
+    animation: pulse 1s infinite alternate;
+}
+@keyframes pulse{
+    from {
+    box-shadow: 0 0 5px 2px rgba(255,0, 0);
+  }
+  to {
+    box-shadow: 0 0 15px 6px rgba(255, 0, 0);
+  }
+}
 
 
+.Chessboard.flip{
+    transform:rotate(180deg);
+    .timerbtn{
+        display: none;
+    }
+    .tutorial{
+        display: none;
+    }
+    .piece img{
+        transform:rotate(180deg);
+    }
+    .number{
+        transform:rotate(180deg);
+        right:-697px;
+        z-index: 3;
+        top: 75px;
+    }
+    .light{
+        color:darkcyan;
+        }
+    .dark{
+        color:lightblue;
+        }
+    .letter{
+        transform:rotate(180deg);
+        right:85%;
+        bottom:775%;
+    }
+    
+}
+
+
+
+    
 

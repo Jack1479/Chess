@@ -16,6 +16,7 @@ const allsquares = document.getElementsByClassName('square')
 const pieces = document.getElementsByClassName('piece')
 const rows = document.getElementById('row')
 const columns = document.getElementById('column')
+const board = document.querySelector('.Chessboard')
 
 let selected = null;
 let from = null;
@@ -48,7 +49,7 @@ function allowclick(e) {
     const piece = e.currentTarget;   /* sets variable piece to be the current target to be moved */
     const piececolour = piece.getAttribute('colour')
     if ((whiteturn && piececolour == 'white')||(!whiteturn && piececolour == 'black')){
-        e.stopPropagation();
+        e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/ 
         if (selected === piece) {   /* if you click the piece twice then it unselects it */
             unhighlight();        /* function to unselect */
             selected = null;      /* reset to nothing selected */
@@ -74,8 +75,10 @@ function allowplace(e) {
     unhighlight();                  /* unhighlights once piece is moved */
     selected = null     /* resets once piece is moved */
     from = null          /* resets once piece is moved */
-    whiteturn =! whiteturn;
+    whiteturn =! whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
+    rotate();
 }
+
 
 function unhighlight() {
     if (selected) selected.classList.remove('highlight')         /* function to remove highlight when function is called */
@@ -85,5 +88,8 @@ function highlight() {
     if (selected) selected.classList.add('highlight')       /* function to add highlight when function is called */
 }
 
+function rotate(){
+    board.classList.toggle('flip')  /*toggles the flip css package  which rotates the board 180 degrees*/
+}
 
 

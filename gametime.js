@@ -67,8 +67,7 @@ function allowplace(e) {
     if (!selected) return;         /* makes sure a piece is selected */
     if(from === square) return;     /*so you cant capture yourself*/
     const targetpiece = square.querySelector('.piece');  /* makes the constant targetpiece  whatever is current on that square e.g. if empty targetpiece = null*/
-    targetcolour = targetpiece.getAttribute('colour');
-    if (targetpiece && targetpiece !== selected && (targetcolour =! null)) {         /* makes sure you cant put the piece you are moving ontop of itsself */
+    if (targetpiece && targetpiece !== selected ) {         /* makes sure you cant put the piece you are moving ontop of itsself */
         targetpiece.remove();                           /* removes the current piece on that square */
     }
     square.appendChild(selected);     /* appends your clicked piece onto the clicked square */

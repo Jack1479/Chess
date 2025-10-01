@@ -19,7 +19,6 @@ const columns = document.getElementById('column')
 const board = document.querySelector('.Chessboard')
 
 let selected = null;
-let from = null;
 let whiteturn = true;
 
 
@@ -38,7 +37,6 @@ setupboard();
 function setuppieces() {
     for (let i = 0; i < pieces.length; i++) {      /* loops through all pieces on the board and adds an event listener to each one*/
         pieces[i].addEventListener('click', allowclick);     /* loops through all pieces on the board and adds an event listener to each one. when clicked will trigger allowclick function*/
-        pieces[i].id = pieces[i].className.split(' ')[1];  /* giving each piece it name through taking the second part of its class name e.g.brook. for black rook*/
     }
 }
 
@@ -47,19 +45,17 @@ setuppieces();
 
 function allowclick(e) {
     const piece = e.currentTarget;   /* sets variable piece to be the current target to be moved */
-    const startingsquareid = piece.parentNode.id;
     const piececolour = piece.getAttribute('colour')
     if ((whiteturn && piececolour == 'white')||(!whiteturn && piececolour == 'black')){
         e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/ 
         if (selected === piece) {   /* if you click the piece twice then it unselects it */
             unhighlight();        /* function to unselect */
             selected = null;      /* reset to nothing selected */
-            from = null;          /* reset to nothing selected */
             return;
         }
         unhighlight();
         selected = piece;
-        from = piece.parentElement;   /* this variable holds the position that piece came from which will be useful for validation */
+        const startingsquareid = piece.parentNode.id;
         highlight();        /* function to highlight selected piece */
     }
 }
@@ -67,18 +63,18 @@ function allowclick(e) {
 function allowplace(e, startingsquareid, piece) {
     const square = e.currentTarget;   /* sets the square you will place on to be the target */
     if (!selected) return;         /* makes sure a piece is selected */
-    if(from === square) return;     /*so you cant capture yourself*/
+    if(startingsquareid === square) return;     /*so you cant capture yourself*/
     const targetpiece = square.querySelector('.piece');  /* makes the constant targetpiece  whatever is current on that square e.g. if empty targetpiece = null*/
     if (targetpiece && targetpiece !== selected ) {         /* makes sure you cant put the piece you are moving ontop of itsself */
         targetpiece.remove();                           /* removes the current piece on that square */
     }
     getpossiblemoves(startingsquareid, piece);
-    square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
-    unhighlight();                  /* unhighlights once piece is moved */
-    selected = null     /* resets once piece is moved */
-    from = null          /* resets once piece is moved */
-    whiteturn =! whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
-    rotate();
+    if (square.id in legalmoves);
+        square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
+        unhighlight();                  /* unhighlights once piece is moved */
+        selected = null     /* resets once piece is moved */
+        whiteturn =! whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
+        rotate();
 }
 
 
@@ -95,33 +91,10 @@ function rotate(){
 }
 
 
-function getpossiblemoves(piece){
+function getpossiblemoves(piece, startingsquareid){
     if (piece.classList.contains('pawn')){
         pawnmoves(piececolour, startingsquareid);
-    }
-        
-
-    if (piece.classList.contains('rook')){
-        /* runs rook function */
-    }
-        
-
-    if (piece.classList.contains('knight')){
-        /* runs knight function */
-    }
-
-    if (piece.classList.contains('bishop')){
-        /* runs bishop function */
-    }
-
-    if (piece.classList.contains('queen')){
-        /* runs queen function */
-    }
-
-    if (piece.classList.contains('king')){
-        /* runs king function */
-    }
-        
+    }  
 
 }
 
@@ -134,11 +107,12 @@ function onsquare(square){
     }
 }
   
-function checkdiagonal(startingsquareid, piececolour){
+function checkdiagonal(piececolour, startingsquareid){
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
-    const rank = parseInt(startingsquareid);    /*gets the rank of the current square the piece is on */
+    const rank = startingsquareid.charAt(1);
+    const ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */
     let currentfile = file;
-    let currentrank = rank;
+    let currentrank = ranknumber;
     let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
     let currentsquare = document.getElementById(currentsquareid)
     let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
@@ -149,7 +123,8 @@ function checkdiagonal(startingsquareid, piececolour){
         currentfile-=1;
         currentfile = String.fromCharCode(currentfile);
         checksquareid = currentfile + currentrank;
-        squarecontains = onsquare(checksquareid);
+        currentsquare = document.getElementById(checksquareid);
+        squarecontains = onsquare(currentsquare);
         if ((squarecontains !== 'empty') && (piececolour !== 'white')){
             legalmoves.push(checksquareid);
         }else{
@@ -165,7 +140,8 @@ function checkdiagonal(startingsquareid, piececolour){
         currentfile+=1;
         currentfile = String.fromCharCode(currentfile);
         checksquareid = currentfile + currentrank;
-        squarecontains = onsquare(checksquareid);
+        currentsquare = document.getElementById(checksquareid);
+        squarecontains = onsquare(currentsquare);
         if ((squarecontains !== 'empty') && (piececolour !== 'white')){
             legalmoves.push(checksquareid);
         }else{
@@ -181,7 +157,8 @@ function checkdiagonal(startingsquareid, piececolour){
             currentfile-=1;
             currentfile = String.fromCharCode(currentfile);
             checksquareid = currentfile + currentrank;
-            squarecontains = onsquare(checksquareid);
+            currentsquare = document.getElementById(checksquareid);
+            squarecontains = onsquare(currentsquare);
             if ((squarecontains !== 'empty') && (piececolour !== 'black')){
                 legalmoves.push(checksquareid);
             }else{
@@ -197,7 +174,8 @@ function checkdiagonal(startingsquareid, piececolour){
             currentfile+=1;
             currentfile = String.fromCharCode(currentfile);
             checksquareid = currentfile + currentrank;
-            squarecontains = onsquare(checksquareid);
+            currentsquare = document.getElementById(checksquareid);
+            squarecontains = onsquare(currentsquare);
             if ((squarecontains !== 'empty') && (piececolour !== 'black')){
                 legalmoves.push(checksquareid);
             }else{
@@ -211,9 +189,10 @@ function pawnmoves(piececolour, startingsquareid){ /* A function which checks th
     let legalmoves = [];
     checkdiagonal(piececolour, startingsquareid);
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
-    const rank = parseInt(startingsquareid);    /*gets the rank of the current square the piece is on */
+    const rank = startingsquareid.chatAt(1);
+    const ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */
     let currentfile = file;
-    let currentrank = rank;
+    let currentrank = ranknumber;
     let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
     let currentsquare = document.getElementById(currentsquareid)
     let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
@@ -238,9 +217,8 @@ function pawnmoves(piececolour, startingsquareid){ /* A function which checks th
         }else{
             legalmoves.push(currentsquareid) /* square infront isnt occupied so can be moves and therefore added to legal moves*/
             }
-        
     }
     }
-
+    return legalmoves;
    
 }

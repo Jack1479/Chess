@@ -2,8 +2,6 @@ body{
     display:flex;
     align-items: center;
     height: 100vh;
-    padding:none;
-    margin:none;
     justify-content: center;
     background-color:darkgray;
     overflow-y:hidden;
@@ -94,7 +92,6 @@ body{
 
 .explain{
     background-color:lightgray;
-    display:relative;
     height: 700px;
     width: 700px;
     border-radius:15px;

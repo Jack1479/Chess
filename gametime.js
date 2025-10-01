@@ -47,6 +47,7 @@ setuppieces();
 
 function allowclick(e) {
     const piece = e.currentTarget;   /* sets variable piece to be the current target to be moved */
+    const startingsquareid = piece.parentNode.id;
     const piececolour = piece.getAttribute('colour')
     if ((whiteturn && piececolour == 'white')||(!whiteturn && piececolour == 'black')){
         e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/ 
@@ -63,7 +64,7 @@ function allowclick(e) {
     }
 }
 
-function allowplace(e) {
+function allowplace(e, startingsquareid, piece) {
     const square = e.currentTarget;   /* sets the square you will place on to be the target */
     if (!selected) return;         /* makes sure a piece is selected */
     if(from === square) return;     /*so you cant capture yourself*/
@@ -71,6 +72,7 @@ function allowplace(e) {
     if (targetpiece && targetpiece !== selected ) {         /* makes sure you cant put the piece you are moving ontop of itsself */
         targetpiece.remove();                           /* removes the current piece on that square */
     }
+    getpossiblemoves(startingsquareid, piece);
     square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
     unhighlight();                  /* unhighlights once piece is moved */
     selected = null     /* resets once piece is moved */
@@ -93,3 +95,91 @@ function rotate(){
 }
 
 
+function getpossiblemoves(piece){
+    if (piece.classList.contains('pawn')){
+        /* runs pawn function */
+    }
+        
+
+    if (piece.classList.contains('rook')){
+        /* runs rook function */
+    }
+        
+
+    if (piece.classList.contains('knight')){
+        /* runs knight function */
+    }
+
+    if (piece.classList.contains('bishop')){
+        /* runs bishop function */
+    }
+
+    if (piece.classList.contains('queen')){
+        /* runs queen function */
+    }
+
+    if (piece.classList.contains('king')){
+        /* runs king function */
+    }
+        
+
+}
+
+function onsquare(square){
+     if (square.querySelector('.piece') == 'null'){ /* checks if anything is on the target square*/
+        return 'empty';         /*if there is nothing there then returns that the square is empty*/
+    } else{
+        pcolour = (square.querySelector('.piece')).getAttribute('colour');    /* if there is something on the square then it gets the colour of it and returns it*/
+        return pcolour;
+    }
+}
+  
+function checkdiagonal(startingsquareid, piececolour){
+    const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
+    const rank = parseInt(startingsquareid);    /*gets the rank of the current square the piece is on */
+    let currentfile = file;
+    let currentrank = rank;
+    let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
+    let currentsquare = document.getElementById(currentsquareid)
+    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
+    let movedirection = piececolour == 'white' ? 1:-1;  /* sets move direction to 1 or -1 depending on if the piececolour is white*/
+    
+
+}
+
+function pawnmoves(piece, startingsquareid, square){ /* A function which checks the square infront of the pawn. If occupied then no legal moves, if not then there is legal move forward 1 place. if on the 2nd or 7th rank then checks the next square.*/
+    let legalmoves = [];
+    const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
+    const rank = parseInt(startingsquareid);    /*gets the rank of the current square the piece is on */
+    let currentfile = file;
+    let currentrank = rank;
+    let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
+    let currentsquare = document.getElementById(currentsquareid)
+    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
+    let movedirection = piececolour == 'white' ? 1:-1;  /* sets move direction to 1 or -1 depending on if the piececolour is white*/
+    currentrank+=movedirection;             /* adds the move direction to get new currentrank*/
+    currentsquareid = currentfile + currentrank;  /* uses new current rank to make the currentsquareid of the square infront*/
+    currentsquare = document.getElementById(currentsquareid);
+    squarecontains = onsquare(currentsquare);
+    if (squarecontains !== 'empty'){  /* if the square infront is occupied then theres no legal moves*/
+        return;
+    }else{
+        legalmoves.push(currentsquareid) /* square infront isnt occupied so can be moves and therefore added to legal moves*/
+        if((currentrank !== 2) && (currentrank !==7)){
+            return;
+        }else{
+        currentrank+=movedirection;             /* adds the move direction to get new currentrank*/
+        currentsquareid = currentfile + currentrank;  /* uses new current rank to make the currentsquareid of the square infront*/
+        currentsquare = document.getElementById(currentsquareid);
+        squarecontains = onsquare(currentsquare);
+        if (squarecontains !== 'empty'){  /* if the square infront is occupied then theres no legal moves*/
+            return;
+        }else{
+            legalmoves.push(currentsquareid) /* square infront isnt occupied so can be moves and therefore added to legal moves*/
+            }
+        
+    }
+    }
+
+   
+}

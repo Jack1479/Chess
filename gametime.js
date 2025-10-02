@@ -105,11 +105,11 @@ function getpossiblemoves(piece, startingsquareid, piececolour){
 }
 
 function onsquare(square){
-     if (square.querySelector('.piece') == null){ /* checks if anything is on the target square*/
-        return 'empty';         /*if there is nothing there then returns that the square is empty*/
-    } else{
-        const pcolour = (square.querySelector('.piece')).getAttribute('colour');    /* if there is something on the square then it gets the colour of it and returns it*/
+    if (square.querySelector('.piece')){               /* checks if anything is on the target square*/
+        const pcolour = (square.querySelector('.piece')).getAttribute('colour');     /* if there is something on the square then it gets the colour of it and returns it*/
         return pcolour;
+    }else{
+        return 'empty';
     }
 }
   
@@ -124,16 +124,16 @@ function checkdiagonal(piececolour, startingsquareid){
     let currentsquare = document.getElementById(currentsquareid)
     let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
     /* checks left diagonal for white*/
-    if ((piececolour == 'white') && (currentrank !== 'a')){
+    if (piececolour == 'white' && currentfile !== 'a'){
         currentrank+=1;
         currentfile = currentfile.charCodeAt(0);
         currentfile-=1;
         currentfile = String.fromCharCode(currentfile);
-        checksquareid = currentfile + currentrank;
-        currentsquare = document.getElementById(checksquareid);
+        currentsquareid = currentfile + currentrank;
+        currentsquare = document.getElementById(currentsquareid);
         squarecontains = onsquare(currentsquare);
         if ((squarecontains !== 'empty') && (piececolour !== 'white')){
-            legalmoves.push(checksquareid);
+            legalmoves.push(currentsquareid);
         }else{
             
         }
@@ -141,16 +141,16 @@ function checkdiagonal(piececolour, startingsquareid){
         
 
     /*checks right diagonal for white*/   
-    if ((piececolour == 'white')&& (currentrank !== 'h')){
+    if ((piececolour == 'white')&& (currentfile !== 'h')){
         currentrank+=1;
         currentfile = currentfile.charCodeAt(0);
         currentfile+=1;
         currentfile = String.fromCharCode(currentfile);
-        checksquareid = currentfile + currentrank;
-        currentsquare = document.getElementById(checksquareid);
+        currentsquareid = currentfile + currentrank;
+        currentsquare = document.getElementById(currentsquareid);
         squarecontains = onsquare(currentsquare);
         if ((squarecontains !== 'empty') && (piececolour !== 'white')){
-            legalmoves.push(checksquareid);
+            legalmoves.push(currentsquareid);
         }else{
             
         }         
@@ -158,16 +158,16 @@ function checkdiagonal(piececolour, startingsquareid){
         
 
         /*checks left diaganal for black */
-    if ((piececolour == 'black') && (currentrank !== 'h')){
-        currentrank+=1;
+    if ((piececolour == 'black') && (currentfile !== 'a')){
+        currentrank-=1;
         currentfile = currentfile.charCodeAt(0);
         currentfile-=1;
         currentfile = String.fromCharCode(currentfile);
-        checksquareid = currentfile + currentrank;
-        currentsquare = document.getElementById(checksquareid);
+        currentsquareid = currentfile + currentrank;
+        currentsquare = document.getElementById(currentsquareid);
         squarecontains = onsquare(currentsquare);
         if ((squarecontains !== 'empty') && (piececolour !== 'black')){
-            legalmoves.push(checksquareid);
+            legalmoves.push(currentsquareid);
         }else{
             
         }
@@ -175,21 +175,21 @@ function checkdiagonal(piececolour, startingsquareid){
    
     
     /*checks right diagonal for black */
-    if ((piececolour == 'black') && (currentrank !== 'a')){
-        currentrank+=1;
+    if ((piececolour == 'black') && (currentfile !== 'h')){
+        currentrank-=1;
         currentfile = currentfile.charCodeAt(0);
         currentfile+=1;
         currentfile = String.fromCharCode(currentfile);
-        checksquareid = currentfile + currentrank;
-        currentsquare = document.getElementById(checksquareid);
+        currentsquareid = currentfile + currentrank;
+        currentsquare = document.getElementById(currentsquareid);
         squarecontains = onsquare(currentsquare);
         if ((squarecontains !== 'empty') && (piececolour !== 'black')){
-            legalmoves.push(checksquareid);
+            legalmoves.push(currentsquareid);
         }else{
             
         }
     }
-    return legalmoves;
+return legalmoves;
 }
 
 function pawnmoves(piececolour, startingsquareid){ /* A function which checks the square infront of the pawn. If occupied then no legal moves, if not then there is legal move forward 1 place. if on the 2nd or 7th rank then checks the next square.*/
@@ -202,29 +202,26 @@ function pawnmoves(piececolour, startingsquareid){ /* A function which checks th
     let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
     let currentsquare = document.getElementById(currentsquareid)
     let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
-    let movedirection = piececolour == 'white' ? 1:-1;  /* sets move direction to 1 or -1 depending on if the piececolour is white*/
+    const movedirection = piececolour == 'white' ? 1:-1;  /* sets move direction to 1 or -1 depending on if the piececolour is white*/
     currentrank+=movedirection;             /* adds the move direction to get new currentrank*/
     currentsquareid = currentfile + currentrank;  /* uses new current rank to make the currentsquareid of the square infront*/
     currentsquare = document.getElementById(currentsquareid);
     squarecontains = onsquare(currentsquare);
     if (squarecontains !== 'empty'){  /* if the square infront is occupied then theres no legal moves*/
-        
     }else{
         legalmoves.push(currentsquareid) /* square infront isnt occupied so can be moves and therefore added to legal moves*/
-        if((currentrank !== 2) && (currentrank !==7)){
-            
+        if((ranknumber !== 2) && (ranknumber !== 7)){
+
         }else{
-        currentrank+=movedirection;             /* adds the move direction to get new currentrank*/
-        currentsquareid = currentfile + currentrank;  /* uses new current rank to make the currentsquareid of the square infront*/
-        currentsquare = document.getElementById(currentsquareid);
-        squarecontains = onsquare(currentsquare);
-        if (squarecontains !== 'empty'){  /* if the square infront is occupied then theres no legal moves*/
-            
-        }else{
-            legalmoves.push(currentsquareid) /* square infront isnt occupied so can be moves and therefore added to legal moves*/
-            }
-    }
+            currentrank+=movedirection;             /* adds the move direction to get new currentrank*/
+            currentsquareid = currentfile + currentrank;  /* uses new current rank to make the currentsquareid of the square infront*/
+            currentsquare = document.getElementById(currentsquareid);
+            squarecontains = onsquare(currentsquare);
+            if (squarecontains !== 'empty'){  /* if the square infront is occupied then theres no legal moves*/
+            }else{
+                legalmoves.push(currentsquareid) /* square infront isnt occupied so can be moves and therefore added to legal moves*/
+        }
     }
     return legalmoves;
-   
+}
 }

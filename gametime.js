@@ -68,7 +68,7 @@ function allowplace(e, startingsquareid, piece) {
     if (targetpiece && targetpiece !== selected ) {         /* makes sure you cant put the piece you are moving ontop of itsself */
         targetpiece.remove();                           /* removes the current piece on that square */
     }
-    getpossiblemoves(startingsquareid, piece);
+    getpossiblemoves(piece, startingsquareid);
     if (square.id in legalmoves);
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
         unhighlight();                  /* unhighlights once piece is moved */
@@ -108,6 +108,7 @@ function onsquare(square){
 }
   
 function checkdiagonal(piececolour, startingsquareid){
+    let legalmoves = [];
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
     const rank = startingsquareid.charAt(1);
     const ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */
@@ -118,7 +119,7 @@ function checkdiagonal(piececolour, startingsquareid){
     let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
     /* checks left diagonal for white*/
     if ((piececolour == 'white') && (currentrank !== 'a')){
-         currentrank+=1;
+        currentrank+=1;
         currentfile = currentfile.charCodeAt(0);
         currentfile-=1;
         currentfile = String.fromCharCode(currentfile);
@@ -183,11 +184,11 @@ function checkdiagonal(piececolour, startingsquareid){
             }
             }
         
+    return legalmoves;
         }
 
 function pawnmoves(piececolour, startingsquareid){ /* A function which checks the square infront of the pawn. If occupied then no legal moves, if not then there is legal move forward 1 place. if on the 2nd or 7th rank then checks the next square.*/
-    let legalmoves = [];
-    checkdiagonal(piececolour, startingsquareid);
+    let legalmoves = checkdiagonal(piececolour, startingsquareid);
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
     const rank = startingsquareid.chatAt(1);
     const ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */

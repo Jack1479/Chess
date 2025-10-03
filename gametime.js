@@ -98,22 +98,21 @@ function rotate(){
 
 function getpossiblemoves(piece, startingsquareid, piececolour){
     if (piece.classList.contains('pawn')){
-        let legalmoves = pawnmoves(piececolour, startingsquareid);
-        return legalmoves;
+        return pawnmoves(piececolour, startingsquareid);
     }
 
 }
 
 function onsquare(square){
-    if (square.querySelector('.piece')){               /* checks if anything is on the target square*/
+    if (square.querySelector('.piece') !== null){               /* checks if anything is on the target square*/
         const pcolour = (square.querySelector('.piece')).getAttribute('colour');     /* if there is something on the square then it gets the colour of it and returns it*/
         return pcolour;
     }else{
         return 'empty';
     }
 }
-  
-function checkdiagonal(piececolour, startingsquareid){
+
+function pawnmoves(piececolour, startingsquareid){ /* A function which checks the square infront of the pawn. If occupied then no legal moves, if not then there is legal move forward 1 place. if on the 2nd or 7th rank then checks the next square.*/
     let legalmoves = [];
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
     const rank = startingsquareid.charAt(1);
@@ -131,11 +130,12 @@ function checkdiagonal(piececolour, startingsquareid){
         currentfile = String.fromCharCode(currentfile);
         currentsquareid = currentfile + currentrank;
         currentsquare = document.getElementById(currentsquareid);
+        /*const capturepiece = currentsquare.querySelector('.piece');*/
         squarecontains = onsquare(currentsquare);
-        if ((squarecontains !== 'empty') && (piececolour !== 'white')){
+        console.log(squarecontains)
+        if (squarecontains =='black'){
             legalmoves.push(currentsquareid);
-        }else{
-            
+        }else{   
         }
     }
         
@@ -149,7 +149,7 @@ function checkdiagonal(piececolour, startingsquareid){
         currentsquareid = currentfile + currentrank;
         currentsquare = document.getElementById(currentsquareid);
         squarecontains = onsquare(currentsquare);
-        if ((squarecontains !== 'empty') && (piececolour !== 'white')){
+        if (squarecontains == 'black'){
             legalmoves.push(currentsquareid);
         }else{
             
@@ -166,7 +166,7 @@ function checkdiagonal(piececolour, startingsquareid){
         currentsquareid = currentfile + currentrank;
         currentsquare = document.getElementById(currentsquareid);
         squarecontains = onsquare(currentsquare);
-        if ((squarecontains !== 'empty') && (piececolour !== 'black')){
+        if (squarecontains == 'white'){
             legalmoves.push(currentsquareid);
         }else{
             
@@ -183,25 +183,21 @@ function checkdiagonal(piececolour, startingsquareid){
         currentsquareid = currentfile + currentrank;
         currentsquare = document.getElementById(currentsquareid);
         squarecontains = onsquare(currentsquare);
-        if ((squarecontains !== 'empty') && (piececolour !== 'black')){
+        if (squarecontains == 'white'){
             legalmoves.push(currentsquareid);
         }else{
             
         }
     }
-return legalmoves;
-}
-
-function pawnmoves(piececolour, startingsquareid){ /* A function which checks the square infront of the pawn. If occupied then no legal moves, if not then there is legal move forward 1 place. if on the 2nd or 7th rank then checks the next square.*/
-    let legalmoves = checkdiagonal(piececolour, startingsquareid);
-    const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
-    const rank = startingsquareid.charAt(1);
-    const ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */
-    let currentfile = file;
-    let currentrank = ranknumber;
-    let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
-    let currentsquare = document.getElementById(currentsquareid)
-    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
+    // console.log(legalmoves)
+    // file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
+    // rank = startingsquareid.charAt(1);
+    // ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */
+    currentfile = file;
+    currentrank = ranknumber;
+    currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
+    currentsquare = document.getElementById(currentsquareid)
+    squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
     const movedirection = piececolour == 'white' ? 1:-1;  /* sets move direction to 1 or -1 depending on if the piececolour is white*/
     currentrank+=movedirection;             /* adds the move direction to get new currentrank*/
     currentsquareid = currentfile + currentrank;  /* uses new current rank to make the currentsquareid of the square infront*/
@@ -222,6 +218,7 @@ function pawnmoves(piececolour, startingsquareid){ /* A function which checks th
                 legalmoves.push(currentsquareid) /* square infront isnt occupied so can be moves and therefore added to legal moves*/
         }
     }
+    
     return legalmoves;
 }
 }

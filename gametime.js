@@ -64,7 +64,7 @@ function allowclick(e) {
     }
 }
 
-function allowplace(e, startingsquareid, piece) {
+function allowplace(e, startingsquareid) {
     const square = e.currentTarget;   /* sets the square you will place on to be the target */
     if (!selected) return;         /* makes sure a piece is selected */
     if(startingsquareid === square) return;     /*so you cant capture yourself*/
@@ -123,35 +123,35 @@ function pawnmoves(piececolour, startingsquareid){ /* A function which checks th
     let currentsquare = document.getElementById(currentsquareid)
     let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
     /* checks left diagonal for white*/
-    if (piececolour == 'white' && currentfile !== 'a'){
-        currentrank+=1;
-        currentfile = currentfile.charCodeAt(0);
-        currentfile-=1;
-        currentfile = String.fromCharCode(currentfile);
-        currentsquareid = currentfile + currentrank;
-        currentsquare = document.getElementById(currentsquareid);
+    if ((piececolour == 'white') && (currentfile !== 'a')){
+        let tempcurrentrank = currentrank+1;
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile -= 1;
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
         /*const capturepiece = currentsquare.querySelector('.piece');*/
-        squarecontains = onsquare(currentsquare);
-        console.log(squarecontains)
-        if (squarecontains =='black'){
-            legalmoves.push(currentsquareid);
-        }else{   
+        let tempsquarecontains = onsquare(tempcurrentsquare);
+        if (tempsquarecontains !== 'black'){
+        }else{
+            legalmoves.push(tempcurrentsquareid);  
+            
         }
     }
         
 
     /*checks right diagonal for white*/   
     if ((piececolour == 'white')&& (currentfile !== 'h')){
-        currentrank+=1;
-        currentfile = currentfile.charCodeAt(0);
-        currentfile+=1;
-        currentfile = String.fromCharCode(currentfile);
-        currentsquareid = currentfile + currentrank;
-        currentsquare = document.getElementById(currentsquareid);
-        squarecontains = onsquare(currentsquare);
-        if (squarecontains == 'black'){
-            legalmoves.push(currentsquareid);
+        let tempcurrentrank = currentrank+1;
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile += 1;
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+        let tempsquarecontains = onsquare(tempcurrentsquare);
+        if (tempsquarecontains !== 'black'){
         }else{
+            legalmoves.push(tempcurrentsquareid); 
             
         }         
     }
@@ -159,16 +159,16 @@ function pawnmoves(piececolour, startingsquareid){ /* A function which checks th
 
         /*checks left diaganal for black */
     if ((piececolour == 'black') && (currentfile !== 'a')){
-        currentrank-=1;
-        currentfile = currentfile.charCodeAt(0);
-        currentfile-=1;
-        currentfile = String.fromCharCode(currentfile);
-        currentsquareid = currentfile + currentrank;
-        currentsquare = document.getElementById(currentsquareid);
-        squarecontains = onsquare(currentsquare);
-        if (squarecontains == 'white'){
-            legalmoves.push(currentsquareid);
-        }else{
+        let tempcurrentrank = currentrank+1;
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile += 1;
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+        let tempsquarecontains = onsquare(tempcurrentsquare);
+        if (tempsquarecontains !== 'white'){
+        }else{ 
+            legalmoves.push(tempcurrentsquareid);
             
         }
     }
@@ -176,16 +176,16 @@ function pawnmoves(piececolour, startingsquareid){ /* A function which checks th
     
     /*checks right diagonal for black */
     if ((piececolour == 'black') && (currentfile !== 'h')){
-        currentrank-=1;
-        currentfile = currentfile.charCodeAt(0);
-        currentfile+=1;
-        currentfile = String.fromCharCode(currentfile);
-        currentsquareid = currentfile + currentrank;
-        currentsquare = document.getElementById(currentsquareid);
-        squarecontains = onsquare(currentsquare);
-        if (squarecontains == 'white'){
-            legalmoves.push(currentsquareid);
+        let tempcurrentrank= currentrank-1;
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile+=1;
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+        let tempsquarecontains = onsquare(tempcurrentsquare);
+        if (tempsquarecontains !== 'white'){
         }else{
+            legalmoves.push(tempcurrentsquareid);
             
         }
     }
@@ -204,10 +204,10 @@ function pawnmoves(piececolour, startingsquareid){ /* A function which checks th
     currentsquare = document.getElementById(currentsquareid);
     squarecontains = onsquare(currentsquare);
     if (squarecontains !== 'empty'){  /* if the square infront is occupied then theres no legal moves*/
+        
     }else{
         legalmoves.push(currentsquareid) /* square infront isnt occupied so can be moves and therefore added to legal moves*/
         if((ranknumber !== 2) && (ranknumber !== 7)){
-
         }else{
             currentrank+=movedirection;             /* adds the move direction to get new currentrank*/
             currentsquareid = currentfile + currentrank;  /* uses new current rank to make the currentsquareid of the square infront*/

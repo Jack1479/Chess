@@ -222,3 +222,15 @@ function pawnmoves(piececolour, startingsquareid){ /* A function which checks th
 }
 }
 
+function knightmoves(piececolour, startingsquareid){
+    let legalmoves = [];
+    const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
+    const rank = startingsquareid.charAt(1);
+    const ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */
+    let currentfile = file;
+    let currentrank = ranknumber;
+    let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
+    let currentsquare = document.getElementById(currentsquareid)
+    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
+    const movedirection = piececolour == 'white' ? 1:-1;
+}

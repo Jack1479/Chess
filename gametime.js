@@ -62,6 +62,10 @@ function allowclick(e) {
         legalmoves = getpossiblemoves(piece, startingsquareid, piececolour);
         console.log(legalmoves)
         highlight();        /* function to highlight selected piece */
+        legalmoves.forEach((move) => {
+            
+            highlightlegal();
+        });
     }
 }
 
@@ -245,15 +249,11 @@ function knightmoves(piececolour, startingsquareid) {
     movedirection.forEach((move) => {
         let tempcurrentrank = currentrank + move[1];
         let tempcurrentfile = currentfile.charCodeAt(0);
-        tempcurrentfile = currentfile + move[0];
+        tempcurrentfile = tempcurrentfile + move[0];
         tempcurrentfile = String.fromCharCode(tempcurrentfile);
-        console.log(tempcurrentfile)
-        console.log(tempcurrentrank)
         let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
         let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
-        console.log(tempcurrentsquare);
-        if (tempallsquares.includes(tempcurrentsquare) == true) {
-            debugger
+        if (tempcurrentsquare !== null) {
             let tempsquarecontains = onsquare(tempcurrentsquare);
             if (tempsquarecontains == 'empty') {
                 legalmoves.push(tempcurrentsquareid);

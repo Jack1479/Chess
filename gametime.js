@@ -243,14 +243,18 @@ function knightmoves(piececolour, startingsquareid) {
         tempallsquares[i] = tempallsquares[i].id
     }
     movedirection.forEach((move) => {
-        let tempcurrentfile = currentfile + move[0];
-        console.log(tempcurrentfile)
         let tempcurrentrank = currentrank + move[1];
+        debugger
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile = currentfile + move[0];
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        console.log(tempcurrentfile)
         console.log(tempcurrentrank)
         let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
         let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
         /*console.log(tempcurrentsquareid)*/
         if (tempallsquares.includes(tempcurrentsquare) == true) {
+            debugger
             let tempsquarecontains = onsquare(tempcurrentsquare);
             if (tempsquarecontains == 'empty') {
                 legalmoves.push(tempcurrentsquareid);

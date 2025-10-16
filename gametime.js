@@ -48,21 +48,23 @@ setuppieces();
 function allowclick(e) {
     const piece = e.currentTarget;   /* sets variable piece to be the current target to be moved */
     const piececolour = piece.getAttribute('colour');
+    const startingsquareid = piece.parentNode.id;
     if ((whiteturn && piececolour == 'white') || (!whiteturn && piececolour == 'black')) {
         e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/
         if (selected === piece) {   /* if you click the piece twice then it unselects it */
-            unhighlight();        /* function to unselect */
+            unhighlight(startingsquareid);        /* function to unselect */
             unhighlightlegal();
             selected = null;      /* reset to nothing selected */
             legalmoves = [];
             return;
         }
-        unhighlight();
+        
         selected = piece;
-        const startingsquareid = piece.parentNode.id;
+        
+        console.log(startingsquareid)
         legalmoves = getpossiblemoves(piece, startingsquareid, piececolour);
         console.log(legalmoves)
-        highlight();        /* function to highlight selected piece */
+        highlight(startingsquareid);        /* function to highlight selected piece */
         highlightlegal();
     }
 }
@@ -71,14 +73,14 @@ function allowplace(e, startingsquareid) {
     const square = e.currentTarget;   /* sets the square you will place on to be the target */
     if (!selected) return;         /* makes sure a piece is selected */
     if (startingsquareid === square) return;     /*so you cant capture yourself*/
-
+    
     if (legalmoves.includes(square.id)) {
         const targetpiece = square.querySelector('.piece');  /* makes the constant targetpiece  whatever is current on that square e.g. if empty targetpiece = null*/
         if (targetpiece && targetpiece !== selected) {         /* makes sure you cant put the piece you are moving ontop of itsself */
             targetpiece.remove();                           /* removes the current piece on that square */
         }
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
-        unhighlight();                  /* unhighlights once piece is moved */
+        unhighlight(startingsquareid);                  /* unhighlights once piece is moved */
         unhighlightlegal();
         selected = null     /* resets once piece is moved */
         whiteturn = !whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
@@ -103,13 +105,25 @@ function highlightlegal(){
         }
     });
 }
-function unhighlight() {
-    if (selected) selected.classList.remove('highlight')         /* function to remove highlight when function is called */
+function unhighlight(startingsquareid) {
+    if (selected){
+        const tempsquare = document.getElementById(startingsquareid);
+        if (tempsquare){
+            tempsquare.classList.remove('highlight')
+        }
+}
 }
 
-function highlight() {
-    if (selected) selected.classList.add('highlight')       /* function to add highlight when function is called */
-}
+function highlight(startingsquareid) {
+    unhighlight(startingsquareid);
+    if (selected){
+        const tempsquare = document.getElementById(startingsquareid);
+        if (tempsquare){
+            tempsquare.classList.add('highlight')
+        }
+        }
+    }
+
 
 function rotate() {
     board.classList.toggle('flip')  /*toggles the flip css package  which rotates the board 180 degrees*/

@@ -3,7 +3,7 @@ body{
     align-items: center;
     height: 100vh;
     justify-content: center;
-    background-color:darkgray;
+    background-color:black;
     overflow-y:hidden;
     overflow-x:hidden;
     box-sizing: border-box;
@@ -27,7 +27,17 @@ body{
     margin: 0 auto;
     flex-wrap: wrap;
     display:flex;
+    box-shadow: inset 0 0 12px 6px rgba(255, 0, 0);
     
+    animation: pulse 1s infinite alternate;
+}
+@keyframes pulse{
+    from {
+    box-shadow: inset 0 0 5px 2px rgba(255,0, 0);
+  }
+  to {
+    box-shadow: inset 0 0 15px 6px rgba(255, 0, 0);
+  }
 }
 
 .white{
@@ -147,17 +157,7 @@ body{
  }
  
 .highlight{
-    box-shadow: inset 0 0 12px 6px rgba(255, 0, 0);
-    
-    animation: pulse 1s infinite alternate;
-}
-@keyframes pulse{
-    from {
-    box-shadow: inset 0 0 5px 2px rgba(255,0, 0);
-  }
-  to {
-    box-shadow: inset 0 0 15px 6px rgba(255, 0, 0);
-  }
+    background-color: rgba(203, 255, 193, 0.705);
 }
 
 
@@ -193,18 +193,20 @@ body{
 }
 
 .legalsquares{
-    box-shadow: inset 0 0 12px 6px rgba(0, 0, 255);
+    box-shadow: inset 0 0 12px 6px var(--pulse-colour);
     
     animation: pulse 1s infinite alternate;
 }
 @keyframes pulse{
     from {
-    box-shadow: inset 0 0 5px 2px rgba(0,0, 255);
+    box-shadow: inset 0 0 20px 2px var(--pulse-colour);
   }
   to {
-    box-shadow: inset 0 0 10px 6px rgba(0, 0, 255);
+    box-shadow: inset 0 0 30px 6px var(--pulse-colour);
   }
 }
 
     
-
+html{
+    --pulse-colour: rgb(16, 247, 66);
+}

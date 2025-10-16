@@ -52,6 +52,7 @@ function allowclick(e) {
         e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/
         if (selected === piece) {   /* if you click the piece twice then it unselects it */
             unhighlight();        /* function to unselect */
+            unhighlightlegal();
             selected = null;      /* reset to nothing selected */
             legalmoves = [];
             return;
@@ -62,10 +63,7 @@ function allowclick(e) {
         legalmoves = getpossiblemoves(piece, startingsquareid, piececolour);
         console.log(legalmoves)
         highlight();        /* function to highlight selected piece */
-        legalmoves.forEach((move) => {
-            
-            highlightlegal();
-        });
+        highlightlegal();
     }
 }
 
@@ -81,6 +79,7 @@ function allowplace(e, startingsquareid) {
         }
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
         unhighlight();                  /* unhighlights once piece is moved */
+        unhighlightlegal();
         selected = null     /* resets once piece is moved */
         whiteturn = !whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
         /*rotate();*/
@@ -89,7 +88,21 @@ function allowplace(e, startingsquareid) {
     }
 }
 
+function unhighlightlegal(){
+    document.querySelectorAll('.legalsquares').forEach((move) =>{
+        move.classList.remove('legalsquares');
+    });
+}
 
+function highlightlegal(){
+    unhighlightlegal();
+    legalmoves.forEach((squareid) => {
+        const tempsquare = document.getElementById(squareid);
+        if (tempsquare){
+            tempsquare.classList.add('legalsquares')
+        }
+    });
+}
 function unhighlight() {
     if (selected) selected.classList.remove('highlight')         /* function to remove highlight when function is called */
 }
@@ -242,10 +255,12 @@ function knightmoves(piececolour, startingsquareid) {
     const movedirection = [
         [2, -1], [2, 1], [-2, -1], [-2, 1], [-1, 2], [1, 2], [1, -2], [-1, -2]
     ];
+
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
     for(let i=0;i<tempallsquares.length;i++){
         tempallsquares[i] = tempallsquares[i].id
     }
+
     movedirection.forEach((move) => {
         let tempcurrentrank = currentrank + move[1];
         let tempcurrentfile = currentfile.charCodeAt(0);
@@ -271,4 +286,28 @@ function knightmoves(piececolour, startingsquareid) {
     });
 
     return legalmoves;
+}
+
+function bishopmoves(){
+    let legalmoves = [];
+    const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
+    const rank = startingsquareid.charAt(1);
+    const ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */
+    let currentfile = file;
+    let currentrank = ranknumber;
+    let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
+    let currentsquare = document.getElementById(currentsquareid)
+    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
+    const movedirection = [
+        [1, -1], [1, 1], [-1, -1], [-1, 1]
+    ];
+    let tempcurrentrank = currentrank + movedirection[0];
+    let tempcurrentfile = currentfile.charCodeAt(0);
+    tempcurrentfile = tempcurrentfile + move[0];
+    tempcurrentfile = String.fromCharCode(tempcurrentfile);
+    let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+    let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+    while (tempcurrentsquare !== null){
+        
+    }
 }

@@ -27,18 +27,9 @@ body{
     margin: 0 auto;
     flex-wrap: wrap;
     display:flex;
-    box-shadow: inset 0 0 12px 6px rgba(255, 0, 0);
-    
-    animation: pulse 1s infinite alternate;
+    box-shadow: 0 0 20px 10px var(--pulse-colour);
 }
-@keyframes pulse{
-    from {
-    box-shadow: inset 0 0 5px 2px rgba(255,0, 0);
-  }
-  to {
-    box-shadow: inset 0 0 15px 6px rgba(255, 0, 0);
-  }
-}
+
 
 .white{
     background-color:lightblue;
@@ -75,15 +66,19 @@ body{
 }
 
 .piece img{
-    width:100%;
-    height: 100%;
+    width:95%;
+    height: 95%;
 }
 
 .piece{
     width:95%;
     cursor:pointer;
 }
-
+.queen{
+    position:relative;
+    left:2.25px;
+    top:1px;
+}
 .tutorial{                       /* for button */
     border:20px;
     background-color:darkcyan;
@@ -157,9 +152,10 @@ body{
  }
  
 .highlight{
-    background-color: rgba(203, 255, 193, 0.705);
+    border-radius: 50px;
+    
+    box-shadow: 0 0 20px 5px var(--pulse-colour);
 }
-
 
 .Chessboard.flip{
     transform:rotate(180deg);
@@ -209,4 +205,15 @@ body{
     
 html{
     --pulse-colour: rgb(16, 247, 66);
+}
+input{
+    
+}
+
+.colour{
+    position:relative;
+    bottom:78%;
+    right:65%;
+    height:80px;
+    width:150px;
 }

@@ -52,16 +52,14 @@ function allowclick(e) {
     if ((whiteturn && piececolour == 'white') || (!whiteturn && piececolour == 'black')) {
         e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/
         if (selected === piece) {   /* if you click the piece twice then it unselects it */
-            unhighlight(startingsquareid);        /* function to unselect */
+            unhighlight();        /* function to unselect */
             unhighlightlegal();
             selected = null;      /* reset to nothing selected */
             legalmoves = [];
             return;
         }
-        
+        unhighlight()
         selected = piece;
-        
-        console.log(startingsquareid)
         legalmoves = getpossiblemoves(piece, startingsquareid, piececolour);
         console.log(legalmoves)
         highlight(startingsquareid);        /* function to highlight selected piece */
@@ -69,18 +67,16 @@ function allowclick(e) {
     }
 }
 
-function allowplace(e, startingsquareid) {
+function allowplace(e) {
     const square = e.currentTarget;   /* sets the square you will place on to be the target */
     if (!selected) return;         /* makes sure a piece is selected */
-    if (startingsquareid === square) return;     /*so you cant capture yourself*/
-    
     if (legalmoves.includes(square.id)) {
         const targetpiece = square.querySelector('.piece');  /* makes the constant targetpiece  whatever is current on that square e.g. if empty targetpiece = null*/
         if (targetpiece && targetpiece !== selected) {         /* makes sure you cant put the piece you are moving ontop of itsself */
             targetpiece.remove();                           /* removes the current piece on that square */
         }
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
-        unhighlight(startingsquareid);                  /* unhighlights once piece is moved */
+        unhighlight();                  /* unhighlights once piece is moved */
         unhighlightlegal();
         selected = null     /* resets once piece is moved */
         whiteturn = !whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
@@ -105,24 +101,21 @@ function highlightlegal(){
         }
     });
 }
-function unhighlight(startingsquareid) {
+function unhighlight() {
     if (selected){
-        const tempsquare = document.getElementById(startingsquareid);
-        if (tempsquare){
-            tempsquare.classList.remove('highlight')
-        }
-}
-}
-
-function highlight(startingsquareid) {
-    unhighlight(startingsquareid);
-    if (selected){
-        const tempsquare = document.getElementById(startingsquareid);
-        if (tempsquare){
-            tempsquare.classList.add('highlight')
-        }
+        selected.classList.remove('highlight');
         }
     }
+   
+
+
+function highlight() {
+    if (selected){
+        selected.classList.add('highlight');
+        }
+    }
+
+    
 
 
 function rotate() {

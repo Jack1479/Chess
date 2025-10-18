@@ -128,20 +128,17 @@ body{
     top: 18%;
  }
 
- .timerbtn{
-    border:20px;
-    background-color:darkcyan;
-    color: white;
-    font-weight:bold;
-    font-size: large;
-    padding:25px 35px ;
-    text-align:center;
-    margin: 10px;
+ .change{
     border-radius:15px;
     text-decoration: none; /* to remove underline of link*/
     position:relative;
-    top:-90%;
-    left:-45%;
+    bottom:88%;
+    right:62%;
+    color:white;
+    background-color: black;
+    border:none;
+    font-weight: bolder;
+    font-size: large;
  }
 
  @media (min-width:800px) {
@@ -153,7 +150,6 @@ body{
  
 .highlight{
     border-radius: 50px;
-    
     box-shadow: 0 0 20px 5px var(--pulse-colour);
 }
 
@@ -206,14 +202,12 @@ body{
 html{
     --pulse-colour: rgb(16, 247, 66);
 }
-input{
-    
-}
 
 .colour{
     position:relative;
-    bottom:78%;
-    right:65%;
+    bottom:88%;
+    right:62%;
     height:80px;
-    width:150px;
+    width:130px;
 }
+

@@ -23,6 +23,11 @@ let selected = null;
 let whiteturn = true;
 var legalmoves = [];
 
+const colourpicker = document.getElementById('colourpick');
+colourpicker.addEventListener('input', (e) => {
+  const chosenColour = e.target.value; 
+  document.documentElement.style.setProperty('--pulse-colour', chosenColour);
+});
 
 function setupboard() {
     for (let i = 0; i < allsquares.length; i++) {    /* loops through all squares on the board and adds an event listener to each one*/
@@ -129,6 +134,9 @@ function getpossiblemoves(piece, startingsquareid, piececolour) {
     }
     if (piece.classList.contains('knight')) {
         return knightmoves(piececolour, startingsquareid);
+    }
+     if (piece.classList.contains('bishop')) {
+        return bishopmoves(piececolour, startingsquareid);
     }
 }
 
@@ -263,10 +271,7 @@ function knightmoves(piececolour, startingsquareid) {
         [2, -1], [2, 1], [-2, -1], [-2, 1], [-1, 2], [1, 2], [1, -2], [-1, -2]
     ];
 
-    let tempallsquares = Array.from(document.getElementsByClassName('square'));
-    for(let i=0;i<tempallsquares.length;i++){
-        tempallsquares[i] = tempallsquares[i].id
-    }
+    
 
     movedirection.forEach((move) => {
         let tempcurrentrank = currentrank + move[1];
@@ -295,7 +300,7 @@ function knightmoves(piececolour, startingsquareid) {
     return legalmoves;
 }
 
-function bishopmoves(){
+function bishopmoves(piececolour, startingsquareid){
     let legalmoves = [];
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
     const rank = startingsquareid.charAt(1);
@@ -304,17 +309,160 @@ function bishopmoves(){
     let currentrank = ranknumber;
     let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
     let currentsquare = document.getElementById(currentsquareid)
-    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
-    const movedirection = [
-        [1, -1], [1, 1], [-1, -1], [-1, 1]
-    ];
-    let tempcurrentrank = currentrank + movedirection[0];
-    let tempcurrentfile = currentfile.charCodeAt(0);
-    tempcurrentfile = tempcurrentfile + move[0];
-    tempcurrentfile = String.fromCharCode(tempcurrentfile);
-    let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
-    let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
-    while (tempcurrentsquare !== null){
-        
+    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */      /*||*/
+    const movedirectionNE = [1,1];
+    const movedirectionSE = [-1,1];
+    const movedirectionSW = [-1,-1];
+    const movedirectionNW = [1,-1];    
+
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+    for(let i=0;i<tempallsquares.length;i++){
+        tempallsquares[i] = tempallsquares[i].id
     }
+
+    function northeast(){
+        let legal = [];
+        let cont = true;
+        let tempcurrentrank = currentrank + movedirectionNE[0];
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile = tempcurrentfile + movedirectionNE[1];
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+        while (cont = true){
+            if (tempallsquares.includes(tempcurrentsquareid)) {
+                let tempsquarecontains = onsquare(tempcurrentsquare);
+                if (tempsquarecontains == 'empty') {
+                    legal.push(tempcurrentsquareid);
+                    tempcurrentrank = tempcurrentrank + movedirectionNE[0];
+                    tempcurrentfile = tempcurrentfile.charCodeAt(0);
+                    tempcurrentfile = tempcurrentfile + movedirectionNE[1];
+                    tempcurrentfile = String.fromCharCode(tempcurrentfile);
+                    tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+                    tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+                }else if (piececolour !== tempsquarecontains) {
+                    legal.push(tempcurrentsquareid);
+                    return legal;
+                    } else{
+                        return legal;
+                    } 
+                }else{
+                    return legal;
+        }}}
+            
+
+    
+    function southeast(){
+        let legal = [];
+        let cont = true;
+        let tempcurrentrank = currentrank + movedirectionSE[0];
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile = tempcurrentfile + movedirectionSE[1];
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+        while (cont = true){
+            if (tempallsquares.includes(tempcurrentsquareid)) {
+                let tempsquarecontains = onsquare(tempcurrentsquare);
+                if (tempsquarecontains == 'empty') {
+                    legal.push(tempcurrentsquareid);
+                    tempcurrentrank = tempcurrentrank + movedirectionSE[0];
+                    tempcurrentfile = tempcurrentfile.charCodeAt(0);
+                    tempcurrentfile = tempcurrentfile + movedirectionSE[1];
+                    tempcurrentfile = String.fromCharCode(tempcurrentfile);
+                    tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+                    tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+                }else if (piececolour !== tempsquarecontains) {
+                    legal.push(tempcurrentsquareid);
+                    return legal;
+                    }else{
+                        return legal;
+                    } 
+                }else{
+                    return legal;
+        }}}
+         
+
+    function southwest(){
+        let legal = [];
+        let cont = true;
+        let tempcurrentrank = currentrank + movedirectionSW[0];
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile = tempcurrentfile + movedirectionSW[1];
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+        while (cont = true){
+            if (tempallsquares.includes(tempcurrentsquareid)) {
+                let tempsquarecontains = onsquare(tempcurrentsquare);
+                if (tempsquarecontains == 'empty') {
+                    legal.push(tempcurrentsquareid);
+                    tempcurrentrank = tempcurrentrank + movedirectionSW[0];
+                    tempcurrentfile = tempcurrentfile.charCodeAt(0);
+                    tempcurrentfile = tempcurrentfile + movedirectionSW[1];
+                    tempcurrentfile = String.fromCharCode(tempcurrentfile);
+                    tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+                    tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+                }else if (piececolour !== tempsquarecontains) {
+                    legal.push(tempcurrentsquareid);
+                    return legal;
+                    }else{
+                        return legal;
+                    }  
+                }else{
+                    return legal;
+        }}}
+        
+        
+    function northwest(){
+        let legal = [];
+        let cont = true;
+        let tempcurrentrank = currentrank + movedirectionNW[0];
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile = tempcurrentfile + movedirectionNW[1];
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+        while (cont = true){
+            if (tempallsquares.includes(tempcurrentsquareid)) {
+                let tempsquarecontains = onsquare(tempcurrentsquare);
+                if (tempsquarecontains == 'empty') {
+                    legal.push(tempcurrentsquareid);
+                    tempcurrentrank = tempcurrentrank + movedirectionNW[0];
+                    tempcurrentfile = tempcurrentfile.charCodeAt(0);
+                    tempcurrentfile = tempcurrentfile + movedirectionNW[1];
+                    tempcurrentfile = String.fromCharCode(tempcurrentfile);
+                    tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+                    tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+                }else if (piececolour !== tempsquarecontains) {
+                    legal.push(tempcurrentsquareid);
+                    return legal;
+                    } else{
+                        return legal;
+                    } 
+                }else{
+                    return legal;
+        }}}
+    
+    let legalNEmoves = northeast();
+    legalNEmoves.forEach((move) => {
+        legalmoves.push(move)
+    });
+
+    let legalSEmoves = southeast();
+    legalSEmoves.forEach((move) => {
+        legalmoves.push(move)
+    });
+
+    let legalNWmoves = northwest();
+    legalNWmoves.forEach((move) => {
+        legalmoves.push(move)
+    });
+
+    let legalSWmoves = southwest();
+    legalSWmoves.forEach((move) => {
+        legalmoves.push(move)
+    });
+        
+    return legalmoves;
 }

@@ -144,6 +144,9 @@ function getpossiblemoves(piece, startingsquareid, piececolour) {
     if (piece.classList.contains('queen')) {
         return queenmoves(piececolour, startingsquareid);
     }
+    if (piece.classList.contains('king')) {
+        return kingmoves(piececolour, startingsquareid);
+    }
 }
 
 function onsquare(square) {
@@ -276,8 +279,6 @@ function knightmoves(piececolour, startingsquareid) {
     const movedirection = [
         [2, -1], [2, 1], [-2, -1], [-2, 1], [-1, 2], [1, 2], [1, -2], [-1, -2]
     ];
-
-    
 
     movedirection.forEach((move) => {
         let tempcurrentrank = currentrank + move[1];
@@ -643,3 +644,47 @@ function queenmoves(piececolour, startingsquareid){
 
     return legalmoves;
 }
+
+function kingmoves(piececolour, startingsquareid){
+    let legalmoves = [];
+    const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
+    const rank = startingsquareid.charAt(1);
+    const ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */
+    let currentfile = file;
+    let currentrank = ranknumber;
+    let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
+    let currentsquare = document.getElementById(currentsquareid)
+    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */      /*||*/
+    const movedirection = [
+        [1,0], [-1,0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]
+    ]; 
+
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+    for(let i=0;i<tempallsquares.length;i++){
+        tempallsquares[i] = tempallsquares[i].id
+    }
+
+    movedirection.forEach((move) =>{
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile = tempcurrentfile + move[1];
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentrank = currentrank;
+        tempcurrentrank = tempcurrentrank + move[0];
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid)
+        if (tempallsquares.includes(tempcurrentsquareid)) {
+            let tempsquarecontains = onsquare(tempcurrentsquare);
+            if (tempsquarecontains == 'empty') {
+                legalmoves.push(tempcurrentsquareid);
+            }else if (piececolour !== tempsquarecontains) {
+                legalmoves.push(tempcurrentsquareid);
+                return legalmoves;
+                }else{
+                    return legalmoves;
+                }  
+            }else{
+                return legalmoves;
+        }});
+    
+        return legalmoves;
+    }

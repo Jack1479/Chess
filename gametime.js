@@ -135,8 +135,14 @@ function getpossiblemoves(piece, startingsquareid, piececolour) {
     if (piece.classList.contains('knight')) {
         return knightmoves(piececolour, startingsquareid);
     }
-     if (piece.classList.contains('bishop')) {
+    if (piece.classList.contains('bishop')) {
         return bishopmoves(piececolour, startingsquareid);
+    }
+    if (piece.classList.contains('rook')) {
+        return rookmoves(piececolour, startingsquareid);
+    }
+    if (piece.classList.contains('queen')) {
+        return queenmoves(piececolour, startingsquareid);
     }
 }
 
@@ -464,5 +470,176 @@ function bishopmoves(piececolour, startingsquareid){
         legalmoves.push(move)
     });
         
+    return legalmoves;
+
+}
+
+function rookmoves(piececolour, startingsquareid){
+    let legalmoves = [];
+    const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
+    const rank = startingsquareid.charAt(1);
+    const ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */
+    let currentfile = file;
+    let currentrank = ranknumber;
+    let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
+    let currentsquare = document.getElementById(currentsquareid)
+    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */      /*||*/    
+
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+    for(let i=0;i<tempallsquares.length;i++){
+        tempallsquares[i] = tempallsquares[i].id
+    }
+
+    function north(){
+        let legal = [];
+        let cont = true;
+        let tempcurrentrank = currentrank +1;
+        let tempcurrentfile = currentfile;
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+        while (cont = true){
+            if (tempallsquares.includes(tempcurrentsquareid)) {
+                let tempsquarecontains = onsquare(tempcurrentsquare);
+                if (tempsquarecontains == 'empty') {
+                    legal.push(tempcurrentsquareid);
+                    tempcurrentrank = tempcurrentrank +1;
+                    tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+                    tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+                }else if (piececolour !== tempsquarecontains) {
+                    legal.push(tempcurrentsquareid);
+                    return legal;
+                    }else{
+                        return legal;
+                    }  
+                }else{
+                    return legal;
+        }}}
+
+
+    function east(){
+        let legal = [];
+        let cont = true;
+        let tempcurrentrank = currentrank;
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile +=1;
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+        while (cont = true){
+            if (tempallsquares.includes(tempcurrentsquareid)) {
+                let tempsquarecontains = onsquare(tempcurrentsquare);
+                if (tempsquarecontains == 'empty') {
+                    legal.push(tempcurrentsquareid);
+                    tempcurrentfile = tempcurrentfile.charCodeAt(0);
+                    tempcurrentfile +=1;
+                    tempcurrentfile = String.fromCharCode(tempcurrentfile);
+                    tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+                    tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+                }else if (piececolour !== tempsquarecontains) {
+                    legal.push(tempcurrentsquareid);
+                    return legal;
+                    }else{
+                        return legal;
+                    }  
+                }else{
+                    return legal;
+        }}}
+
+
+    function south(){
+        let legal = [];
+        let cont = true;
+        let tempcurrentrank = currentrank -1;
+        let tempcurrentfile = currentfile;
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);     
+        while (cont = true){
+            if (tempallsquares.includes(tempcurrentsquareid)) {
+                let tempsquarecontains = onsquare(tempcurrentsquare);
+                if (tempsquarecontains == 'empty') {
+                    legal.push(tempcurrentsquareid);
+                    tempcurrentrank = tempcurrentrank-1;
+                    tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+                    tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+                }else if (piececolour !== tempsquarecontains) {
+                    legal.push(tempcurrentsquareid);
+                    return legal;
+                    }else{
+                        return legal;
+                    }  
+                }else{
+                    return legal;
+        }}}
+
+
+    function west(){
+        let legal = [];
+        let cont = true;
+        let tempcurrentrank = currentrank;
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile -=1;
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+        while (cont = true){
+            if (tempallsquares.includes(tempcurrentsquareid)) {
+                let tempsquarecontains = onsquare(tempcurrentsquare);
+                if (tempsquarecontains == 'empty') {
+                    legal.push(tempcurrentsquareid);
+                    tempcurrentfile = tempcurrentfile.charCodeAt(0);
+                    tempcurrentfile -=1;
+                    tempcurrentfile = String.fromCharCode(tempcurrentfile);
+                    tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+                    tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+                }else if (piececolour !== tempsquarecontains) {
+                    legal.push(tempcurrentsquareid);
+                    return legal;
+                    }else{
+                        return legal;
+                    }  
+                }else{
+                    return legal;
+        }}}
+
+
+
+    let northmoves = north();
+    northmoves.forEach((move) => {
+        legalmoves.push(move)
+    });
+
+    let eastmoves = east();
+    eastmoves.forEach((move) => {
+        legalmoves.push(move)
+    });
+
+    let southmoves = south();
+    southmoves.forEach((move) => {
+        legalmoves.push(move)
+    });
+
+    let westmoves = west();
+    westmoves.forEach((move) => {
+        legalmoves.push(move)
+    });
+        
+    return legalmoves;
+
+    }
+
+
+
+function queenmoves(piececolour, startingsquareid){
+    let legalmoves = [];
+
+    let diaganalmoves = bishopmoves(piececolour, startingsquareid);
+    diaganalmoves.forEach((move) => {
+        legalmoves.push(move)
+    });
+    let straightmoves = rookmoves(piececolour, startingsquareid);
+    straightmoves.forEach((move) => {
+        legalmoves.push(move)
+    });
+
     return legalmoves;
 }

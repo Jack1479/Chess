@@ -155,6 +155,10 @@ body{
 
 .Chessboard.flip{
     transform:rotate(180deg);
+    animation-delay: 1s;
+    .change{
+        display:none;
+    }
     .timerbtn{
         display: none;
     }

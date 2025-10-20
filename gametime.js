@@ -85,7 +85,7 @@ function allowplace(e) {
         unhighlightlegal();
         selected = null     /* resets once piece is moved */
         whiteturn = !whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
-        /*rotate();*/
+        rotate();
     } else {
 
     }

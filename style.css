@@ -80,19 +80,17 @@ body{
     top:1px;
 }
 .tutorial{                       /* for button */
-    border:20px;
-    background-color:darkcyan;
-    color: white;
-    font-weight:bold;
-    font-size: large;
-    padding:25px 35px ;
+    background-color:darkgrey;
+    color: black;
+    font-size: xx-large;
     text-align:center;
-    margin: 10px;
-    border-radius:15px;
+    border-radius:40px;
     text-decoration: none; /* to remove underline of link*/
     position:relative;
-    top:-100%;
-    left:-20%;
+    width: 200px;
+    height: 100px;
+    right:61%;
+    bottom:43%;
 }
 
 .explain{
@@ -120,7 +118,7 @@ body{
     font-size: small;
  }
 
- .exit{
+ button.exit{
     position:absolute;
     background-color: lightgray;
     font-size: large;
@@ -213,5 +211,21 @@ html{
     right:62%;
     height:80px;
     width:130px;
+    
 }
 
+button{
+    border-radius:60px;
+    position:relative;
+    height: 140px;
+    width: 600px;
+    margin:4px;
+    font-size:xx-large;
+    background-color: darkgray;
+}
+
+.modes{
+    display: grid;
+    grid-template-columns: auto;
+    
+}

@@ -1,14 +1,14 @@
 const open = document.getElementById('openbutton');
 const close = document.getElementById('close_button')
 const tut = document.getElementById('tutorial_page');
-open.addEventListener('click', () => {
-    tut.style.display = 'block'
-    close.style.display = 'block';
+open.addEventListener('click', () => { /* adds event listener so when it it clicked on it runs the following*/ 
+    tut.style.display = 'block' /* displays tutorial*/
+    close.style.display = 'block'; /* displays exit button*/
 });
 
-close.addEventListener('click', () => {
-    tut.style.display = 'none';
-    close.style.display = 'none';
+close.addEventListener('click', () => { /* adds event listener to close button*/
+    tut.style.display = 'none'; /* sets display to none to hide*/
+    close.style.display = 'none'; /* sets display to none to hide*/
 });
 
 const pieceimg = document.getElementsByTagName('img')

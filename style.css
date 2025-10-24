@@ -118,12 +118,14 @@ body{
     font-size: small;
  }
 
- button.exit{
+.exit{
     position:absolute;
     background-color: lightgray;
     font-size: large;
     left:65%;
-    top: 18%;
+    top: 15%;
+    height:40px;
+    width:40px;
  }
 
  .change{
@@ -224,8 +226,21 @@ button{
     background-color: darkgray;
 }
 
+button:hover{
+    background-color: grey;
+}
+
+
 .modes{
     display: grid;
     grid-template-columns: auto;
+    position:relative;
+    left:90px;
     
 }
+
+
+    
+
+
+    

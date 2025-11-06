@@ -132,8 +132,8 @@ body{
     border-radius:15px;
     text-decoration: none; /* to remove underline of link*/
     position:relative;
-    bottom:88%;
-    right:62%;
+    bottom:99%;
+    right:42%;
     color:white;
     background-color: black;
     border:none;
@@ -158,6 +158,9 @@ body{
     animation-delay: 1s;
     .change{
         display:none;
+    }
+    .colour{
+        display: none;
     }
     .timerbtn{
         display: none;
@@ -209,12 +212,24 @@ html{
 
 .colour{
     position:relative;
-    bottom:88%;
-    right:62%;
+    bottom:100%;
+    right:40%;
     height:80px;
     width:130px;
+    background:none;
+    box-shadow: inset 0 0 12px 6px var(--pulse-colour);
     
+    animation: pulse 1s infinite alternate;
 }
+@keyframes pulse{
+    from {
+    box-shadow: inset 0 0 20px 2px var(--pulse-colour);
+  }
+  to {
+    box-shadow: inset 0 0 30px 6px var(--pulse-colour);
+  }
+}
+
 
 button{
     border-radius:60px;

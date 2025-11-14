@@ -208,7 +208,10 @@ body{
     
 html{
     --pulse-colour: rgb(16, 247, 66);
+    --pulse-colourL: rgb(173, 216, 230);
+    --pulse-colourD: rgb(0, 139, 139);
 }
+
 
 .colour{
     position:relative;
@@ -254,8 +257,53 @@ button:hover{
     
 }
 
-
+.return{
+    position:relative;
+    height:100px;
+    width:100px;
+    bottom:105%;
+    left:110%;
+}
     
+.changelight{
+    position:relative;
+    bottom:88%;
+    right:82.5%;
+    color:white;
+    background-color: black;
+    border:none;
+    font-weight: bolder;
+    font-size: large;
+}
+
+.changedark{
+    position:relative;
+    bottom:86%;
+    right:46%;
+    color:white;
+    background-color: black;
+    border:none;
+    font-weight: bolder;
+    font-size: large;
+}    
+
+.colourL{
+    position:relative;
+    bottom:88%;
+    right:82.5%;
+    height:80px;
+    width:130px;
+    background:none;
+    box-shadow: inset 0 0 12px 6px var(--pulse-colourL);
+}
 
 
-    
+.colourD{
+    position:relative;
+    bottom:86%;
+    right:46%;
+    height:80px;
+    width:130px;
+    background:none;
+    box-shadow: inset 0 0 12px 6px var(--pulse-colourD);
+}

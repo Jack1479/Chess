@@ -16,6 +16,18 @@ colourpicker.addEventListener('input', (e) => {
   document.documentElement.style.setProperty('--pulse-colour', chosenColour);
 });
 
+const colourpickerL = document.getElementById('colourpickL');
+colourpickerL.addEventListener('input', (e) => {
+  const chosenColour = e.target.value; 
+  document.documentElement.style.setProperty('--pulse-colourL', chosenColour);
+});
+
+const colourpickerD = document.getElementById('colourpickD');
+colourpickerD.addEventListener('input', (e) => {
+  const chosenColour = e.target.value; 
+  document.documentElement.style.setProperty('--pulse-colourD', chosenColour);
+});
+
 function setupboard() {
     for (let i = 0; i < allsquares.length; i++) {    /* loops through all squares on the board and adds an event listener to each one*/
         allsquares[i].addEventListener('click', allowplace); /* loops through all squares on the board and adds an event listener to each one*/
@@ -72,7 +84,7 @@ function allowplace(e) {
         unhighlightlegal();
         selected = null     /* resets once piece is moved */
         whiteturn = !whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
-        rotate();
+        /*rotate();*/
     } else {
 
     }

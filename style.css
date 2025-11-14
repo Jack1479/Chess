@@ -32,11 +32,11 @@ body{
 
 
 .white{
-    background-color:lightblue;
+    background-color:var(--pulse-colourL);
 }
 
 .black{
-    background-color:darkcyan;
+    background-color:var(--pulse-colourD);
 }
 
 .letter{                   /* making all containing letter class to be the same and position in the right bottom corner*/
@@ -58,11 +58,11 @@ body{
 }
 
 .light{
-    color: lightblue;
+    color: var(--pulse-colourL);
 }
 
 .dark{
-    color:darkcyan;
+    color:var(--pulse-colourD);
 }
 
 .piece img{
@@ -156,6 +156,21 @@ body{
 .Chessboard.flip{
     transform:rotate(180deg);
     animation-delay: 1s;
+    .return{
+        display:none;
+    }
+    .colourL{
+        display:none;
+    }
+    .colourD{
+        display:none;
+    }
+    .changelight{
+        display:none;
+    }
+    .changedark{
+        display:none;
+    }
     .change{
         display:none;
     }

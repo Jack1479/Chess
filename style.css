@@ -249,7 +249,7 @@ html{
 }
 
 
-button{
+.classic{
     border-radius:60px;
     position:relative;
     height: 140px;
@@ -259,10 +259,36 @@ button{
     background-color: darkgray;
 }
 
-button:hover{
-    background-color: grey;
+.atomic{
+    border-radius:60px;
+    position:relative;
+    height: 140px;
+    width: 600px;
+    margin:4px;
+    font-size:xx-large;
+    background-color: darkgray;
 }
 
+.threecheck{
+    border-radius:60px;
+    position:relative;
+    height: 140px;
+    width: 600px;
+    margin:4px;
+    font-size:xx-large;
+    background-color: darkgray;
+    
+}
+
+.classic:hover{
+    background-color: grey;
+}
+.atomic:hover{
+    background-color: grey;
+}
+.threecheck:hover{
+    background-color: grey;
+}
 
 .modes{
     display: grid;
@@ -276,7 +302,7 @@ button:hover{
     position:relative;
     height:100px;
     width:100px;
-    bottom:105%;
+    bottom:120%;
     left:110%;
 }
     
@@ -321,4 +347,28 @@ button:hover{
     width:130px;
     background:none;
     box-shadow: inset 0 0 12px 6px var(--pulse-colourD);
+}
+
+.settings{
+    background-color:transparent;
+    border:none;
+    font-size:600%;
+    position:relative;
+    bottom:400px;
+    left:450%;
+}
+
+.showsetting{
+    background-color:lightgray;
+    height: 700px;
+    width: 700px;
+    border-radius:15px;
+    position:relative;
+    text-align: center;
+}
+
+.settingspanel{
+    position:fixed; 
+    left:30.5%;
+    top:10%;
 }

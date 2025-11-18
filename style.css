@@ -104,7 +104,7 @@ body{
 
 .frame{
     position:fixed; 
-    left:30.5%;
+    left:30%;
     top:10%;
 }
     
@@ -358,17 +358,16 @@ html{
     left:450%;
 }
 
-.showsetting{
-    background-color:lightgray;
-    height: 700px;
-    width: 700px;
-    border-radius:15px;
-    position:relative;
+.menu{
+    position:fixed;
+    background-color:lightgrey;
     text-align: center;
+    height:700px;
+    width:700px;
+    border-radius:15px;
+    left:30%;
+    border-color:black;
+    border-width:30px;
+    border-style:solid;
 }
 
-.settingspanel{
-    position:fixed; 
-    left:30.5%;
-    top:10%;
-}

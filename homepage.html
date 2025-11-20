@@ -27,15 +27,13 @@
 
 <div class = 'menu' id = 'settingsmenu' style ='display:none;'><u><h1>Settings</h1></u>
     <div class = 'selection'>
-    <form>
-        <input type="checkbox" id="rotate" name="rotatecheck" value="yes">
+        <input type="checkbox" id="rotate" name="rotatecheck" >
         <label for="rotatecheck">Do you want the board to rotate after each move?</label><br>
-        <input type="checkbox" id="showmoves" name="showmovescheck" value="yes">
+        <input type="checkbox" id="showmoves" name="showmovescheck" >
         <label for="showmovescheck">Do you want to be shown the legal moves?</label><br>
-        <input type="checkbox" id="timer" name="timercheck" value="yes">
+        <input type="checkbox" id="timer" name="timercheck">
         <label for="timercheck">Do you want a timer?</label><br>
-        <input type="submit" value="Submit">
-    </form>
+        <button>Submit</button>
     </div>
 </div>
 
@@ -67,6 +65,13 @@ openset.addEventListener('click' , () => {
     close.style.display = 'block'
 });
 
+var url = location.href
+if (url.split('?').length == 2){
+    var urldata = location.href.split('?')[1].split['&']
+    for(let i = 0; i < urldata.length; i++){
+
+    }
+}
 </script>
 
 

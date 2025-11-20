@@ -25,11 +25,20 @@
         style='border:none; text-align: center; display:none;'></iframe>
 </div>
 
-<div class = 'menu' id = 'settingsmenu' style ='display:none;'>
-    <div class = 'settingdisplay'>
-
+<div class = 'menu' id = 'settingsmenu' style ='display:none;'><u><h1>Settings</h1></u>
+    <div class = 'selection'>
+    <form>
+        <input type="checkbox" id="rotate" name="rotatecheck" value="yes">
+        <label for="rotatecheck">Do you want the board to rotate after each move?</label><br>
+        <input type="checkbox" id="showmoves" name="showmovescheck" value="yes">
+        <label for="showmovescheck">Do you want to be shown the legal moves?</label><br>
+        <input type="checkbox" id="timer" name="timercheck" value="yes">
+        <label for="timercheck">Do you want a timer?</label><br>
+        <input type="submit" value="Submit">
+    </form>
     </div>
 </div>
+
 <div><button class = 'settings' id = 'opensettings'>⚙️</button></div>
 
 

@@ -110,16 +110,12 @@ function unhighlight() {
         selected.classList.remove('highlight');
         }
     }
-   
-
 
 function highlight() {
     if (selected){
         selected.classList.add('highlight');
         }
     }
-
-    
 
 
 function rotate() {

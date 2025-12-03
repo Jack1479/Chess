@@ -294,7 +294,7 @@ html{
     display: grid;
     grid-template-columns: auto;
     position:relative;
-    left:90px;
+    left:120px;
     
 }
 
@@ -304,6 +304,8 @@ html{
     width:100px;
     bottom:120%;
     left:110%;
+    box-shadow: 0 0 18px 6px var(--pulse-colour);
+    border-radius: 10px;
 }
     
 .changelight{
@@ -354,7 +356,7 @@ html{
     border:none;
     font-size:600%;
     position:relative;
-    bottom:400px;
+    bottom:460px;
     left:450%;
 }
 
@@ -366,6 +368,7 @@ html{
     width:700px;
     border-radius:15px;
     left:30%;
+    bottom:20%;
     border-color:black;
     border-width:30px;
     border-style:solid;

@@ -356,8 +356,10 @@ html{
     border:none;
     font-size:600%;
     position:relative;
-    bottom:460px;
-    left:450%;
+    bottom:90vh;
+    left:755px;
+    box-shadow: 0 0 12px 6px var(--pulse-colour);
+    border-radius:15px;
 }
 
 .menu{
@@ -368,7 +370,7 @@ html{
     width:700px;
     border-radius:15px;
     left:30%;
-    bottom:20%;
+    bottom:10%;
     border-color:black;
     border-width:30px;
     border-style:solid;

@@ -1,3 +1,24 @@
+const openset = document.getElementById('opensettings');
+const menusett = document.getElementById('settingsmenu');
+const close = document.getElementById('close_button');
+
+openset.addEventListener('click' , () => {
+    menusett.style.display = 'block'
+    close.style.display = 'block'
+});
+
+close.addEventListener('click', () => { /* adds event listener to close button*/
+    close.style.display = 'none'; /* sets display to none to hide*/
+    menusett.style.display = 'none';
+}); 
+
+var url = location.href
+var urldata = location.href.split('?')[1].split('&')
+console.log(urldata)
+
+
+
+
 const pieceimg = document.getElementsByTagName('img')
 const allsquares = document.getElementsByClassName('square')
 const pieces = document.getElementsByClassName('piece')
@@ -67,7 +88,8 @@ function allowclick(e) {
         legalmoves = getpossiblemoves(piece, startingsquareid, piececolour);
         console.log(legalmoves)
         highlight(startingsquareid);        /* function to highlight selected piece */
-        highlightlegal();
+        if(urldata.includes('showmovescheck=on'))
+            highlightlegal();
     }
 }
 
@@ -84,7 +106,8 @@ function allowplace(e) {
         unhighlightlegal();
         selected = null     /* resets once piece is moved */
         whiteturn = !whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
-        /*rotate();*/
+        if(urldata.includes('rotatecheck=on'))
+            rotate();
     } else {
 
     }

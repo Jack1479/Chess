@@ -203,7 +203,9 @@ body{
         right:85%;
         bottom:775%;
     }
-    
+    .settings{
+        display:none;
+    }
 }
 
 .legalsquares{
@@ -356,7 +358,7 @@ html{
     border:none;
     font-size:600%;
     position:relative;
-    bottom:90vh;
+    bottom:79vh;
     left:755px;
     box-shadow: 0 0 12px 6px var(--pulse-colour);
     border-radius:15px;
@@ -370,12 +372,22 @@ html{
     width:700px;
     border-radius:15px;
     left:30%;
-    bottom:10%;
+    bottom:14%;
     border-color:black;
     border-width:30px;
     border-style:solid;
 }
 
 .selection{
-    font-size: x-large;
+    font-size: xx-large;
 }
+
+.exit2{
+    position:absolute;
+    background-color: lightgray;
+    font-size: large;
+    left:65%;
+    top: 20%;
+    height:40px;
+    width:40px;
+ }

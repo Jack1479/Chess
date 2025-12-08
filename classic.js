@@ -17,8 +17,6 @@ var urldata = location.href.split('?')[1].split('&')
 console.log(urldata)
 
 
-
-
 const pieceimg = document.getElementsByTagName('img')
 const allsquares = document.getElementsByClassName('square')
 const pieces = document.getElementsByClassName('piece')
@@ -148,7 +146,7 @@ function rotate() {
 
 function getpossiblemoves(piece, startingsquareid, piececolour) {
     if (piece.classList.contains('pawn')) {
-        return pawnmoves(piececolour, startingsquareid);
+        return pawnmoves(piececolour, startingsquareid); 
     }
     if (piece.classList.contains('knight')) {
         return knightmoves(piececolour, startingsquareid);
@@ -682,6 +680,10 @@ function kingmoves(piececolour, startingsquareid){
         tempallsquares[i] = tempallsquares[i].id
     }
 
+    if((currentsquareid ='e1') || (currentsquareid ='e8')){
+        
+    }
+
     movedirection.forEach((move) =>{
         let tempcurrentfile = currentfile.charCodeAt(0);
         tempcurrentfile = tempcurrentfile + move[1];
@@ -705,4 +707,7 @@ function kingmoves(piececolour, startingsquareid){
         }});
     
         return legalmoves;
-    }
+
+   
+
+}

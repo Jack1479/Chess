@@ -174,6 +174,16 @@ function onsquare(square) {
     }
 }
 
+function onsquare2(square){
+    if (square.querySelector('.piece') !== null) {               /* checks if anything is on the target square*/
+        const x = (square.querySelector('.piece')).getAttribute('type');     /* if there is something on the square then it gets the colour of it and returns it*/
+        return x ;
+    } else {
+        return 'empty';
+    }
+}
+
+
 function pawnmoves(piececolour, startingsquareid) { /* A function which checks the square infront of the pawn. If occupied then no legal moves, if not then there is legal move forward 1 place. if on the 2nd or 7th rank then checks the next square.*/
     let legalmoves = [];
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
@@ -680,10 +690,6 @@ function kingmoves(piececolour, startingsquareid){
         tempallsquares[i] = tempallsquares[i].id
     }
 
-    if((currentsquareid ='e1') || (currentsquareid ='e8')){
-        
-    }
-
     movedirection.forEach((move) =>{
         let tempcurrentfile = currentfile.charCodeAt(0);
         tempcurrentfile = tempcurrentfile + move[1];
@@ -707,7 +713,36 @@ function kingmoves(piececolour, startingsquareid){
         }});
     
         return legalmoves;
-
-   
-
 }
+
+function getallmoves(){
+    let allmoves = []
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+        for(let i=0;i<tempallsquares.length;i++){
+            let whichpiece = onsquare2(i)
+            if (whichpiece != 'empty'){
+                let col = onsquare(i)
+                if(whichpiece = 'pawn'){
+                    let allpmoves = pawnmoves(col,i)
+                    allmoves.push(allpmoves)
+                }else if(whichpiece = 'rook'){
+                    let allrmoves = rookmoves(col,i)
+                    allmoves.push(allrmoves);     
+                }else if(whichpiece = 'bishop'){
+                    let allbmoves = bishopmoves(col,i) 
+                    allmoves.push(allbmoves);  
+                }else if(whichpiece = 'knight'){
+                    let allkmoves = knightmoves(col,i)
+                    allmoves.push(allkmoves);
+                }else if(whichpiece = 'queen'){
+                    let allqmoves = queenmoves(col,i)
+                    allmoves.push(allqmoves);
+                }else if(whichpiece = 'king'){
+                    let allkimoves = kingmoves(col,i)
+                    allmoves.push(allkimoves);
+                }
+            }
+        }
+        return allmoves;
+}
+ console.log(getallmoves())

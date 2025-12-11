@@ -102,6 +102,7 @@ function allowplace(e) {
         unhighlight();                  /* unhighlights once piece is moved */
         unhighlightlegal();
         selected = null     /* resets once piece is moved */
+    }
         whiteturn = !whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
         let allvalidwhite = getallwhitemoves();
         let allvalidblack = getallblackmoves();
@@ -112,30 +113,98 @@ function allowplace(e) {
             let columnLetter = String.fromCharCode(97 + column);
             let coord = columnLetter + row;
             let currentcoord = document.getElementById(coord);
+            unhighlightcheck(currentcoord);
             let whichpiece = onsquare2(currentcoord);
-            let col = onsquare(whichpiece)
+            let col = onsquare(currentcoord);
             if(whichpiece == 'king' & col == 'black'){
                 let kinglocation = coord
                 if (whiteturn == false){
                     if(allvalidwhite.includes(kinglocation)){
-                        console.log('your in check');
-                        }
+                        highlightcheck(currentcoord);
+                        }}}
             if(whichpiece == 'king' & col == 'white'){
                 let kinglocation = coord;
                 if(whiteturn == true){
                     if(allvalidblack.includes(kinglocation)){
-                            console.log('your in check');
-                }
-            }
-                }
-             
-            
-        
+                        highlightcheck(currentcoord);
+                }}}
         if(urldata.includes('rotatecheck=on'))
             rotate();
-    }
+    
 }}
 
+function getallwhitemoves(){
+    let allmoves = [];
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+        for(let i=1;i<tempallsquares.length + 1;i++){
+            let row = 8 - Math.floor((i - 1) / 8);
+            let column = (i - 1) % 8;
+            let columnLetter = String.fromCharCode(97 + column);
+            let coord = columnLetter + row;
+            let currentcoord = document.getElementById(coord);
+            let whichpiece = onsquare2(currentcoord);
+            if (whichpiece != 'empty'){
+                let col = onsquare(currentcoord);
+                if(whichpiece == 'pawn' & col == 'white'){
+                    let allpmoves = pawnmoves(col,coord)
+                    allmoves.push(allpmoves)
+                }else if(whichpiece == 'rook' & col == 'white'){
+                    let allrmoves = rookmoves(col,coord)
+                    allmoves.push(allrmoves);     
+                }else if(whichpiece == 'bishop' & col == 'white'){
+                    let allbmoves = bishopmoves(col,coord) 
+                    allmoves.push(allbmoves);  
+                }else if(whichpiece == 'knight' & col == 'white'){
+                    let allkmoves = knightmoves(col,coord)
+                    allmoves.push(allkmoves);
+                }else if(whichpiece == 'queen' & col == 'white'){
+                    let allqmoves = queenmoves(col,coord)
+                    allmoves.push(allqmoves);
+                }else if(whichpiece == 'king' & col == 'white'){
+                    let allkimoves = kingmoves(col,coord)
+                    allmoves.push(allkimoves);
+                }
+            }
+        }
+        return allmoves.flat();
+}
+
+function getallblackmoves(){
+    let allmoves = [];
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+        for(let i=1;i<tempallsquares.length + 1;i++){
+            let row = 8 - Math.floor((i - 1) / 8);
+            let column = (i - 1) % 8;
+            let columnLetter = String.fromCharCode(97 + column);
+            let coord = columnLetter + row;
+            let currentcoord = document.getElementById(coord);
+            let whichpiece = onsquare2(currentcoord);
+            if (whichpiece != 'empty'){
+                let col = onsquare(currentcoord);
+                if(whichpiece == 'pawn' & col == 'black'){
+                    let allpmoves = pawnmoves(col,coord)
+                    allmoves.push(allpmoves)
+                }else if(whichpiece == 'rook' & col == 'black'){
+                    let allrmoves = rookmoves(col,coord)
+                    allmoves.push(allrmoves);     
+                }else if(whichpiece == 'bishop' & col == 'black'){
+                    let allbmoves = bishopmoves(col,coord) 
+                    allmoves.push(allbmoves);  
+                }else if(whichpiece == 'knight' & col == 'black'){
+                    let allkmoves = knightmoves(col,coord)
+                    allmoves.push(allkmoves);
+                }else if(whichpiece == 'queen' & col == 'black'){
+                    let allqmoves = queenmoves(col,coord)
+                    allmoves.push(allqmoves);
+                }else if(whichpiece == 'king' & col == 'black'){
+                    let allkimoves = kingmoves(col,coord)
+                    allmoves.push(allkimoves);
+                }
+            }
+        }
+        return allmoves.flat();
+        
+}
 function unhighlightlegal(){
     document.querySelectorAll('.legalsquares').forEach((move) =>{
         move.classList.remove('legalsquares');
@@ -169,6 +238,87 @@ function rotate() {
     board.classList.toggle('flip')  /*toggles the flip css package  which rotates the board 180 degrees*/
 }
 
+function highlightcheck(currentcoord){
+    currentcoord.classList.add('checkhighlight')
+    
+}
+function unhighlightcheck(allsquares){
+    allsquares.classList.remove('checkhighlight')
+    
+}
+function getallwhitemoves(){
+    let allmoves = [];
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+        for(let i=1;i<tempallsquares.length + 1;i++){
+            let row = 8 - Math.floor((i - 1) / 8);
+            let column = (i - 1) % 8;
+            let columnLetter = String.fromCharCode(97 + column);
+            let coord = columnLetter + row;
+            let currentcoord = document.getElementById(coord);
+            let whichpiece = onsquare2(currentcoord);
+            if (whichpiece != 'empty'){
+                let col = onsquare(currentcoord);
+                if(whichpiece == 'pawn' & col == 'white'){
+                    let allpmoves = pawnmoves(col,coord)
+                    allmoves.push(allpmoves)
+                }else if(whichpiece == 'rook' & col == 'white'){
+                    let allrmoves = rookmoves(col,coord)
+                    allmoves.push(allrmoves);     
+                }else if(whichpiece == 'bishop' & col == 'white'){
+                    let allbmoves = bishopmoves(col,coord) 
+                    allmoves.push(allbmoves);  
+                }else if(whichpiece == 'knight' & col == 'white'){
+                    let allkmoves = knightmoves(col,coord)
+                    allmoves.push(allkmoves);
+                }else if(whichpiece == 'queen' & col == 'white'){
+                    let allqmoves = queenmoves(col,coord)
+                    allmoves.push(allqmoves);
+                }else if(whichpiece == 'king' & col == 'white'){
+                    let allkimoves = kingmoves(col,coord)
+                    allmoves.push(allkimoves);
+                }
+            }
+        }
+        return allmoves.flat();
+}
+
+function getallblackmoves(){
+    let allmoves = [];
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+        for(let i=1;i<tempallsquares.length + 1;i++){
+            let row = 8 - Math.floor((i - 1) / 8);
+            let column = (i - 1) % 8;
+            let columnLetter = String.fromCharCode(97 + column);
+            let coord = columnLetter + row;
+            let currentcoord = document.getElementById(coord);
+            let whichpiece = onsquare2(currentcoord);
+            if (whichpiece != 'empty'){
+                let col = onsquare(currentcoord);
+                if(whichpiece == 'pawn' & col == 'black'){
+                    let allpmoves = pawnmoves(col,coord)
+                    allmoves.push(allpmoves)
+                }else if(whichpiece == 'rook' & col == 'black'){
+                    let allrmoves = rookmoves(col,coord)
+                    allmoves.push(allrmoves);     
+                }else if(whichpiece == 'bishop' & col == 'black'){
+                    let allbmoves = bishopmoves(col,coord) 
+                    allmoves.push(allbmoves);  
+                }else if(whichpiece == 'knight' & col == 'black'){
+                    let allkmoves = knightmoves(col,coord)
+                    allmoves.push(allkmoves);
+                }else if(whichpiece == 'queen' & col == 'black'){
+                    let allqmoves = queenmoves(col,coord)
+                    allmoves.push(allqmoves);
+                }else if(whichpiece == 'king' & col == 'black'){
+                    let allkimoves = kingmoves(col,coord)
+                    allmoves.push(allkimoves);
+                }
+            }
+        }
+        return allmoves.flat();
+        
+}
+
 
 function getpossiblemoves(piece, startingsquareid, piececolour) {
     if (piece.classList.contains('pawn')) {
@@ -191,7 +341,7 @@ function getpossiblemoves(piece, startingsquareid, piececolour) {
     }
 }
 
-function onsquare(square) {
+function onsquare(square){
     if (square.querySelector('.piece') !== null) {               /* checks if anything is on the target square*/
         const pcolour = (square.querySelector('.piece')).getAttribute('colour');     /* if there is something on the square then it gets the colour of it and returns it*/
         return pcolour;
@@ -729,7 +879,7 @@ function kingmoves(piececolour, startingsquareid){
             let tempsquarecontains = onsquare(tempcurrentsquare);
             if (tempsquarecontains == 'empty') {
                 legalmoves.push(tempcurrentsquareid);
-            }else if (piececolour !== tempsquarecontains) {
+            }else if (piececolour !== tempsquarecontains ) {
                 legalmoves.push(tempcurrentsquareid);
                 return legalmoves;
                 }else{
@@ -742,74 +892,3 @@ function kingmoves(piececolour, startingsquareid){
         return legalmoves;
 }
 
-function getallwhitemoves(){
-    let allmoves = [];
-    let tempallsquares = Array.from(document.getElementsByClassName('square'));
-        for(let i=1;i<tempallsquares.length + 1;i++){
-            let row = 8 - Math.floor((i - 1) / 8);
-            let column = (i - 1) % 8;
-            let columnLetter = String.fromCharCode(97 + column);
-            let coord = columnLetter + row;
-            let currentcoord = document.getElementById(coord);
-            let whichpiece = onsquare2(currentcoord);
-            if (whichpiece != 'empty'){
-                let col = onsquare(currentcoord);
-                if(whichpiece == 'pawn' & col == 'white'){
-                    let allpmoves = pawnmoves(col,coord)
-                    allmoves.push(allpmoves)
-                }else if(whichpiece == 'rook' & col == 'white'){
-                    let allrmoves = rookmoves(col,coord)
-                    allmoves.push(allrmoves);     
-                }else if(whichpiece == 'bishop' & col == 'white'){
-                    let allbmoves = bishopmoves(col,coord) 
-                    allmoves.push(allbmoves);  
-                }else if(whichpiece == 'knight' & col == 'white'){
-                    let allkmoves = knightmoves(col,coord)
-                    allmoves.push(allkmoves);
-                }else if(whichpiece == 'queen' & col == 'white'){
-                    let allqmoves = queenmoves(col,coord)
-                    allmoves.push(allqmoves);
-                }else if(whichpiece == 'king' & col == 'white'){
-                    let allkimoves = kingmoves(col,coord)
-                    allmoves.push(allkimoves);
-                }
-            }
-        }
-        return allmoves;
-}
-
-function getallblackmoves(){
-    let allmoves = [];
-    let tempallsquares = Array.from(document.getElementsByClassName('square'));
-        for(let i=1;i<tempallsquares.length + 1;i++){
-            let row = 8 - Math.floor((i - 1) / 8);
-            let column = (i - 1) % 8;
-            let columnLetter = String.fromCharCode(97 + column);
-            let coord = columnLetter + row;
-            let currentcoord = document.getElementById(coord);
-            let whichpiece = onsquare2(currentcoord);
-            if (whichpiece != 'empty'){
-                let col = onsquare(currentcoord);
-                if(whichpiece == 'pawn' & col == 'black'){
-                    let allpmoves = pawnmoves(col,coord)
-                    allmoves.push(allpmoves)
-                }else if(whichpiece == 'rook' & col == 'black'){
-                    let allrmoves = rookmoves(col,coord)
-                    allmoves.push(allrmoves);     
-                }else if(whichpiece == 'bishop' & col == 'black'){
-                    let allbmoves = bishopmoves(col,coord) 
-                    allmoves.push(allbmoves);  
-                }else if(whichpiece == 'knight' & col == 'black'){
-                    let allkmoves = knightmoves(col,coord)
-                    allmoves.push(allkmoves);
-                }else if(whichpiece == 'queen' & col == 'black'){
-                    let allqmoves = queenmoves(col,coord)
-                    allmoves.push(allqmoves);
-                }else if(whichpiece == 'king' & col == 'black'){
-                    let allkimoves = kingmoves(col,coord)
-                    allmoves.push(allkimoves);
-                }
-            }
-        }
-        return allmoves;
-}

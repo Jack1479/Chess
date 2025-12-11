@@ -119,6 +119,7 @@ function unhighlightlegal(){
 
 function highlightlegal(){
     unhighlightlegal();
+    debugger
     legalmoves.forEach((squareid) => {
         const tempsquare = document.getElementById(squareid);
         if (tempsquare){
@@ -166,7 +167,6 @@ function getpossiblemoves(piece, startingsquareid, piececolour) {
 }
 
 function onsquare(square) {
-    debugger
     if (square.querySelector('.piece') !== null) {               /* checks if anything is on the target square*/
         const pcolour = (square.querySelector('.piece')).getAttribute('colour');     /* if there is something on the square then it gets the colour of it and returns it*/
         return pcolour;
@@ -177,8 +177,7 @@ function onsquare(square) {
 
 function onsquare2(squared){
     if (squared.querySelector('.piece') !== null) {               
-        const x = (squared.querySelector('.piece')).getAttribute('type');  
-        debugger   
+        const x = (squared.querySelector('.piece')).getAttribute('type');     
         return x ;
     } else {
         return 'empty';
@@ -719,39 +718,37 @@ function kingmoves(piececolour, startingsquareid){
 }
 
 function getallmoves(){
-    let allmoves = []
+    let allmoves = [];
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
         for(let i=1;i<tempallsquares.length;i++){
             let row = 8 - Math.floor((i - 1) / 8);
             let column = (i - 1) % 8;
             let columnLetter = String.fromCharCode(97 + column);
             let coord = columnLetter + row;
-            let currentcoord = document.getElementById(coord)
-            let whichpiece = onsquare2(currentcoord)
-            debugger
+            let currentcoord = document.getElementById(coord);
+            let whichpiece = onsquare2(currentcoord);
             if (whichpiece != 'empty'){
-                let col = onsquare(i)
-                if(whichpiece = 'pawn'){
-                    let allpmoves = pawnmoves(col,i)
+                let col = onsquare(currentcoord);
+                if(whichpiece == 'pawn'){
+                    let allpmoves = pawnmoves(col,coord)
                     allmoves.push(allpmoves)
-                }else if(whichpiece = 'rook'){
-                    let allrmoves = rookmoves(col,i)
+                }else if(whichpiece == 'rook'){
+                    let allrmoves = rookmoves(col,coord)
                     allmoves.push(allrmoves);     
-                }else if(whichpiece = 'bishop'){
-                    let allbmoves = bishopmoves(col,i) 
+                }else if(whichpiece == 'bishop'){
+                    let allbmoves = bishopmoves(col,coord) 
                     allmoves.push(allbmoves);  
-                }else if(whichpiece = 'knight'){
-                    let allkmoves = knightmoves(col,i)
+                }else if(whichpiece == 'knight'){
+                    let allkmoves = knightmoves(col,coord)
                     allmoves.push(allkmoves);
-                }else if(whichpiece = 'queen'){
-                    let allqmoves = queenmoves(col,i)
+                }else if(whichpiece == 'queen'){
+                    let allqmoves = queenmoves(col,coord)
                     allmoves.push(allqmoves);
-                }else if(whichpiece = 'king'){
-                    let allkimoves = kingmoves(col,i)
+                }else if(whichpiece == 'king'){
+                    let allkimoves = kingmoves(col,coord)
                     allmoves.push(allkimoves);
                 }
             }
         }
         return allmoves;
 }
- console.log(getallmoves()) 

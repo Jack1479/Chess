@@ -166,6 +166,7 @@ function getpossiblemoves(piece, startingsquareid, piececolour) {
 }
 
 function onsquare(square) {
+    debugger
     if (square.querySelector('.piece') !== null) {               /* checks if anything is on the target square*/
         const pcolour = (square.querySelector('.piece')).getAttribute('colour');     /* if there is something on the square then it gets the colour of it and returns it*/
         return pcolour;
@@ -174,14 +175,16 @@ function onsquare(square) {
     }
 }
 
-function onsquare2(square){
-    if (square.querySelector('.piece') !== null) {               /* checks if anything is on the target square*/
-        const x = (square.querySelector('.piece')).getAttribute('type');     /* if there is something on the square then it gets the colour of it and returns it*/
+function onsquare2(squared){
+    if (squared.querySelector('.piece') !== null) {               
+        const x = (squared.querySelector('.piece')).getAttribute('type');  
+        debugger   
         return x ;
     } else {
         return 'empty';
     }
-}
+} 
+
 
 
 function pawnmoves(piececolour, startingsquareid) { /* A function which checks the square infront of the pawn. If occupied then no legal moves, if not then there is legal move forward 1 place. if on the 2nd or 7th rank then checks the next square.*/
@@ -718,8 +721,14 @@ function kingmoves(piececolour, startingsquareid){
 function getallmoves(){
     let allmoves = []
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
-        for(let i=0;i<tempallsquares.length;i++){
-            let whichpiece = onsquare2(i)
+        for(let i=1;i<tempallsquares.length;i++){
+            let row = 8 - Math.floor((i - 1) / 8);
+            let column = (i - 1) % 8;
+            let columnLetter = String.fromCharCode(97 + column);
+            let coord = columnLetter + row;
+            let currentcoord = document.getElementById(coord)
+            let whichpiece = onsquare2(currentcoord)
+            debugger
             if (whichpiece != 'empty'){
                 let col = onsquare(i)
                 if(whichpiece = 'pawn'){
@@ -745,4 +754,4 @@ function getallmoves(){
         }
         return allmoves;
 }
- console.log(getallmoves())
+ console.log(getallmoves()) 

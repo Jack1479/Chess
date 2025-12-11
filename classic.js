@@ -14,7 +14,6 @@ close.addEventListener('click', () => { /* adds event listener to close button*/
 
 var url = location.href
 var urldata = location.href.split('?')[1].split('&')
-console.log(urldata)
 
 
 const pieceimg = document.getElementsByTagName('img')
@@ -104,12 +103,38 @@ function allowplace(e) {
         unhighlightlegal();
         selected = null     /* resets once piece is moved */
         whiteturn = !whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
+        let allvalidwhite = getallwhitemoves();
+        let allvalidblack = getallblackmoves();
+        let tempallsquares = Array.from(document.getElementsByClassName('square'));
+        for(let i=1;i<tempallsquares.length + 1;i++){
+            let row = 8 - Math.floor((i - 1) / 8);
+            let column = (i - 1) % 8;
+            let columnLetter = String.fromCharCode(97 + column);
+            let coord = columnLetter + row;
+            let currentcoord = document.getElementById(coord);
+            let whichpiece = onsquare2(currentcoord);
+            let col = onsquare(whichpiece)
+            if(whichpiece == 'king' & col == 'black'){
+                let kinglocation = coord
+                if (whiteturn == false){
+                    if(allvalidwhite.includes(kinglocation)){
+                        console.log('your in check');
+                        }
+            if(whichpiece == 'king' & col == 'white'){
+                let kinglocation = coord;
+                if(whiteturn == true){
+                    if(allvalidblack.includes(kinglocation)){
+                            console.log('your in check');
+                }
+            }
+                }
+             
+            
+        
         if(urldata.includes('rotatecheck=on'))
             rotate();
-    } else {
-
     }
-}
+}}
 
 function unhighlightlegal(){
     document.querySelectorAll('.legalsquares').forEach((move) =>{
@@ -119,7 +144,6 @@ function unhighlightlegal(){
 
 function highlightlegal(){
     unhighlightlegal();
-    debugger
     legalmoves.forEach((squareid) => {
         const tempsquare = document.getElementById(squareid);
         if (tempsquare){
@@ -127,6 +151,7 @@ function highlightlegal(){
         }
     });
 }
+
 function unhighlight() {
     if (selected){
         selected.classList.remove('highlight');
@@ -682,7 +707,7 @@ function kingmoves(piececolour, startingsquareid){
     let currentrank = ranknumber;
     let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
     let currentsquare = document.getElementById(currentsquareid)
-    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */      /*||*/
+    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */     
     const movedirection = [
         [1,0], [-1,0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]
     ]; 
@@ -717,10 +742,10 @@ function kingmoves(piececolour, startingsquareid){
         return legalmoves;
 }
 
-function getallmoves(){
+function getallwhitemoves(){
     let allmoves = [];
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
-        for(let i=1;i<tempallsquares.length;i++){
+        for(let i=1;i<tempallsquares.length + 1;i++){
             let row = 8 - Math.floor((i - 1) / 8);
             let column = (i - 1) % 8;
             let columnLetter = String.fromCharCode(97 + column);
@@ -729,22 +754,58 @@ function getallmoves(){
             let whichpiece = onsquare2(currentcoord);
             if (whichpiece != 'empty'){
                 let col = onsquare(currentcoord);
-                if(whichpiece == 'pawn'){
+                if(whichpiece == 'pawn' & col == 'white'){
                     let allpmoves = pawnmoves(col,coord)
                     allmoves.push(allpmoves)
-                }else if(whichpiece == 'rook'){
+                }else if(whichpiece == 'rook' & col == 'white'){
                     let allrmoves = rookmoves(col,coord)
                     allmoves.push(allrmoves);     
-                }else if(whichpiece == 'bishop'){
+                }else if(whichpiece == 'bishop' & col == 'white'){
                     let allbmoves = bishopmoves(col,coord) 
                     allmoves.push(allbmoves);  
-                }else if(whichpiece == 'knight'){
+                }else if(whichpiece == 'knight' & col == 'white'){
                     let allkmoves = knightmoves(col,coord)
                     allmoves.push(allkmoves);
-                }else if(whichpiece == 'queen'){
+                }else if(whichpiece == 'queen' & col == 'white'){
                     let allqmoves = queenmoves(col,coord)
                     allmoves.push(allqmoves);
-                }else if(whichpiece == 'king'){
+                }else if(whichpiece == 'king' & col == 'white'){
+                    let allkimoves = kingmoves(col,coord)
+                    allmoves.push(allkimoves);
+                }
+            }
+        }
+        return allmoves;
+}
+
+function getallblackmoves(){
+    let allmoves = [];
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+        for(let i=1;i<tempallsquares.length + 1;i++){
+            let row = 8 - Math.floor((i - 1) / 8);
+            let column = (i - 1) % 8;
+            let columnLetter = String.fromCharCode(97 + column);
+            let coord = columnLetter + row;
+            let currentcoord = document.getElementById(coord);
+            let whichpiece = onsquare2(currentcoord);
+            if (whichpiece != 'empty'){
+                let col = onsquare(currentcoord);
+                if(whichpiece == 'pawn' & col == 'black'){
+                    let allpmoves = pawnmoves(col,coord)
+                    allmoves.push(allpmoves)
+                }else if(whichpiece == 'rook' & col == 'black'){
+                    let allrmoves = rookmoves(col,coord)
+                    allmoves.push(allrmoves);     
+                }else if(whichpiece == 'bishop' & col == 'black'){
+                    let allbmoves = bishopmoves(col,coord) 
+                    allmoves.push(allbmoves);  
+                }else if(whichpiece == 'knight' & col == 'black'){
+                    let allkmoves = knightmoves(col,coord)
+                    allmoves.push(allkmoves);
+                }else if(whichpiece == 'queen' & col == 'black'){
+                    let allqmoves = queenmoves(col,coord)
+                    allmoves.push(allqmoves);
+                }else if(whichpiece == 'king' & col == 'black'){
                     let allkimoves = kingmoves(col,coord)
                     allmoves.push(allkimoves);
                 }

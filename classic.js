@@ -801,15 +801,18 @@ function kingmoves(piececolour, startingsquareid){
         let tempcurrentsquare = document.getElementById(tempcurrentsquareid)
         if (tempallsquares.includes(tempcurrentsquareid)) {
             let tempsquarecontains = onsquare(tempcurrentsquare);
-            if ((tempsquarecontains == 'empty')&(whiteturn = true)&(!blackmoves.includes(tempcurrentsquare))){
-                legalmoves.push(tempcurrentsquareid);
-            }else if (piececolour !== tempsquarecontains ) {
-                legalmoves.push(tempcurrentsquareid);
-                return legalmoves;
-            }else{
-                return legalmoves;
-                }  
-        }});
+            if ((tempsquarecontains == 'empty')&&(whiteturn === true)){
+                if(!blackmoves.includes(tempcurrentsquareid)){
+                    legalmoves.push(tempcurrentsquareid);
+                }
+            }else if ((tempsquarecontains == 'empty')&&(whiteturn !== true)){
+                if(!whitemoves.includes(tempcurrentsquareid)){
+                    legalmoves.push(tempcurrentsquareid);
+                }
+            }else if(piececolour !== tempsquarecontains){
+                legalmoves.push(tempcurrentsquareid)
+            }
+    }});
     
         return legalmoves;
 }

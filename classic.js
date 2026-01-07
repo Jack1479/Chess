@@ -119,18 +119,19 @@ function allowplace(e) {
             unhighlightcheck(currentcoord);
             let whichpiece = onsquare2(currentcoord);
             let col = onsquare(currentcoord);
-            if(whichpiece == 'king' & col == 'black'){
+            if(whichpiece == 'king' && col == 'white'){
                 let kinglocation = coord
-                if (whiteturn == false){
-                    if(allvalidwhite.includes(kinglocation)){
-                        highlightcheck(currentcoord);
-                        }}}
-            if(whichpiece == 'king' & col == 'white'){
-                let kinglocation = coord;
-                if(whiteturn == true){
+                if (whiteturn == true){
                     if(allvalidblack.includes(kinglocation)){
                         highlightcheck(currentcoord);
-                }}}  
+                        }}}
+            if(whichpiece == 'king' && col == 'black'){
+                let kinglocation = coord;
+                if(whiteturn !== true){
+                    if(allvalidwhite.includes(kinglocation)){
+                        highlightcheck(currentcoord);
+                }}}
+            
 }}
 
 
@@ -188,25 +189,26 @@ function getallwhitemoves(){
             let whichpiece = onsquare2(currentcoord);
             if (whichpiece != 'empty'){
                 let col = onsquare(currentcoord);
-                if(whichpiece == 'pawn' & col == 'white'){
+                if(whichpiece == 'pawn' && col == 'white'){
                     let allpmoves = pawnmoves(col,coord)
                     allmoves.push(allpmoves);
-                }else if(whichpiece == 'rook' & col == 'white'){
+                }else if(whichpiece == 'rook' && col == 'white'){
                     let allrmoves = rookmoves(col,coord)
                     allmoves.push(allrmoves);     
-                }else if(whichpiece == 'bishop' & col == 'white'){
+                }else if(whichpiece == 'bishop' && col == 'white'){
                     let allbmoves = bishopmoves(col,coord) 
                     allmoves.push(allbmoves);  
-                }else if(whichpiece == 'knight' & col == 'white'){
+                }else if(whichpiece == 'knight' && col == 'white'){
                     let allkmoves = knightmoves(col,coord)
                     allmoves.push(allkmoves);
-                }else if(whichpiece == 'queen' & col == 'white'){
+                }else if(whichpiece == 'queen' && col == 'white'){
                     let allqmoves = queenmoves(col,coord)
                     allmoves.push(allqmoves);
             }
         }
+        }
         return allmoves.flat();
-}}
+}
 
 function getallblackmoves(){
     let allmoves = [];
@@ -220,19 +222,19 @@ function getallblackmoves(){
             let whichpiece = onsquare2(currentcoord);
             if (whichpiece != 'empty'){
                 let col = onsquare(currentcoord);
-                if(whichpiece == 'pawn' & col == 'black'){
+                if(whichpiece == 'pawn' && col == 'black'){
                     let allpmoves = pawnmoves(col,coord)
                     allmoves.push(allpmoves)
-                }else if(whichpiece == 'rook' & col == 'black'){
+                }else if(whichpiece == 'rook' && col == 'black'){
                     let allrmoves = rookmoves(col,coord)
                     allmoves.push(allrmoves);     
-                }else if(whichpiece == 'bishop' & col == 'black'){
+                }else if(whichpiece == 'bishop' && col == 'black'){
                     let allbmoves = bishopmoves(col,coord) 
                     allmoves.push(allbmoves);  
-                }else if(whichpiece == 'knight' & col == 'black'){
+                }else if(whichpiece == 'knight' && col == 'black'){
                     let allkmoves = knightmoves(col,coord)
                     allmoves.push(allkmoves);
-                }else if(whichpiece == 'queen' & col == 'black'){
+                }else if(whichpiece == 'queen' && col == 'black'){
                     let allqmoves = queenmoves(col,coord)
                     allmoves.push(allqmoves);
                 }

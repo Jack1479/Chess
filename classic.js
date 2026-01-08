@@ -99,6 +99,7 @@ function allowplace(e) {
             targetpiece.remove();                           /* removes the current piece on that square */
         }
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
+        promotion();
         unhighlight();                  /* unhighlights once piece is moved */
         unhighlightlegal();
         if(urldata.includes('rotatecheck=on')){
@@ -117,7 +118,7 @@ function allowplace(e) {
             let coord = columnLetter + row;
             let currentcoord = document.getElementById(coord);
             unhighlightcheck(currentcoord);
-            let whichpiece = onsquare2(currentcoord);
+            let whichpiece = whatpiece(currentcoord);
             let col = onsquare(currentcoord);
             if(whichpiece == 'king' && col == 'white'){
                 let kinglocation = coord
@@ -186,7 +187,7 @@ function getallwhitemoves(){
             let columnLetter = String.fromCharCode(97 + column);
             let coord = columnLetter + row;
             let currentcoord = document.getElementById(coord);
-            let whichpiece = onsquare2(currentcoord);
+            let whichpiece = whatpiece(currentcoord);
             if (whichpiece != 'empty'){
                 let col = onsquare(currentcoord);
                 if(whichpiece == 'pawn' && col == 'white'){
@@ -219,7 +220,7 @@ function getallblackmoves(){
             let columnLetter = String.fromCharCode(97 + column);
             let coord = columnLetter + row;
             let currentcoord = document.getElementById(coord);
-            let whichpiece = onsquare2(currentcoord);
+            let whichpiece = whatpiece(currentcoord);
             if (whichpiece != 'empty'){
                 let col = onsquare(currentcoord);
                 if(whichpiece == 'pawn' && col == 'black'){
@@ -275,7 +276,7 @@ function onsquare(square){
     }
 }
 
-function onsquare2(squared){
+function whatpiece(squared){
     if (squared.querySelector('.piece') !== null) {               
         const x = (squared.querySelector('.piece')).getAttribute('type');     
         return x ;
@@ -309,7 +310,6 @@ function pawnmoves(piececolour, startingsquareid) { /* A function which checks t
         if (tempsquarecontains !== 'black') {
         } else {
             legalmoves.push(tempcurrentsquareid);
-
         }
     }
 
@@ -326,7 +326,6 @@ function pawnmoves(piececolour, startingsquareid) { /* A function which checks t
         if (tempsquarecontains !== 'black') {
         } else {
             legalmoves.push(tempcurrentsquareid);
-
         }
     }
 
@@ -818,3 +817,20 @@ function kingmoves(piececolour, startingsquareid){
     
         return legalmoves;
 }
+
+function promotion(piececolour){
+    let allsquare = Array.from(document.getElementsByClassName('square'));
+        for(let i=1;i<allsquare.length + 1;i++){
+            let row = 8 - Math.floor((i - 1) / 8);
+            let column = (i - 1) % 8;
+            let columnLetter = String.fromCharCode(97 + column);
+            let coord = columnLetter + row;
+            let currentcoord = document.getElementById(coord);
+            let whichpiece = whatpiece(currentcoord);
+            if(whichpiece == 'pawn' && row == '8' && piececolour == 'white'){
+                console.log('wewewew')
+            }
+            if(whichpiece == 'pawn' && row == '1' && piececolour == 'black'){
+                console.log('wewewew')
+            }
+}};

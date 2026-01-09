@@ -99,7 +99,9 @@ function allowplace(e) {
             targetpiece.remove();                           /* removes the current piece on that square */
         }
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
-        promotion();
+        const pawncoord = promotion();
+        if(pawncoord !== undefined)
+            promotepawn(pawncoord, square);
         unhighlight();                  /* unhighlights once piece is moved */
         unhighlightlegal();
         if(urldata.includes('rotatecheck=on')){
@@ -818,7 +820,7 @@ function kingmoves(piececolour, startingsquareid){
         return legalmoves;
 }
 
-function promotion(piececolour){
+function promotion(){
     let allsquare = Array.from(document.getElementsByClassName('square'));
         for(let i=1;i<allsquare.length + 1;i++){
             let row = 8 - Math.floor((i - 1) / 8);
@@ -827,10 +829,26 @@ function promotion(piececolour){
             let coord = columnLetter + row;
             let currentcoord = document.getElementById(coord);
             let whichpiece = whatpiece(currentcoord);
-            if(whichpiece == 'pawn' && row == '8' && piececolour == 'white'){
-                console.log('wewewew')
+            let pcol = onsquare(currentcoord);
+            if(whichpiece == 'pawn' && row == '8' && pcol == 'white'){
+                return currentcoord
             }
-            if(whichpiece == 'pawn' && row == '1' && piececolour == 'black'){
-                console.log('wewewew')
+            if(whichpiece == 'pawn' && row == '1' && pcol == 'black'){
+                return currentcoord
             }
 }};
+
+function promotepawn(pawncoord, square){
+    const removepawn = square.querySelector('.piece');
+    let pcol = onsquare(pawncoord);
+    removepawn.remove()
+    const newqueen = document.createElement('div')
+    newqueen.classList.add('piece', 'queen')
+    if (pcol == 'white') {
+        newqueen.classList.add('white');
+    } else {
+        newqueen.classList.add('black');
+    }
+    square.appendChild(newqueen)
+    
+}

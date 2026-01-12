@@ -101,7 +101,7 @@ function allowplace(e) {
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
         const pawncoord = promotion();
         if(pawncoord !== undefined)
-            promotepawn(pawncoord, square);
+            pawnpromote(pawncoord, square);
         unhighlight();                  /* unhighlights once piece is moved */
         unhighlightlegal();
         if(urldata.includes('rotatecheck=on')){
@@ -838,17 +838,35 @@ function promotion(){
             }
 }};
 
-function promotepawn(pawncoord, square){
+/*function promotepawn(pawncoord, square){
     const removepawn = square.querySelector('.piece');
-    let pcol = onsquare(pawncoord);
+    let pcol = onsquare(pawncoord)
     removepawn.remove()
     const newqueen = document.createElement('div')
-    newqueen.classList.add('piece', 'queen')
-    if (pcol == 'white') {
-        newqueen.classList.add('white');
-    } else {
-        newqueen.classList.add('black');
+    newqueen.classList.add('piece', 'queen', 'new')
+    const newqueencolour = document.createAttribute('colour')
+    if(pcol == 'white'){
+        newqueencolour.classList.add('white')
+    }else{
+        newqueencolour.classList.add('black')
     }
+    debugger
     square.appendChild(newqueen)
-    
+    newqueen.addEventListener('click', allowclick);
+    const addqueen = document.createElement('img');
+    if(whiteturn == true){
+        addqueen.src = 'images/w_queen.png'
+        square.appendChild(addqueen)
+    }else{
+        addqueen.src = 'images/b_queen.png'
+        square.appendChild(addqueen)
+    }
+}
+*/
+
+function pawnpromote(pawncoord, square){
+    const changepawn = square.querySelector('.piece');
+    debugger
+    changepawn.classList.remove('pawn')
+    changepawn.classList.add('queen')
 }

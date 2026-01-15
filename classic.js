@@ -838,35 +838,19 @@ function promotion(){
             }
 }};
 
-/*function promotepawn(pawncoord, square){
-    const removepawn = square.querySelector('.piece');
-    let pcol = onsquare(pawncoord)
-    removepawn.remove()
-    const newqueen = document.createElement('div')
-    newqueen.classList.add('piece', 'queen', 'new')
-    const newqueencolour = document.createAttribute('colour')
-    if(pcol == 'white'){
-        newqueencolour.classList.add('white')
-    }else{
-        newqueencolour.classList.add('black')
-    }
-    debugger
-    square.appendChild(newqueen)
-    newqueen.addEventListener('click', allowclick);
-    const addqueen = document.createElement('img');
-    if(whiteturn == true){
-        addqueen.src = 'images/w_queen.png'
-        square.appendChild(addqueen)
-    }else{
-        addqueen.src = 'images/b_queen.png'
-        square.appendChild(addqueen)
-    }
-}
-*/
 
 function pawnpromote(pawncoord, square){
     const changepawn = square.querySelector('.piece');
-    debugger
+    const image = changepawn.querySelector('img')
+    console.log(changepawn.type)
+    changepawn.type = 'queen'
     changepawn.classList.remove('pawn')
     changepawn.classList.add('queen')
+    
+    if(whiteturn == true){
+        image.src = 'images/w_queen.png'
+    }else{
+        image.src = 'images/b_queen.png'
+    }
 }
+

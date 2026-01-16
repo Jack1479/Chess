@@ -101,7 +101,7 @@ function allowplace(e) {
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
         const pawncoord = promotion();
         if(pawncoord !== undefined)
-            pawnpromote(pawncoord, square);
+            pawnpromote(square);
         unhighlight();                  /* unhighlights once piece is moved */
         unhighlightlegal();
         if(urldata.includes('rotatecheck=on')){
@@ -838,8 +838,7 @@ function promotion(){
             }
 }};
 
-
-function pawnpromote(pawncoord,square){
+function pawnpromote(square){
     const changepawn = square.querySelector('.piece');
     const image = changepawn.querySelector('img');
     changepawn.classList.remove('pawn');
@@ -852,3 +851,12 @@ function pawnpromote(pawncoord,square){
     }
 }
 
+function isincheck(){
+    const checkking = document.querySelector('king');
+    if (checkking.classList.contains('checkhighlight')){
+        if(whiteturn == true){
+            let forwhiteking = kingmoves();
+            let blockmoveswhite = getallwhitemoves();
+        }
+    }
+}

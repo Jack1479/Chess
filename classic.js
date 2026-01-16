@@ -72,7 +72,7 @@ function allowclick(e) {
     const piececolour = piece.getAttribute('colour');
     const startingsquareid = piece.parentNode.id;
     const checks = isincheck();
-    if ((whiteturn && piececolour == 'white') || (!whiteturn && piececolour == 'black' )) {
+    if ((whiteturn && piececolour == 'white' && checks !=='white') || (!whiteturn && piececolour == 'black'&& checks !== 'black')) {
         e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/
         if (selected === piece) {   /* if you click the piece twice then it unselects it */
             unhighlight();        /* function to unselect */
@@ -88,6 +88,8 @@ function allowclick(e) {
         highlight(startingsquareid);        /* function to highlight selected piece */
         if(urldata.includes('showmovescheck=on'))
             highlightlegal();
+    }else{
+        debugger
     }
 }
 
@@ -864,7 +866,9 @@ function isincheck(){
         let currentcoord = document.getElementById(coord);
         if(whatpiece(currentcoord) =='king'){
             let kingpos = currentcoord
-            if(kingpos.classList.contains('checkhighlight')){
+            let kingcheck = currentcoord.querySelector('.piece')
+            if(kingcheck.classList.contains('checkhighlight') ===true){
+                debugger
                 if(whiteturn !== true){
                     x = 'black'
                     return x
@@ -873,6 +877,8 @@ function isincheck(){
                     x = 'white'
                     return x
                 }
+            }else{
+                return false
             }
         }
 }

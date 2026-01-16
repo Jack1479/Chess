@@ -89,7 +89,23 @@ function allowclick(e) {
         if(urldata.includes('showmovescheck=on'))
             highlightlegal();
     }else{
-        debugger
+        e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/
+        if (selected === piece) {   /* if you click the piece twice then it unselects it */
+            unhighlight();        /* function to unselect */
+            unhighlightlegal();
+            selected = null;      /* reset to nothing selected */
+            legalmoves = [];
+            return;
+        }
+        unhighlight()
+        selected = piece;
+        if(piece == 'king'){
+            legalmoves = kingmoves()
+        }
+        console.log(legalmoves)
+        highlight(startingsquareid);        /* function to highlight selected piece */
+        if(urldata.includes('showmovescheck=on'))
+            highlightlegal();
     }
 }
 
@@ -113,32 +129,9 @@ function allowplace(e) {
         selected = null     /* resets once piece is moved */
     }
         whiteturn = !whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
-        let allvalidwhite = getallwhitemoves();
-        let allvalidblack = getallblackmoves();
-        let tempallsquares = Array.from(document.getElementsByClassName('square'));
-        for(let i=1;i<tempallsquares.length + 1;i++){
-            let row = 8 - Math.floor((i - 1) / 8);
-            let column = (i - 1) % 8;
-            let columnLetter = String.fromCharCode(97 + column);
-            let coord = columnLetter + row;
-            let currentcoord = document.getElementById(coord);
-            unhighlightcheck(currentcoord);
-            let whichpiece = whatpiece(currentcoord);
-            let col = onsquare(currentcoord);
-            if(whichpiece == 'king' && col == 'white'){
-                let kinglocation = coord
-                if (whiteturn == true){
-                    if(allvalidblack.includes(kinglocation)){
-                        highlightcheck(currentcoord);
-                        }}}
-            if(whichpiece == 'king' && col == 'black'){
-                let kinglocation = coord;
-                if(whiteturn !== true){
-                    if(allvalidwhite.includes(kinglocation)){
-                        highlightcheck(currentcoord);
-                }}}
+        incheck()
             
-}}
+}
 
 
 function unhighlightlegal(){
@@ -855,8 +848,6 @@ function pawnpromote(square){
 }
 
 function isincheck(){
-    let allvalidwhite = getallwhitemoves();
-    let allvalidblack = getallblackmoves();
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
     for(let i=1;i<tempallsquares.length + 1;i++){
         let row = 8 - Math.floor((i - 1) / 8);
@@ -866,9 +857,8 @@ function isincheck(){
         let currentcoord = document.getElementById(coord);
         if(whatpiece(currentcoord) =='king'){
             let kingpos = currentcoord
-            let kingcheck = currentcoord.querySelector('.piece')
-            if(kingcheck.classList.contains('checkhighlight') ===true){
-                debugger
+            let kingcheck = incheck();
+            if(kingcheck == true){
                 if(whiteturn !== true){
                     x = 'black'
                     return x
@@ -881,5 +871,36 @@ function isincheck(){
                 return false
             }
         }
+    }
 }
-}
+
+
+function incheck(){
+    let allvalidwhite = getallwhitemoves();
+        let allvalidblack = getallblackmoves();
+        let tempallsquares = Array.from(document.getElementsByClassName('square'));
+        for(let i=1;i<tempallsquares.length + 1;i++){
+            let row = 8 - Math.floor((i - 1) / 8);
+            let column = (i - 1) % 8;
+            let columnLetter = String.fromCharCode(97 + column);
+            let coord = columnLetter + row;
+            let currentcoord = document.getElementById(coord);
+            unhighlightcheck(currentcoord);
+            let whichpiece = whatpiece(currentcoord);
+            let col = onsquare(currentcoord);
+            if(whichpiece == 'king' && col == 'white'){
+                let kinglocation = coord
+                if (whiteturn == true){
+                    if(allvalidblack.includes(kinglocation)){
+                        highlightcheck(currentcoord);
+                        return true
+                        }}}
+            if(whichpiece == 'king' && col == 'black'){
+                let kinglocation = coord;
+                if(whiteturn !== true){
+                    if(allvalidwhite.includes(kinglocation)){
+                        highlightcheck(currentcoord);
+                        return true
+                }}}
+            
+}}

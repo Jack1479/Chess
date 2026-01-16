@@ -71,7 +71,8 @@ function allowclick(e) {
     const piece = e.currentTarget;   /* sets variable piece to be the current target to be moved */
     const piececolour = piece.getAttribute('colour');
     const startingsquareid = piece.parentNode.id;
-    if ((whiteturn && piececolour == 'white') || (!whiteturn && piececolour == 'black')) {
+    const checks = isincheck();
+    if ((whiteturn && piececolour == 'white') || (!whiteturn && piececolour == 'black' )) {
         e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/
         if (selected === piece) {   /* if you click the piece twice then it unselects it */
             unhighlight();        /* function to unselect */
@@ -852,11 +853,27 @@ function pawnpromote(square){
 }
 
 function isincheck(){
-    const checkking = document.querySelector('king');
-    if (checkking.classList.contains('checkhighlight')){
-        if(whiteturn == true){
-            let forwhiteking = kingmoves();
-            let blockmoveswhite = getallwhitemoves();
+    let allvalidwhite = getallwhitemoves();
+    let allvalidblack = getallblackmoves();
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+    for(let i=1;i<tempallsquares.length + 1;i++){
+        let row = 8 - Math.floor((i - 1) / 8);
+        let column = (i - 1) % 8;
+        let columnLetter = String.fromCharCode(97 + column);
+        let coord = columnLetter + row;
+        let currentcoord = document.getElementById(coord);
+        if(whatpiece(currentcoord) =='king'){
+            let kingpos = currentcoord
+            if(kingpos.classList.contains('checkhighlight')){
+                if(whiteturn !== true){
+                    x = 'black'
+                    return x
+                }
+                if(whiteturn == true){
+                    x = 'white'
+                    return x
+                }
+            }
         }
-    }
+}
 }

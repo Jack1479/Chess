@@ -280,7 +280,7 @@ function onsquare(square){
 
 function whatpiece(squared){
     if (squared.querySelector('.piece') !== null) {               
-        const x = (squared.querySelector('.piece')).getAttribute('type');     
+        const x = (squared.querySelector('.piece')).getAttribute('data-type');     
         return x ;
     } else {
         return 'empty';
@@ -839,14 +839,12 @@ function promotion(){
 }};
 
 
-function pawnpromote(pawncoord, square){
+function pawnpromote(pawncoord,square){
     const changepawn = square.querySelector('.piece');
-    const image = changepawn.querySelector('img')
-    console.log(changepawn.type)
-    changepawn.type = 'queen'
-    changepawn.classList.remove('pawn')
-    changepawn.classList.add('queen')
-    
+    const image = changepawn.querySelector('img');
+    changepawn.classList.remove('pawn');
+    changepawn.classList.add('queen');
+    changepawn.dataset.type = 'queen';
     if(whiteturn == true){
         image.src = 'images/w_queen.png'
     }else{

@@ -88,9 +88,10 @@ function allowclick(e) {
         highlight(startingsquareid);        /* function to highlight selected piece */
         if(urldata.includes('showmovescheck=on'))
             highlightlegal();
-    }else{
+    }
+    if((whiteturn && piececolour == 'white' && checks =='white') || (!whiteturn && piececolour == 'black'&& checks == 'black')){
         e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/
-        if (selected === piece) {   /* if you click the piece twice then it unselects it */
+        if (selected === piece){   /* if you click the piece twice then it unselects it */
             unhighlight();        /* function to unselect */
             unhighlightlegal();
             selected = null;      /* reset to nothing selected */
@@ -99,15 +100,14 @@ function allowclick(e) {
         }
         unhighlight()
         selected = piece;
-        if(piece == 'king'){
-            legalmoves = kingmoves()
-        }
+        legalmoves = getsafekingmoves(piece, piececolour, startingsquareid);
         console.log(legalmoves)
         highlight(startingsquareid);        /* function to highlight selected piece */
         if(urldata.includes('showmovescheck=on'))
             highlightlegal();
     }
 }
+
 
 function allowplace(e) {
     const square = e.currentTarget;   /* sets the square you will place on to be the target */
@@ -130,7 +130,6 @@ function allowplace(e) {
     }
         whiteturn = !whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
         incheck()
-            
 }
 
 
@@ -779,8 +778,7 @@ function kingmoves(piececolour, startingsquareid){
     let currentfile = file;
     let currentrank = ranknumber;
     let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
-    let currentsquare = document.getElementById(currentsquareid)
-    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */     
+    let currentsquare = document.getElementById(currentsquareid)     
     const movedirection = [
         [1,0], [-1,0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]
     ]; 
@@ -847,7 +845,7 @@ function pawnpromote(square){
     }
 }
 
-function isincheck(){
+function isincheck(){ /* returns the colour of the king that is in check */
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
     for(let i=1;i<tempallsquares.length + 1;i++){
         let row = 8 - Math.floor((i - 1) / 8);
@@ -875,7 +873,7 @@ function isincheck(){
 }
 
 
-function incheck(){
+function incheck(){ /* checks if the king is in check after every move */
     let allvalidwhite = getallwhitemoves();
         let allvalidblack = getallblackmoves();
         let tempallsquares = Array.from(document.getElementsByClassName('square'));
@@ -904,3 +902,51 @@ function incheck(){
                 }}}
             
 }}
+
+function getkingpos(){
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+        for(let i=1;i<tempallsquares.length + 1;i++){
+            let row = 8 - Math.floor((i - 1) / 8);
+            let column = (i - 1) % 8;
+            let columnLetter = String.fromCharCode(97 + column);
+            let coord = columnLetter + row;
+            let currentcoord = document.getElementById(coord);
+            unhighlightcheck(currentcoord);
+            let whichpiece = whatpiece(currentcoord);
+            let col = onsquare(currentcoord);
+            if(whichpiece == 'king' && col == 'white'){
+                let whitekingpos = coord
+                return tempallsquares[i - 1]
+            }
+            if(whichpiece == 'king' && col == 'black'){
+                let blackkingpos = coord;
+                return tempallsquares[i - 1]
+}
+    }}
+
+function getsafekingmoves(piece, piececolour, startingsquareid){
+    if(piece.classList.contains('king')) {
+        return kingmoves(piececolour, startingsquareid);
+    }
+    if (piece.classList.contains('pawn')) {
+        legalmoves = []
+        return legalmoves 
+    }
+    if (piece.classList.contains('knight')) {
+        legalmoves = []
+        return legalmoves
+    }
+    if (piece.classList.contains('bishop')) {
+        legalmoves = []
+        return legalmoves
+    }
+    if (piece.classList.contains('rook')) {
+        legalmoves = []
+        return legalmoves
+    }
+    if (piece.classList.contains('queen')) {
+        legalmoves = []
+        return legalmoves
+    }
+}
+

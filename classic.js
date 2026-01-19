@@ -27,6 +27,7 @@ const board = document.querySelector('.Chessboard')
 let selected = null;
 let whiteturn = true;
 var legalmoves = [];
+let newpos = null
 
 const colourpicker = document.getElementById('colourpick');
 colourpicker.addEventListener('input', (e) => {
@@ -118,6 +119,7 @@ function allowplace(e) {
             targetpiece.remove();                           /* removes the current piece on that square */
         }
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
+        newpos = square;
         const pawncoord = promotion();
         if(pawncoord !== undefined)
             pawnpromote(square);
@@ -131,6 +133,7 @@ function allowplace(e) {
         whiteturn = !whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
         incheck()
 }
+
 
 
 function unhighlightlegal(){
@@ -949,4 +952,7 @@ function getsafekingmoves(piece, piececolour, startingsquareid){
         return legalmoves
     }
 }
+
+
+
 

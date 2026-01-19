@@ -101,7 +101,11 @@ function allowclick(e) {
         }
         unhighlight()
         selected = piece;
-        legalmoves = getsafekingmoves(piece, piececolour, startingsquareid);
+        safemoves = getsafekingmoves(piece, piececolour, startingsquareid);
+        blocks = getblockmoves(newpos, piececolour, piece, startingsquareid)
+        legalmoves.push(safemoves)
+        legalmoves.push(blocks)
+        legalmoves = legalmoves.flat()
         console.log(legalmoves)
         highlight(startingsquareid);        /* function to highlight selected piece */
         if(urldata.includes('showmovescheck=on'))
@@ -813,7 +817,7 @@ function kingmoves(piececolour, startingsquareid){
                 legalmoves.push(tempcurrentsquareid)
             }
     }});
-    
+        debugger
         return legalmoves;
 }
 
@@ -929,6 +933,7 @@ function getkingpos(){
 
 function getsafekingmoves(piece, piececolour, startingsquareid){
     if(piece.classList.contains('king')) {
+        legalmoves = []
         return kingmoves(piececolour, startingsquareid);
     }
     if (piece.classList.contains('pawn')) {
@@ -953,6 +958,43 @@ function getsafekingmoves(piece, piececolour, startingsquareid){
     }
 }
 
-
+function getblockmoves(newpos, piececolour, piece, startingsquareid){
+    const checkpiece = newpos.querySelector('.piece')
+    let startings = newpos.id
+    let checkmoves = [];
+    let simmoves = [];
+    if(checkpiece.classList.contains('queen')){
+        checkmoves = queenmoves(piececolour, startings);
+    }
+    if(checkpiece.classList.contains('pawn')){
+        checkmoves = pawnmoves(piececolour, startings);
+    }
+    if(checkpiece.classList.contains('rook')){
+        checkmoves = rookmoves(piececolour, startings);
+    }
+    if(checkpiece.classList.contains('bishop')){
+        checkmoves = bishopmoves(piececolour, startings);
+    }
+    if(checkpiece.classList.contains('knight')){
+        checkmoves = knightmoves(piececolour, startings);
+    }
+    if(piece.classList.contains('queen')){
+        simmoves = queenmoves(piececolour, startingsquareid);
+    }
+    if(piece.classList.contains('pawn')){
+        simmoves = pawnmoves(piececolour, startingsquareid);
+    }
+    if(piece.classList.contains('rook')){
+        simmoves = rookmoves(piececolour, startingsquareid);
+    }
+    if(piece.classList.contains('bishop')){
+        simmoves = bishopmoves(piececolour, startingsquareid);
+    }
+    if(piece.classList.contains('knight')){
+        simmoves = knightmoves(piececolour, startingsquareid);
+    }
+    let blockmoves = checkmoves.filter(coord => simmoves.includes(coord));
+    return blockmoves
+}
 
 

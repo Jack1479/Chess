@@ -127,6 +127,7 @@ function allowplace(e) {
         const pawncoord = promotion();
         if(pawncoord !== undefined)
             pawnpromote(square);
+        whiteturn = !whiteturn;
         unhighlight();                  /* unhighlights once piece is moved */
         unhighlightlegal();
         if(urldata.includes('rotatecheck=on')){
@@ -134,7 +135,6 @@ function allowplace(e) {
     };
         selected = null     /* resets once piece is moved */
     }
-        whiteturn = !whiteturn; /* turns white turn to false (black turn) or white turn back to true (white turn) */
         incheck()
 }
 
@@ -817,7 +817,6 @@ function kingmoves(piececolour, startingsquareid){
                 legalmoves.push(tempcurrentsquareid)
             }
     }});
-        debugger
         return legalmoves;
 }
 
@@ -911,6 +910,7 @@ function incheck(){ /* checks if the king is in check after every move */
 }}
 
 function getkingpos(){
+    let kingcheck = incheck();
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
         for(let i=1;i<tempallsquares.length + 1;i++){
             let row = 8 - Math.floor((i - 1) / 8);
@@ -921,13 +921,13 @@ function getkingpos(){
             unhighlightcheck(currentcoord);
             let whichpiece = whatpiece(currentcoord);
             let col = onsquare(currentcoord);
-            if(whichpiece == 'king' && col == 'white'){
+            if(whichpiece == 'king' && col == 'white' && kingcheck == true){
                 let whitekingpos = coord
-                return tempallsquares[i - 1]
+                return whitekingpos
             }
-            if(whichpiece == 'king' && col == 'black'){
+            if(whichpiece == 'king' && col == 'black' && kingcheck == true){
                 let blackkingpos = coord;
-                return tempallsquares[i - 1]
+                return blackkingpos
 }
     }}
 
@@ -998,3 +998,31 @@ function getblockmoves(newpos, piececolour, piece, startingsquareid){
 }
 
 
+function getmiddlemoves(piececolour, piece, startingsquareid){
+    let middle = []
+    let simmoves = []
+    let kingpos = getkingpos();
+    let kingcolour = isincheck()
+    if(piece.classList.contains('queen')){
+        simmoves = queenmoves(piececolour, startingsquareid);
+    }
+    if(piece.classList.contains('rook')){
+        simmoves = rookmoves(piececolour, startingsquareid);
+        let kfile = kingpos.charAt(0)
+        let krank = kingpos.charAt(1)
+        let file = startingsquareid.charAt(0)
+        let rank = startingsquareid.charAt(1)
+        if (kfile===file){
+            if(kingcolour == 'black'){
+                
+            }
+            if(kingcolour == 'white'){
+
+            }
+        }
+    }
+    if(piece.classList.contains('bishop')){
+        simmoves = bishopmoves(piececolour, startingsquareid);
+    }
+
+}

@@ -102,7 +102,7 @@ function allowclick(e) {
         unhighlight()
         selected = piece;
         safemoves = getsafekingmoves(piece, piececolour, startingsquareid);
-        blocks = getblockmoves(newpos, piececolour, piece, startingsquareid)
+        blocks = getmiddlemoves(piececolour, piece, startingsquareid, newpos)
         legalmoves.push(safemoves)
         legalmoves.push(blocks)
         legalmoves = legalmoves.flat()
@@ -957,7 +957,7 @@ function getsafekingmoves(piece, piececolour, startingsquareid){
         return legalmoves
     }
 }
-
+/*
 function getblockmoves(newpos, piececolour, piece, startingsquareid){
     const checkpiece = newpos.querySelector('.piece')
     let startings = newpos.id
@@ -996,30 +996,49 @@ function getblockmoves(newpos, piececolour, piece, startingsquareid){
     let blockmoves = checkmoves.filter(coord => simmoves.includes(coord));
     return blockmoves
 }
+*/
 
-
-function getmiddlemoves(piececolour, piece, startingsquareid){
+function getmiddlemoves(piececolour, piece, startingsquareid, newpos){
     let middle = []
     let simmoves = []
     let kingpos = getkingpos();
-    let kingcolour = isincheck()
+    let kingcolour = isincheck();
+    let startings = newpos.id
+    debugger
     if(piece.classList.contains('queen')){
         simmoves = queenmoves(piececolour, startingsquareid);
     }
     if(piece.classList.contains('rook')){
         simmoves = rookmoves(piececolour, startingsquareid);
-        let kfile = kingpos.charAt(0)
-        let krank = kingpos.charAt(1)
-        let file = startingsquareid.charAt(0)
-        let rank = startingsquareid.charAt(1)
+        let kfile = kingpos.charAt(0) /*e*/
+        let krank = kingpos.charAt(1) /*8*/
+        let file = startings.charAt(0)/*e*/
+        const rank = startings.charAt(1)/*2*/
+        let mrank = parseInt(rank)
+        let tempmrank = mrank
         if (kfile===file){
             if(kingcolour == 'black'){
-                
+                let middlenum = krank-rank
+                for(i=0;i<middlenum;i++){
+                    tempmrank = mrank + i
+                    tempcoord = file + tempmrank
+                    debugger
+                    middle.push(tempcoord)
+                }
             }
             if(kingcolour == 'white'){
-
+                let middlenum = krank-rank
+                for(i=1;i<middlenum - 1;i++){
+                    mrank = mrank - i
+                    tempcoord = file + tempmrank
+                    debugger
+                    middle.push(tempcoord)
+                }
             }
         }
+        let blocks = middle.filter(coord => simmoves.includes(coord));
+        debugger
+        return blocks
     }
     if(piece.classList.contains('bishop')){
         simmoves = bishopmoves(piececolour, startingsquareid);

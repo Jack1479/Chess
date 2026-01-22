@@ -910,7 +910,7 @@ function incheck(){ /* checks if the king is in check after every move */
 }}
 
 function getkingpos(){
-    let kingcheck = incheck();
+    let kingcheck = isincheck();
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
         for(let i=1;i<tempallsquares.length + 1;i++){
             let row = 8 - Math.floor((i - 1) / 8);
@@ -921,11 +921,11 @@ function getkingpos(){
             unhighlightcheck(currentcoord);
             let whichpiece = whatpiece(currentcoord);
             let col = onsquare(currentcoord);
-            if(whichpiece == 'king' && col == 'white' && kingcheck == true){
+            if(whichpiece == 'king' && col == 'white' && kingcheck == 'white'){
                 let whitekingpos = coord
                 return whitekingpos
             }
-            if(whichpiece == 'king' && col == 'black' && kingcheck == true){
+            if(whichpiece == 'king' && col == 'black' && kingcheck == 'black'){
                 let blackkingpos = coord;
                 return blackkingpos
 }
@@ -957,46 +957,7 @@ function getsafekingmoves(piece, piececolour, startingsquareid){
         return legalmoves
     }
 }
-/*
-function getblockmoves(newpos, piececolour, piece, startingsquareid){
-    const checkpiece = newpos.querySelector('.piece')
-    let startings = newpos.id
-    let checkmoves = [];
-    let simmoves = [];
-    if(checkpiece.classList.contains('queen')){
-        checkmoves = queenmoves(piececolour, startings);
-    }
-    if(checkpiece.classList.contains('pawn')){
-        checkmoves = pawnmoves(piececolour, startings);
-    }
-    if(checkpiece.classList.contains('rook')){
-        checkmoves = rookmoves(piececolour, startings);
-    }
-    if(checkpiece.classList.contains('bishop')){
-        checkmoves = bishopmoves(piececolour, startings);
-    }
-    if(checkpiece.classList.contains('knight')){
-        checkmoves = knightmoves(piececolour, startings);
-    }
-    if(piece.classList.contains('queen')){
-        simmoves = queenmoves(piececolour, startingsquareid);
-    }
-    if(piece.classList.contains('pawn')){
-        simmoves = pawnmoves(piececolour, startingsquareid);
-    }
-    if(piece.classList.contains('rook')){
-        simmoves = rookmoves(piececolour, startingsquareid);
-    }
-    if(piece.classList.contains('bishop')){
-        simmoves = bishopmoves(piececolour, startingsquareid);
-    }
-    if(piece.classList.contains('knight')){
-        simmoves = knightmoves(piececolour, startingsquareid);
-    }
-    let blockmoves = checkmoves.filter(coord => simmoves.includes(coord));
-    return blockmoves
-}
-*/
+
 
 function getmiddlemoves(piececolour, piece, startingsquareid, newpos){
     let middle = []
@@ -1004,38 +965,79 @@ function getmiddlemoves(piececolour, piece, startingsquareid, newpos){
     let kingpos = getkingpos();
     let kingcolour = isincheck();
     let startings = newpos.id
-    debugger
     if(piece.classList.contains('queen')){
         simmoves = queenmoves(piececolour, startingsquareid);
     }
     if(piece.classList.contains('rook')){
         simmoves = rookmoves(piececolour, startingsquareid);
-        let kfile = kingpos.charAt(0) /*e*/
-        let krank = kingpos.charAt(1) /*8*/
-        let file = startings.charAt(0)/*e*/
-        const rank = startings.charAt(1)/*2*/
+        let kfile = kingpos.charAt(0)
+        let krank = kingpos.charAt(1) 
+        let file = startings.charAt(0)
+        const rank = startings.charAt(1)
         let mrank = parseInt(rank)
         let tempmrank = mrank
-        if (kfile===file){
+        if (kfile === file){
             if(kingcolour == 'black'){
                 let middlenum = krank-rank
                 for(i=0;i<middlenum;i++){
                     tempmrank = mrank + i
                     tempcoord = file + tempmrank
-                    debugger
                     middle.push(tempcoord)
-                }
-            }
+                }}
             if(kingcolour == 'white'){
                 let middlenum = krank-rank
                 for(i=1;i<middlenum - 1;i++){
-                    mrank = mrank - i
+                    tempmrank = mrank - i
                     tempcoord = file + tempmrank
-                    debugger
                     middle.push(tempcoord)
+                }}}
+
+        if(krank === rank){
+            if(kingcolour == 'black'){
+                let numberkfile = kfile.charCodeAt(0)
+                let numberfile = file.charCodeAt(0)
+                let tempnumfile = numberfile
+                let middlenum = numberkfile-numberfile
+                if(middlenum<0){
+                    middlenum = middlenum * -1
                 }
-            }
-        }
+                if(numberkfile>numberfile){
+                    for(i=0;i<middlenum;i++){
+                        tempnumfile = numberfile + i
+                        letterfile = String.fromCharCode(tempnumfile)
+                        tempcoord = letterfile + rank
+                        middle.push(tempcoord)
+            }}
+                if(numberkfile<numberfile){
+                    for(i=0;i<middlenum;i++){
+                        tempnumfile = numberfile - i
+                        letterfile = String.fromCharCode(tempnumfile)
+                        tempcoord = letterfile + rank
+                        middle.push(tempcoord)
+            }}}
+            if(kingcolour == 'white'){
+                let numberkfile = kfile.charCodeAt(0)
+                let numberfile = file.charCodeAt(0)
+                let tempnumfile = numberfile
+                let middlenum = numberkfile-numberfile
+                if(middlenum<0){
+                    middlenum = middlenum * -1
+                }
+                if(numberkfile>numberfile){
+                    for(i=0;i<middlenum;i++){
+                        tempnumfile = numberfile + i
+                        letterfile = String.fromCharCode(tempnumfile)
+                        tempcoord = letterfile + rank
+                        middle.push(tempcoord)
+            }}
+                if(numberkfile<numberfile){
+                    for(i=0;i<middlenum;i++){
+                        tempnumfile = numberfile - i
+                        letterfile = String.fromCharCode(tempnumfile)
+                        tempcoord = letterfile + rank
+                        middle.push(tempcoord)
+            }}}}
+                
         let blocks = middle.filter(coord => simmoves.includes(coord));
         debugger
         return blocks
@@ -1044,4 +1046,80 @@ function getmiddlemoves(piececolour, piece, startingsquareid, newpos){
         simmoves = bishopmoves(piececolour, startingsquareid);
     }
 
+}
+
+function rookblocking(piececolour, startingsquareid, kingpos, startings, kingcolour){
+    let simmoves = []
+    simmoves = rookmoves(piececolour, startingsquareid);
+        let kfile = kingpos.charAt(0)
+        let krank = kingpos.charAt(1) 
+        let file = startings.charAt(0)
+        const rank = startings.charAt(1)
+        let mrank = parseInt(rank)
+        let tempmrank = mrank
+        if (kfile === file){
+            if(kingcolour == 'black'){
+                let middlenum = krank-rank
+                for(i=0;i<middlenum;i++){
+                    tempmrank = mrank + i
+                    tempcoord = file + tempmrank
+                    middle.push(tempcoord)
+                }}
+            if(kingcolour == 'white'){
+                let middlenum = krank-rank
+                for(i=1;i<middlenum - 1;i++){
+                    tempmrank = mrank - i
+                    tempcoord = file + tempmrank
+                    middle.push(tempcoord)
+                }}}
+
+        if(krank === rank){
+            if(kingcolour == 'black'){
+                let numberkfile = kfile.charCodeAt(0)
+                let numberfile = file.charCodeAt(0)
+                let tempnumfile = numberfile
+                let middlenum = numberkfile-numberfile
+                if(middlenum<0){
+                    middlenum = middlenum * -1
+                }
+                if(numberkfile>numberfile){
+                    for(i=0;i<middlenum;i++){
+                        tempnumfile = numberfile + i
+                        letterfile = String.fromCharCode(tempnumfile)
+                        tempcoord = letterfile + rank
+                        middle.push(tempcoord)
+            }}
+                if(numberkfile<numberfile){
+                    for(i=0;i<middlenum;i++){
+                        tempnumfile = numberfile - i
+                        letterfile = String.fromCharCode(tempnumfile)
+                        tempcoord = letterfile + rank
+                        middle.push(tempcoord)
+            }}}
+            if(kingcolour == 'white'){
+                let numberkfile = kfile.charCodeAt(0)
+                let numberfile = file.charCodeAt(0)
+                let tempnumfile = numberfile
+                let middlenum = numberkfile-numberfile
+                if(middlenum<0){
+                    middlenum = middlenum * -1
+                }
+                if(numberkfile>numberfile){
+                    for(i=0;i<middlenum;i++){
+                        tempnumfile = numberfile + i
+                        letterfile = String.fromCharCode(tempnumfile)
+                        tempcoord = letterfile + rank
+                        middle.push(tempcoord)
+            }}
+                if(numberkfile<numberfile){
+                    for(i=0;i<middlenum;i++){
+                        tempnumfile = numberfile - i
+                        letterfile = String.fromCharCode(tempnumfile)
+                        tempcoord = letterfile + rank
+                        middle.push(tempcoord)
+            }}}}
+                
+        let blocks = middle.filter(coord => simmoves.includes(coord));
+        debugger
+        return blocks
 }

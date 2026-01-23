@@ -102,7 +102,7 @@ function allowclick(e) {
         unhighlight()
         selected = piece;
         safemoves = getsafekingmoves(piece, piececolour, startingsquareid);
-        blocks = getmiddlemoves(piececolour, piece, startingsquareid, newpos)
+        blocks = getblockingmoves(piececolour, piece, startingsquareid, newpos)
         legalmoves.push(safemoves)
         legalmoves.push(blocks)
         legalmoves = legalmoves.flat()
@@ -959,33 +959,52 @@ function getsafekingmoves(piece, piececolour, startingsquareid){
 }
 
 
-function getmiddlemoves(piececolour, piece, startingsquareid, newpos){
+function getblockingmoves(piececolour, piece, startingsquareid, newpos){
     let kingpos = getkingpos();
     let kingcolour = isincheck();
     let startings = newpos.id
+    let xymiddle = getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+    let diagmiddle = getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
     if(piece.classList.contains('queen')){
-        simmoves = queenmoves(piececolour, startingsquareid);
+        let simmoves = []
+        simmoves = queenmoves(piececolour, startingsquareid)
+        let middle = []
+        let xy = getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        let diag = getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        middle.push(xy)
+        middle.push(diag)
+        middle.flat()
+        let blocks = middle.filter(coord => simmoves.includes(coord));
+        return blocks
     }
     if(piece.classList.contains('rook')){
-        return rookblocking(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        let simmoves = []
+        simmoves = rookmoves(piececolour, startingsquareid)
+        let middle = []
+        middle = getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        let blocks = middle.filter(coord => simmoves.includes(coord));
+        return blocks
     }
     if(piece.classList.contains('bishop')){
-        return bishopblocking(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        let simmoves = []
+        simmoves = bishopmoves(piececolour, startingsquareid)
+        let middle = []
+        middle = getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        let blocks = middle.filter(coord => simmoves.includes(coord));
+        return blocks
     }
 
 }
 
-function rookblocking(piececolour, startingsquareid, kingpos, startings, kingcolour){
-    let simmoves = []
+function getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour){
     let middle = []
-    simmoves = rookmoves(piececolour, startingsquareid);
-        let kfile = kingpos.charAt(0)
+        let kfile = kingpos.charAt(0) /*position of king*/
         let krank = kingpos.charAt(1) 
-        let file = startings.charAt(0)
+        let file = startings.charAt(0) /*position of checking piece*/
         const rank = startings.charAt(1)
         let mrank = parseInt(rank)
         let tempmrank = mrank
-        if (kfile === file){
+        if (kfile === file){ /*if king and checking piece on the same file*/
             if(kingcolour == 'black'){
                 let middlenum = krank-rank
                 for(i=0;i<middlenum;i++){
@@ -1046,15 +1065,11 @@ function rookblocking(piececolour, startingsquareid, kingpos, startings, kingcol
                         tempcoord = letterfile + rank
                         middle.push(tempcoord)
             }}}}
-                
-        let blocks = middle.filter(coord => simmoves.includes(coord));
-        return blocks
+        return middle
 }
 
-function bishopblocking(piececolour, startingsquareid, kingpos, startings, kingcolour){
-    let simmoves = []
+function getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour){
     let middle = []
-    simmoves = bishopmoves(piececolour, startingsquareid);
     let kfile = kingpos.charAt(0)
     let krank = kingpos.charAt(1) 
     let file = startings.charAt(0)
@@ -1071,11 +1086,11 @@ function bishopblocking(piececolour, startingsquareid, kingpos, startings, kingc
     }else{
         xpos = 'left'
     }
+    debugger
     if(ypos == 'up' && xpos == 'right'){
         let middlenum = krank - mrank
         let numberfile = file.charCodeAt(0)
         let tempnumfile = numberfile
-        debugger
         for(i=0;i<middlenum;i++){
             tempmrank = mrank + i
             tempnumfile = numberfile + i
@@ -1090,7 +1105,6 @@ function bishopblocking(piececolour, startingsquareid, kingpos, startings, kingc
         }
         let numberfile = file.charCodeAt(0)
         let tempnumfile = numberfile
-        debugger
         for(i=0;i<middlenum;i++){
             tempmrank = mrank - i
             tempnumfile = numberfile + i
@@ -1105,7 +1119,6 @@ function bishopblocking(piececolour, startingsquareid, kingpos, startings, kingc
         }
         let numberfile = file.charCodeAt(0)
         let tempnumfile = numberfile
-        debugger
         for(i=0;i<middlenum;i++){
             tempmrank = mrank - i
             tempnumfile = numberfile - i
@@ -1117,7 +1130,6 @@ function bishopblocking(piececolour, startingsquareid, kingpos, startings, kingc
         let middlenum = krank - mrank
         let numberfile = file.charCodeAt(0)
         let tempnumfile = numberfile
-        debugger
         for(i=0;i<middlenum;i++){
             tempmrank = mrank + i
             tempnumfile = numberfile - i
@@ -1126,7 +1138,6 @@ function bishopblocking(piececolour, startingsquareid, kingpos, startings, kingc
             middle.push(tempcoord)
         }
     }
-    let blocks = middle.filter(coord => simmoves.includes(coord));
-    debugger
-    return blocks
+    return middle
 }
+

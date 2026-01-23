@@ -963,34 +963,40 @@ function getblockingmoves(piececolour, piece, startingsquareid, newpos){
     let kingpos = getkingpos();
     let kingcolour = isincheck();
     let startings = newpos.id
-    let xymiddle = getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
-    let diagmiddle = getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
     if(piece.classList.contains('queen')){
         let simmoves = []
         simmoves = queenmoves(piececolour, startingsquareid)
-        let middle = []
+        let middlem = []
         let xy = getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
         let diag = getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
-        middle.push(xy)
-        middle.push(diag)
-        middle.flat()
-        let blocks = middle.filter(coord => simmoves.includes(coord));
+        middlem.push(xy)
+        middlem.push(diag)
+        middlem = middlem.flat()
+        let blocks = middlem.filter(coord => simmoves.includes(coord));
         return blocks
     }
     if(piece.classList.contains('rook')){
         let simmoves = []
         simmoves = rookmoves(piececolour, startingsquareid)
-        let middle = []
-        middle = getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
-        let blocks = middle.filter(coord => simmoves.includes(coord));
+        let middlem = []
+        let xy = getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        let diag = getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        middlem.push(xy)
+        middlem.push(diag)
+        middlem = middlem.flat()
+        let blocks = middlem.filter(coord => simmoves.includes(coord));
         return blocks
     }
     if(piece.classList.contains('bishop')){
         let simmoves = []
         simmoves = bishopmoves(piececolour, startingsquareid)
-        let middle = []
-        middle = getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
-        let blocks = middle.filter(coord => simmoves.includes(coord));
+        let middlem = []
+        let xy = getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        let diag = getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        middlem.push(xy)
+        middlem.push(diag)
+        middlem = middlem.flat()
+        let blocks = middlem.filter(coord => simmoves.includes(coord));
         return blocks
     }
 
@@ -1078,15 +1084,18 @@ function getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, k
     let tempmrank = mrank
     if(mrank<krank){
         ypos = 'up'
-    }else{
+    }else if(mrank>krank){
         ypos = 'down'
+    }else{
+        ypos = null
     }
     if(file<kfile){
         xpos = 'right'
-    }else{
+    }else if(file>kfile){
         xpos = 'left'
+    }else{
+        xpos = null
     }
-    debugger
     if(ypos == 'up' && xpos == 'right'){
         let middlenum = krank - mrank
         let numberfile = file.charCodeAt(0)

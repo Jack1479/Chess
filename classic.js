@@ -86,6 +86,8 @@ function allowclick(e) {
         selected = piece;
         legalmoves = getpossiblemoves(piece, startingsquareid, piececolour);
         console.log(legalmoves)
+        test = iscastlevalid(startingsquareid, piececolour)
+        console.log(test)
         highlight(startingsquareid);        /* function to highlight selected piece */
         if(urldata.includes('showmovescheck=on'))
             highlightlegal();
@@ -757,8 +759,7 @@ function rookmoves(piececolour, startingsquareid){
         
     return legalmoves;
 
-    }
-
+}
 
 function queenmoves(piececolour, startingsquareid){
     let legalmoves = [];
@@ -999,7 +1000,30 @@ function getblockingmoves(piececolour, piece, startingsquareid, newpos){
         let blocks = middlem.filter(coord => simmoves.includes(coord));
         return blocks
     }
-
+    if(piece.classList.contains('knight')){
+        let simmoves = []
+        simmoves = knightmoves(piececolour, startingsquareid)
+        let middlem = []
+        let xy = getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        let diag = getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        middlem.push(xy)
+        middlem.push(diag)
+        middlem = middlem.flat()
+        let blocks = middlem.filter(coord => simmoves.includes(coord));
+        return blocks
+    }
+    if(piece.classList.contains('pawn')){
+        let simmoves = []
+        simmoves = pawnmoves(piececolour, startingsquareid)
+        let middlem = []
+        let xy = getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        let diag = getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour)
+        middlem.push(xy)
+        middlem.push(diag)
+        middlem = middlem.flat()
+        let blocks = middlem.filter(coord => simmoves.includes(coord));
+        return blocks
+    }
 }
 
 function getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour){
@@ -1013,6 +1037,9 @@ function getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kin
         if (kfile === file){ /*if king and checking piece on the same file*/
             if(kingcolour == 'black'){
                 let middlenum = krank-rank
+                if(middlenum<0){
+                    middlenum = middlenum * -1
+                }
                 for(i=0;i<middlenum;i++){
                     tempmrank = mrank + i
                     tempcoord = file + tempmrank
@@ -1020,7 +1047,10 @@ function getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kin
                 }}
             if(kingcolour == 'white'){
                 let middlenum = krank-rank
-                for(i=1;i<middlenum - 1;i++){
+                if(middlenum<0){
+                    middlenum = middlenum * -1
+                }
+                for(i=0;i<middlenum;i++){
                     tempmrank = mrank - i
                     tempcoord = file + tempmrank
                     middle.push(tempcoord)
@@ -1149,4 +1179,52 @@ function getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, k
     }
     return middle
 }
+/*
+function iscastlevalid(startingsquareid, piececolour){
+    if(startingsquareid == 'e8' && piececolour == 'black'){
+        let cont = 0
+        const file = startingsquareid.charAt(0);    
+        const rank = startingsquareid.charAt(1);
+        const ranknumber = parseInt(rank);    
+        let currentfile = file;
+        let currentrank = ranknumber;
+        let currentsquareid = currentfile + currentrank;
 
+        let tempallsquares = Array.from(document.getElementsByClassName('square'));
+        for(let i=0;i<tempallsquares.length;i++){
+            tempallsquares[i] = tempallsquares[i].id
+        }
+        while(cont <3){
+            let tempcurrentrank = currentrank;
+            let tempcurrentfile = currentfile.charCodeAt(0);
+            tempcurrentfile +=1;
+            tempcurrentfile = String.fromCharCode(tempcurrentfile);
+            let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+            let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+            if (tempallsquares.includes(tempcurrentsquareid)) {
+                let tempsquarecontains = whatpiece(tempcurrentsquare);
+                debugger
+                if (tempsquarecontains == 'empty'){
+                    cont +=1
+                }else if(tempsquarecontains == 'rook'){
+                    return true
+                }
+            }}
+        while(cont <4){
+            let tempcurrentrank = currentrank;
+            let tempcurrentfile = currentfile.charCodeAt(0);
+            tempcurrentfile -=1;
+            tempcurrentfile = String.fromCharCode(tempcurrentfile);
+            let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+            let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
+            if (tempallsquares.includes(tempcurrentsquareid)) {
+                let tempsquarecontains = whatpiece(tempcurrentsquare);
+                if (tempsquarecontains == 'empty'){
+                    cont +=1
+                }else if(tempsquarecontains == 'rook'){
+                    return true
+                }
+            }}
+
+}}
+*/

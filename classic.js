@@ -86,8 +86,6 @@ function allowclick(e) {
         selected = piece;
         legalmoves = getpossiblemoves(piece, startingsquareid, piececolour);
         console.log(legalmoves)
-        test = iscastlevalid(startingsquareid, piececolour)
-        console.log(test)
         highlight(startingsquareid);        /* function to highlight selected piece */
         if(urldata.includes('showmovescheck=on'))
             highlightlegal();
@@ -125,12 +123,13 @@ function allowplace(e) {
             targetpiece.remove();                           /* removes the current piece on that square */
         }
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
+        
         newpos = square;
         const pawncoord = promotion();
         if(pawncoord !== undefined)
             pawnpromote(square);
         whiteturn = !whiteturn;
-        unhighlight();                  /* unhighlights once piece is moved */
+        unhighlight();           /* unhighlights once piece is moved */
         unhighlightlegal();
         if(urldata.includes('rotatecheck=on')){
             rotate();
@@ -139,8 +138,6 @@ function allowplace(e) {
     }
         incheck()
 }
-
-
 
 function unhighlightlegal(){
     document.querySelectorAll('.legalsquares').forEach((move) =>{
@@ -162,14 +159,13 @@ function unhighlight() {
     if (selected){
         selected.classList.remove('highlight');
         }
-    }
+}
 
 function highlight() {
     if (selected){
         selected.classList.add('highlight');
         }
-    }
-
+}
 
 function rotate() {
     board.classList.toggle('flip')  /*toggles the flip css package  which rotates the board 180 degrees*/
@@ -179,6 +175,7 @@ function highlightcheck(currentcoord){
     currentcoord.classList.add('checkhighlight')
     
 }
+
 function unhighlightcheck(allsquares){
     allsquares.classList.remove('checkhighlight')
     
@@ -250,8 +247,6 @@ function getallblackmoves(){
         return allmoves.flat();     
 }
 
-
-
 function getpossiblemoves(piece, startingsquareid, piececolour) {
     if (piece.classList.contains('pawn')) {
         return pawnmoves(piececolour, startingsquareid); 
@@ -269,7 +264,8 @@ function getpossiblemoves(piece, startingsquareid, piececolour) {
         return queenmoves(piececolour, startingsquareid);
     }
     if (piece.classList.contains('king')) {
-        return kingmoves(piececolour, startingsquareid);
+        /*return kingmoves(piececolour, startingsquareid);*/
+        return castlemoves(piececolour, startingsquareid)
     }
 }
 
@@ -291,7 +287,14 @@ function whatpiece(squared){
     }
 } 
 
-
+function isempty(coord){
+    let square = document.getElementById(coord)
+    if (square.querySelector('.piece') == null){
+        return 'empty'
+    }else{
+        return 'occupied'
+    }
+}
 
 function pawnmoves(piececolour, startingsquareid) { /* A function which checks the square infront of the pawn. If occupied then no legal moves, if not then there is legal move forward 1 place. if on the 2nd or 7th rank then checks the next square.*/
     let legalmoves = [];
@@ -818,7 +821,7 @@ function kingmoves(piececolour, startingsquareid){
                 legalmoves.push(tempcurrentsquareid)
             }
     }});
-        return legalmoves;
+    return legalmoves;
 }
 
 function promotion(){
@@ -910,7 +913,7 @@ function incheck(){ /* checks if the king is in check after every move */
             
 }}
 
-function getkingpos(){
+function getkingposcheck(){
     let kingcheck = isincheck();
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
         for(let i=1;i<tempallsquares.length + 1;i++){
@@ -930,7 +933,29 @@ function getkingpos(){
                 let blackkingpos = coord;
                 return blackkingpos
 }
-    }}
+}}
+
+function getkingposition(){
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+    for(let i=1;i<tempallsquares.length + 1;i++){
+        let row = 8 - Math.floor((i - 1) / 8);
+        let column = (i - 1) % 8;
+        let columnLetter = String.fromCharCode(97 + column);
+        let coord = columnLetter + row;
+        let currentcoord = document.getElementById(coord);
+        unhighlightcheck(currentcoord);
+        let whichpiece = whatpiece(currentcoord);
+        let col = onsquare(currentcoord);
+        if(whichpiece == 'king' && col == 'white'){
+            let whitekingpos = coord
+            return whitekingpos
+        }
+        if(whichpiece == 'king' && col == 'black'){
+            let blackkingpos = coord;
+            return blackkingpos
+}
+    }
+}
 
 function getsafekingmoves(piece, piececolour, startingsquareid){
     if(piece.classList.contains('king')) {
@@ -959,9 +984,8 @@ function getsafekingmoves(piece, piececolour, startingsquareid){
     }
 }
 
-
 function getblockingmoves(piececolour, piece, startingsquareid, newpos){
-    let kingpos = getkingpos();
+    let kingpos = getkingposcheck();
     let kingcolour = isincheck();
     let startings = newpos.id
     if(piece.classList.contains('queen')){
@@ -1179,52 +1203,75 @@ function getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, k
     }
     return middle
 }
-/*
-function iscastlevalid(startingsquareid, piececolour){
-    if(startingsquareid == 'e8' && piececolour == 'black'){
-        let cont = 0
-        const file = startingsquareid.charAt(0);    
-        const rank = startingsquareid.charAt(1);
-        const ranknumber = parseInt(rank);    
-        let currentfile = file;
-        let currentrank = ranknumber;
-        let currentsquareid = currentfile + currentrank;
 
-        let tempallsquares = Array.from(document.getElementsByClassName('square'));
-        for(let i=0;i<tempallsquares.length;i++){
-            tempallsquares[i] = tempallsquares[i].id
-        }
-        while(cont <3){
-            let tempcurrentrank = currentrank;
-            let tempcurrentfile = currentfile.charCodeAt(0);
-            tempcurrentfile +=1;
-            tempcurrentfile = String.fromCharCode(tempcurrentfile);
-            let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
-            let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
-            if (tempallsquares.includes(tempcurrentsquareid)) {
-                let tempsquarecontains = whatpiece(tempcurrentsquare);
-                debugger
-                if (tempsquarecontains == 'empty'){
-                    cont +=1
-                }else if(tempsquarecontains == 'rook'){
-                    return true
-                }
-            }}
-        while(cont <4){
-            let tempcurrentrank = currentrank;
-            let tempcurrentfile = currentfile.charCodeAt(0);
-            tempcurrentfile -=1;
-            tempcurrentfile = String.fromCharCode(tempcurrentfile);
-            let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
-            let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
-            if (tempallsquares.includes(tempcurrentsquareid)) {
-                let tempsquarecontains = whatpiece(tempcurrentsquare);
-                if (tempsquarecontains == 'empty'){
-                    cont +=1
-                }else if(tempsquarecontains == 'rook'){
-                    return true
-                }
-            }}
+function castlingvalid(piececolour, startingsquareid){
+    let valid = []
+    let kingpos = startingsquareid
+    let kingcolour = piececolour
+    let startingsBQS = 'a8'
+    let startingsBKS = 'h8'
+    let startingsWQS = 'a1'
+    let startingsWKS = 'h1'
+    let blackqs = getxymiddlemoves(piececolour, startingsquareid, kingpos, startingsBQS, kingcolour)
+    let blackks = getxymiddlemoves(piececolour, startingsquareid, kingpos, startingsBKS, kingcolour)
+    let whiteqs = getxymiddlemoves(piececolour, startingsquareid, kingpos, startingsWQS, kingcolour)
+    let whiteks = getxymiddlemoves(piececolour, startingsquareid, kingpos, startingsWKS, kingcolour)
+    if(kingcolour == 'black' && kingpos == 'e8' && blackqs[0] == 'a8' && isempty(blackqs[1]) == 'empty' && isempty(blackqs[2]) == 'empty' && isempty(blackqs[3]) == 'empty'){
+        valid.push('bqsvalid')
+    }
+    if(kingcolour == 'black' && kingpos == 'e8' && blackks[0] == 'h8' && isempty(blackks[1]) == 'empty' && isempty(blackks[2]) == 'empty'){
+        valid.push('bksvalid')
+    }
+    if(kingcolour == 'white' && kingpos == 'e1' && whiteqs[0] == 'a1' && isempty(whiteqs[1]) == 'empty' && isempty(whiteqs[2]) == 'empty' && isempty(whiteqs[3]) == 'empty'){
+        valid.push('wqsvalid')
+    }
+    if(kingcolour == 'white' && kingpos == 'e1' && whiteks[0] == 'h1' && isempty(whiteks[1]) == 'empty' && isempty(whiteks[2]) == 'empty'){
+        valid.push('wksvalid')
+    }
+    return valid
+}
 
-}}
-*/
+function castlemoves(piececolour, startingsquareid){
+    let legalmoves = []
+    let isitvalid = castlingvalid(piececolour, startingsquareid)
+    if(isitvalid.includes('wksvalid') === true){
+        legalmoves.push('g1')
+    }
+    if(isitvalid.includes('wqsvalid') === true){
+        legalmoves.push('c1')
+    }
+    if(isitvalid.includes('bksvalid') === true){
+        legalmoves.push('g8')
+    }
+    if(isitvalid.includes('bqsvalid') === true){
+        legalmoves.push('c8')
+    }
+    return legalmoves
+}
+
+function moverook(piececolour, startingsquareid){
+    let kingto = castlemoves(piececolour, startingsquareid)
+    let rookfrom = null
+    let rookto = null
+    if(kingto == 'g1'){
+        rookfrom = 'h1'
+        rookto = 'f1'
+    }
+    if(kingto == 'c1'){
+        rookfrom = 'a1'
+        rookto = 'd1'
+    }
+    if(kingto == 'g8'){
+        rookfrom = 'h8'
+        rookto = 'f8'
+    }
+    if(kingto == 'c8'){
+        rookfrom = 'a8'
+        rookto = 'd8'
+    }
+    const fromSquare = document.getElementById(rookfrom)
+    const toSquare = document.getElementById(rookto)
+
+    const rook = fromSquare.firstElementChild
+    toSquare.appendChild(rook)
+}

@@ -123,7 +123,10 @@ function allowplace(e) {
             targetpiece.remove();                           /* removes the current piece on that square */
         }
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
-        
+        console.log(selected)
+        if(selected.classList[1] == 'king' && (square.id == 'g1' || square.id == 'c1' || square.id == 'g8' || square.id == 'c8')){
+            moverook(square.id)
+        }
         newpos = square;
         const pawncoord = promotion();
         if(pawncoord !== undefined)
@@ -264,8 +267,13 @@ function getpossiblemoves(piece, startingsquareid, piececolour) {
         return queenmoves(piececolour, startingsquareid);
     }
     if (piece.classList.contains('king')) {
-        /*return kingmoves(piececolour, startingsquareid);*/
-        return castlemoves(piececolour, startingsquareid)
+        let legalmoves = []
+        let normal = kingmoves(piececolour, startingsquareid);
+        let castle = castlemoves(piececolour, startingsquareid)
+        legalmoves.push(normal)
+        legalmoves.push(castle)
+        legalmoves = legalmoves.flat()
+        return legalmoves
     }
 }
 
@@ -1249,8 +1257,8 @@ function castlemoves(piececolour, startingsquareid){
     return legalmoves
 }
 
-function moverook(piececolour, startingsquareid){
-    let kingto = castlemoves(piececolour, startingsquareid)
+function moverook(squareid){
+    let kingto = squareid
     let rookfrom = null
     let rookto = null
     if(kingto == 'g1'){
@@ -1269,9 +1277,8 @@ function moverook(piececolour, startingsquareid){
         rookfrom = 'a8'
         rookto = 'd8'
     }
-    const fromSquare = document.getElementById(rookfrom)
-    const toSquare = document.getElementById(rookto)
-
-    const rook = fromSquare.firstElementChild
-    toSquare.appendChild(rook)
+    const fromsquare = document.getElementById(rookfrom)
+    const tosquare = document.getElementById(rookto)
+    const rook = fromsquare.querySelector('.piece.rook');
+    tosquare.appendChild(rook)
 }

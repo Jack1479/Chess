@@ -28,6 +28,10 @@ let selected = null;
 let whiteturn = true;
 var legalmoves = [];
 let newpos = null
+let wkingmoved = false
+let wkingchecked = false;
+let bkingmoved = false;
+let bkingchecked = false;
 
 const colourpicker = document.getElementById('colourpick');
 colourpicker.addEventListener('input', (e) => {
@@ -91,6 +95,12 @@ function allowclick(e) {
             highlightlegal();
     }
     if((whiteturn && piececolour == 'white' && checks =='white') || (!whiteturn && piececolour == 'black'&& checks == 'black')){
+        if(checks == 'white'){
+            wkingchecked = true
+        }
+        if(checks == 'black'){
+            bkingchecked = true
+        }
         e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/
         if (selected === piece){   /* if you click the piece twice then it unselects it */
             unhighlight();        /* function to unselect */
@@ -122,9 +132,19 @@ function allowplace(e) {
         if (targetpiece && targetpiece !== selected) {         /* makes sure you cant put the piece you are moving ontop of itsself */
             targetpiece.remove();                           /* removes the current piece on that square */
         }
+        let kingposition = getkingposition()
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
-        console.log(selected)
-        if(selected.classList[1] == 'king' && (square.id == 'g1' || square.id == 'c1' || square.id == 'g8' || square.id == 'c8')){
+        if(selected.classList[1] == 'king'){
+            const thepiece = square.querySelector('.piece');
+            let kcolour = thepiece.getAttribute('colour');
+            if(kcolour == 'white'){
+                wkingmoved = true
+            }
+            if(kcolour == 'black'){
+                bkingmoved = true
+            }
+        }
+        if(selected.classList[1] == 'king' && (square.id == 'g1' || square.id == 'c1' || square.id == 'g8' || square.id == 'c8') && (kingposition == 'e1' || kingposition == 'e8')){
             moverook(square.id)
         }
         newpos = square;
@@ -271,7 +291,13 @@ function getpossiblemoves(piece, startingsquareid, piececolour) {
         let normal = kingmoves(piececolour, startingsquareid);
         let castle = castlemoves(piececolour, startingsquareid)
         legalmoves.push(normal)
-        legalmoves.push(castle)
+        let kingcol = piece.getAttribute('colour')
+        if(kingcol == 'white' && wkingchecked == false && wkingmoved == false){
+            legalmoves.push(castle)
+        }
+        if(kingcol == 'black' && bkingchecked == false && bkingmoved == false){
+            legalmoves.push(castle)
+        }
         legalmoves = legalmoves.flat()
         return legalmoves
     }
@@ -1241,17 +1267,23 @@ function castlingvalid(piececolour, startingsquareid){
 
 function castlemoves(piececolour, startingsquareid){
     let legalmoves = []
+    let blackmoves = getallblackmoves();
+    let whitemoves = getallwhitemoves();
     let isitvalid = castlingvalid(piececolour, startingsquareid)
     if(isitvalid.includes('wksvalid') === true){
+        if(whiteturn == true && !blackmoves.includes('g1'))
         legalmoves.push('g1')
     }
     if(isitvalid.includes('wqsvalid') === true){
+        if(whiteturn == true && !blackmoves.includes('c1'))
         legalmoves.push('c1')
     }
     if(isitvalid.includes('bksvalid') === true){
+        if(whiteturn == false && !blackmoves.includes('g8'))
         legalmoves.push('g8')
     }
     if(isitvalid.includes('bqsvalid') === true){
+        if(whiteturn == false && !blackmoves.includes('c8'))
         legalmoves.push('c8')
     }
     return legalmoves

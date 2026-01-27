@@ -1279,11 +1279,11 @@ function castlemoves(piececolour, startingsquareid){
         legalmoves.push('c1')
     }
     if(isitvalid.includes('bksvalid') === true){
-        if(whiteturn == false && !blackmoves.includes('g8'))
+        if(whiteturn == false && !whitemoves.includes('g8'))
         legalmoves.push('g8')
     }
     if(isitvalid.includes('bqsvalid') === true){
-        if(whiteturn == false && !blackmoves.includes('c8'))
+        if(whiteturn == false && !whitemoves.includes('c8'))
         legalmoves.push('c8')
     }
     return legalmoves

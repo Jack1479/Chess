@@ -132,8 +132,10 @@ function allowplace(e) {
         if (targetpiece && targetpiece !== selected) {         /* makes sure you cant put the piece you are moving ontop of itsself */
             targetpiece.remove();                           /* removes the current piece on that square */
         }
-        let kingposition = getkingposition()
+        let whitekingpos = getwhitekingposition()
+        let blackkingpos = getblackkingposition()
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
+        
         if(selected.classList[1] == 'king'){
             const thepiece = square.querySelector('.piece');
             let kcolour = thepiece.getAttribute('colour');
@@ -144,7 +146,7 @@ function allowplace(e) {
                 bkingmoved = true
             }
         }
-        if(selected.classList[1] == 'king' && (square.id == 'g1' || square.id == 'c1' || square.id == 'g8' || square.id == 'c8') && (kingposition == 'e1' || kingposition == 'e8')){
+        if(selected.classList[1] == 'king' && (square.id == 'g1' || square.id == 'c1' || square.id == 'g8' || square.id == 'c8') && (whitekingpos == 'e1' || blackkingpos == 'e8')){
             moverook(square.id)
         }
         newpos = square;
@@ -969,7 +971,7 @@ function getkingposcheck(){
 }
 }}
 
-function getkingposition(){
+function getblackkingposition(){
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
     for(let i=1;i<tempallsquares.length + 1;i++){
         let row = 8 - Math.floor((i - 1) / 8);
@@ -980,13 +982,28 @@ function getkingposition(){
         unhighlightcheck(currentcoord);
         let whichpiece = whatpiece(currentcoord);
         let col = onsquare(currentcoord);
-        if(whichpiece == 'king' && col == 'white'){
-            let whitekingpos = coord
-            return whitekingpos
-        }
         if(whichpiece == 'king' && col == 'black'){
             let blackkingpos = coord;
             return blackkingpos
+}
+    }
+}
+
+function getwhitekingposition(){
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+    tempallsquares = tempallsquares.reverse()
+    for(let i=1;i<tempallsquares.length + 1;i++){
+        let row = 8 - Math.floor((i - 1) / 8);
+        let column = (i - 1) % 8;
+        let columnLetter = String.fromCharCode(97 + column);
+        let coord = columnLetter + row;
+        let currentcoord = document.getElementById(coord);
+        unhighlightcheck(currentcoord);
+        let whichpiece = whatpiece(currentcoord);
+        let col = onsquare(currentcoord);
+        if(whichpiece == 'king' && col == 'white'){
+            let whitekingpos = coord;
+            return whitekingpos
 }
     }
 }

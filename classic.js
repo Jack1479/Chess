@@ -29,9 +29,8 @@ let whiteturn = true;
 var legalmoves = [];
 let newpos = null
 let wkingmoved = false
-let wkingchecked = false;
 let bkingmoved = false;
-let bkingchecked = false;
+
 
 const colourpicker = document.getElementById('colourpick');
 colourpicker.addEventListener('input', (e) => {
@@ -78,7 +77,7 @@ function allowclick(e) {
     const startingsquareid = piece.parentNode.id;
     const checks = isincheck();
     if ((whiteturn && piececolour == 'white' && checks !=='white') || (!whiteturn && piececolour == 'black'&& checks !== 'black')) {
-        e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/
+        e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as they both take a click to activate*/
         if (selected === piece) {   /* if you click the piece twice then it unselects it */
             unhighlight();        /* function to unselect */
             unhighlightlegal();
@@ -95,12 +94,6 @@ function allowclick(e) {
             highlightlegal();
     }
     if((whiteturn && piececolour == 'white' && checks =='white') || (!whiteturn && piececolour == 'black'&& checks == 'black')){
-        if(checks == 'white'){
-            wkingchecked = true
-        }
-        if(checks == 'black'){
-            bkingchecked = true
-        }
         e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/
         if (selected === piece){   /* if you click the piece twice then it unselects it */
             unhighlight();        /* function to unselect */
@@ -129,13 +122,12 @@ function allowplace(e) {
     if (!selected) return;         /* makes sure a piece is selected */
     if (legalmoves.includes(square.id)) {
         const targetpiece = square.querySelector('.piece');  /* makes the constant targetpiece  whatever is current on that square e.g. if empty targetpiece = null*/
-        if (targetpiece && targetpiece !== selected) {         /* makes sure you cant put the piece you are moving ontop of itsself */
+        if (targetpiece && targetpiece !== selected){         /* makes sure you cant put the piece you are moving ontop of itsself */
             targetpiece.remove();                           /* removes the current piece on that square */
         }
         let whitekingpos = getwhitekingposition()
         let blackkingpos = getblackkingposition()
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
-        
         if(selected.classList[1] == 'king'){
             const thepiece = square.querySelector('.piece');
             let kcolour = thepiece.getAttribute('colour');

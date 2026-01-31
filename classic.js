@@ -94,6 +94,7 @@ function allowclick(e) {
             highlightlegal();
     }
     if((whiteturn && piececolour == 'white' && checks =='white') || (!whiteturn && piececolour == 'black'&& checks == 'black')){
+        legalmoves = [];
         e.stopPropagation();        /* makes ure you cant trigger the allowclick and allowplace functions at the same time as thye both take a click to activate*/
         if (selected === piece){   /* if you click the piece twice then it unselects it */
             unhighlight();        /* function to unselect */
@@ -1002,8 +1003,10 @@ function getwhitekingposition(){
 
 function getsafekingmoves(piece, piececolour, startingsquareid){
     if(piece.classList.contains('king')) {
-        legalmoves = []
-        return kingmoves(piececolour, startingsquareid);
+        let kingsmoves = kingmoves(piececolour, startingsquareid);
+        let sim = simulatepin(newpos)
+        let legalmoves = kingsmoves.filter(coord => !sim.includes(coord));
+        return legalmoves
     }
     if (piece.classList.contains('pawn')) {
         legalmoves = []
@@ -1089,6 +1092,10 @@ function getblockingmoves(piececolour, piece, startingsquareid, newpos){
         middlem.push(diag)
         middlem = middlem.flat()
         let blocks = middlem.filter(coord => simmoves.includes(coord));
+        return blocks
+    }
+    if(piece.classList.contains('king')){
+        let blocks = []
         return blocks
     }
 }
@@ -1324,98 +1331,104 @@ function moverook(squareid){
     tosquare.appendChild(rook)
 }
 
+function simpawn(coord){
+    let moves = []
+    if(whiteturn == true){
+        const file = coord.charAt(0);   
+        const rank = coord.charAt(1);
+        const ranknumber = parseInt(rank);    
+        let currentfile = file;
+        let currentrank = ranknumber;
+        let currentsquareid = currentfile + currentrank; 
+        let currentsquare = document.getElementById(currentsquareid)
+        let squarecontains = onsquare(currentsquare);  
+
+        /* checks left diagonal for white*/
+        let tempcurrentrank = currentrank + 1;
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile -= 1;
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        moves.push(tempcurrentsquareid)
+
+        /* checks right diagonal for white*/
+        let tempcurrentrank2 = currentrank + 1;
+        let tempcurrentfile2 = currentfile.charCodeAt(0);
+        tempcurrentfile2 += 1;
+        tempcurrentfile2 = String.fromCharCode(tempcurrentfile2);
+        let tempcurrentsquareid2 = tempcurrentfile2 + tempcurrentrank2;
+        let tempcurrentsquare2 = document.getElementById(tempcurrentsquareid2);
+        moves.push(tempcurrentsquareid2)
+    }
+
+    if(whiteturn == false){
+        const file = coord.charAt(0);   
+        const rank = coord.charAt(1);
+        const ranknumber = parseInt(rank);    
+        let currentfile = file;
+        let currentrank = ranknumber;
+        let currentsquareid = currentfile + currentrank; 
+        let currentsquare = document.getElementById(currentsquareid)
+        let squarecontains = onsquare(currentsquare);  
+
+        /* checks left diagonal for black*/
+        let tempcurrentrank = currentrank - 1;
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile += 1;
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        moves.push(tempcurrentsquareid)
+
+        /* checks right diagonal for black*/
+        let tempcurrentrank2 = currentrank - 1;
+        let tempcurrentfile2 = currentfile.charCodeAt(0);
+        tempcurrentfile2 -= 1;
+        tempcurrentfile2 = String.fromCharCode(tempcurrentfile2);
+        let tempcurrentsquareid2 = tempcurrentfile2 + tempcurrentrank2;
+        let tempcurrentsquare2 = document.getElementById(tempcurrentsquareid2);
+        moves.push(tempcurrentsquareid2)
+    }
+    return moves
+}
+
 function simulatepin(newpos){
-    let kmoves = []
-    let rmoves = [] 
-    let bmoves = []
+    let returnmoves = []
     let coord = newpos.id
-    let currentcoord = document.getElementById(coord)
-    let checkpiece = whatpiece(currentcoord)
-    let col = onsquare(coord)
-    let xy = rookmoves(col, coord)
-    let diag = bishopmoves(col, coord)
-    let knight = knightmoves(col, coord)
-    rmoves.push(xy)
-    kmoves.push(knight)
-    bmoves.push(diag)
-    for(i=0;i<kmoves.length;i++){
-        tempcoord = kmoves[i]
-        if(whatpiece(tempcoord) == 'knight'){
-            return
+    if(whiteturn == true){
+        col = 'white'
+    }
+    if(whiteturn == false){
+        col = 'black'
+    }
+    let rmoves = rookmoves(col, coord)
+    let bmoves = bishopmoves(col, coord)
+    let kmoves = knightmoves(col, coord)
+    let pmoves = simpawn(coord)
+    for(let i=0;i<kmoves.length;i++){
+        let tempcoord = kmoves[i]
+        let tempsquare = document.getElementById(tempcoord)
+        if(whatpiece(tempsquare) == 'knight'){
+            returnmoves.push(coord)
         }}
-    for(i=0;i<rmoves.length;i++){
-        tempcoord = kmoves[i]
-        if(whatpiece(tempcoord) == 'rook' || whatpiece(tempcoord) == 'queen'){
-            return
+    for(let i=0;i<rmoves.length;i++){
+        let tempcoord = rmoves[i]
+        let tempsquare = document.getElementById(tempcoord)
+        if(whatpiece(tempsquare) == 'rook' || whatpiece(tempsquare) == 'queen'){
+            returnmoves.push(coord)
         }}
-    for(i=0;i<bmoves.length;i++){
-        tempcoord = kmoves[i]
-        if(whatpiece(tempcoord) == 'bishop' || whatpiece(tempcoord) == 'queen'){
-            return
+    for(let i=0;i<bmoves.length;i++){
+        let tempcoord = bmoves[i]
+        let tempsquare = document.getElementById(tempcoord)
+        if(whatpiece(tempsquare) == 'bishop' || whatpiece(tempsquare) == 'queen'){
+            returnmoves.push(coord)
         }}
     
-    /* checks left diagonal for white*/
-    if ((piececolour == 'white') && (currentfile !== 'a')) {
-        let tempcurrentrank = currentrank + 1;
-        let tempcurrentfile = currentfile.charCodeAt(0);
-        tempcurrentfile -= 1;
-        tempcurrentfile = String.fromCharCode(tempcurrentfile);
-        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
-        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
-        let tempsquarecontains = onsquare(tempcurrentsquare);
-        if (tempsquarecontains !== 'black') {
-        } else {
-            legalmoves.push(tempcurrentsquareid);
-        }
-    }
-
-
-    /*checks right diagonal for white*/
-    if ((piececolour == 'white') && (currentfile !== 'h')) {
-        let tempcurrentrank = currentrank + 1;
-        let tempcurrentfile = currentfile.charCodeAt(0);
-        tempcurrentfile += 1;
-        tempcurrentfile = String.fromCharCode(tempcurrentfile);
-        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
-        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
-        let tempsquarecontains = onsquare(tempcurrentsquare);
-        if (tempsquarecontains !== 'black') {
-        } else {
-            legalmoves.push(tempcurrentsquareid);
-        }
-    }
-
-
-    /*checks left diaganal for black */
-    if ((piececolour == 'black') && (currentfile !== 'h')) {
-        let tempcurrentrank = currentrank - 1;
-        let tempcurrentfile = currentfile.charCodeAt(0);
-        tempcurrentfile += 1;
-        tempcurrentfile = String.fromCharCode(tempcurrentfile);
-        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
-        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
-        let tempsquarecontains = onsquare(tempcurrentsquare);
-        if (tempsquarecontains !== 'white') {
-        } else {
-            legalmoves.push(tempcurrentsquareid);
-
-        }
-    }
-
-
-    /*checks right diagonal for black */
-    if ((piececolour == 'black') && (currentfile !== 'a')) {
-        let tempcurrentrank = currentrank - 1;
-        let tempcurrentfile = currentfile.charCodeAt(0);
-        tempcurrentfile -= 1;
-        tempcurrentfile = String.fromCharCode(tempcurrentfile);
-        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
-        let tempcurrentsquare = document.getElementById(tempcurrentsquareid);
-        let tempsquarecontains = onsquare(tempcurrentsquare);
-        if (tempsquarecontains !== 'white') {
-        } else {
-            legalmoves.push(tempcurrentsquareid);
-
-        }
-    }
+    for(let i=0;i<pmoves.length;i++){
+        let tempcoord = pmoves[i]
+        let tempsquare = document.getElementById(tempcoord)
+        if(whatpiece(tempsquare) == 'pawn'){
+            returnmoves.push(coord)
+        }}
+    return returnmoves
 }
+

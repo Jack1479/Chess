@@ -911,7 +911,6 @@ function isincheck(){ /* returns the colour of the king that is in check */
     }
 }
 
-
 function incheck(){ /* checks if the king is in check after every move */
     let allvalidwhite = getallwhitemoves();
         let allvalidblack = getallblackmoves();
@@ -1004,7 +1003,7 @@ function getwhitekingposition(){
 function getsafekingmoves(piece, piececolour, startingsquareid){
     if(piece.classList.contains('king')) {
         let kingsmoves = kingmoves(piececolour, startingsquareid);
-        let sim = simulatepin(newpos)
+        let sim = savingking(newpos)
         let legalmoves = kingsmoves.filter(coord => !sim.includes(coord));
         return legalmoves
     }
@@ -1391,7 +1390,7 @@ function simpawn(coord){
     return moves
 }
 
-function simulatepin(newpos){
+function savingking(newpos){
     let returnmoves = []
     let coord = newpos.id
     if(whiteturn == true){

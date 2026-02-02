@@ -212,7 +212,7 @@ function getallwhitemoves(){
             if (whichpiece != 'empty'){
                 let col = onsquare(currentcoord);
                 if(whichpiece == 'pawn' && col == 'white'){
-                    let allpmoves = pawnmoves(col,coord)
+                    let allpmoves = pawncheck(coord)
                     allmoves.push(allpmoves);
                 }else if(whichpiece == 'rook' && col == 'white'){
                     let allrmoves = rookmoves(col,coord)
@@ -245,7 +245,7 @@ function getallblackmoves(){
             if (whichpiece != 'empty'){
                 let col = onsquare(currentcoord);
                 if(whichpiece == 'pawn' && col == 'black'){
-                    let allpmoves = pawnmoves(col,coord)
+                    let allpmoves = pawncheck(coord)
                     allmoves.push(allpmoves)
                 }else if(whichpiece == 'rook' && col == 'black'){
                     let allrmoves = rookmoves(col,coord)
@@ -1343,14 +1343,17 @@ function simpawn(coord){
         let squarecontains = onsquare(currentsquare);  
 
         /* checks left diagonal for white*/
-        let tempcurrentrank = currentrank + 1;
-        let tempcurrentfile = currentfile.charCodeAt(0);
-        tempcurrentfile -= 1;
-        tempcurrentfile = String.fromCharCode(tempcurrentfile);
-        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
-        moves.push(tempcurrentsquareid)
-
+        if(currentfile !== 'a'){
+            let tempcurrentrank = currentrank + 1;
+            let tempcurrentfile = currentfile.charCodeAt(0);
+            tempcurrentfile -= 1;
+            tempcurrentfile = String.fromCharCode(tempcurrentfile);
+            let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+            moves.push(tempcurrentsquareid)
+        }
+        
         /* checks right diagonal for white*/
+        if(currentfile !== 'h'){
         let tempcurrentrank2 = currentrank + 1;
         let tempcurrentfile2 = currentfile.charCodeAt(0);
         tempcurrentfile2 += 1;
@@ -1359,7 +1362,7 @@ function simpawn(coord){
         let tempcurrentsquare2 = document.getElementById(tempcurrentsquareid2);
         moves.push(tempcurrentsquareid2)
     }
-
+}
     if(whiteturn == false){
         const file = coord.charAt(0);   
         const rank = coord.charAt(1);
@@ -1371,14 +1374,17 @@ function simpawn(coord){
         let squarecontains = onsquare(currentsquare);  
 
         /* checks left diagonal for black*/
+        if(currentfile !== 'h'){
         let tempcurrentrank = currentrank - 1;
         let tempcurrentfile = currentfile.charCodeAt(0);
         tempcurrentfile += 1;
         tempcurrentfile = String.fromCharCode(tempcurrentfile);
         let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
         moves.push(tempcurrentsquareid)
-
+    
+    }
         /* checks right diagonal for black*/
+        if(currentfile !== 'a'){
         let tempcurrentrank2 = currentrank - 1;
         let tempcurrentfile2 = currentfile.charCodeAt(0);
         tempcurrentfile2 -= 1;
@@ -1386,7 +1392,7 @@ function simpawn(coord){
         let tempcurrentsquareid2 = tempcurrentfile2 + tempcurrentrank2;
         let tempcurrentsquare2 = document.getElementById(tempcurrentsquareid2);
         moves.push(tempcurrentsquareid2)
-    }
+    }}
     return moves
 }
 
@@ -1431,3 +1437,62 @@ function savingking(newpos){
     return returnmoves
 }
 
+function pawncheck(coord){
+    let moves = []
+    if(whiteturn == false){
+        const file = coord.charAt(0);   
+        const rank = coord.charAt(1);
+        const ranknumber = parseInt(rank);    
+        let currentfile = file;
+        let currentrank = ranknumber;
+        let currentsquareid = currentfile + currentrank; 
+        let currentsquare = document.getElementById(currentsquareid)
+        let squarecontains = onsquare(currentsquare);  
+
+        /* checks left diagonal for white*/
+        let tempcurrentrank = currentrank + 1;
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile -= 1;
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        moves.push(tempcurrentsquareid)
+
+        /* checks right diagonal for white*/
+        let tempcurrentrank2 = currentrank + 1;
+        let tempcurrentfile2 = currentfile.charCodeAt(0);
+        tempcurrentfile2 += 1;
+        tempcurrentfile2 = String.fromCharCode(tempcurrentfile2);
+        let tempcurrentsquareid2 = tempcurrentfile2 + tempcurrentrank2;
+        let tempcurrentsquare2 = document.getElementById(tempcurrentsquareid2);
+        moves.push(tempcurrentsquareid2)
+    }
+
+    if(whiteturn == true){
+        const file = coord.charAt(0);   
+        const rank = coord.charAt(1);
+        const ranknumber = parseInt(rank);    
+        let currentfile = file;
+        let currentrank = ranknumber;
+        let currentsquareid = currentfile + currentrank; 
+        let currentsquare = document.getElementById(currentsquareid)
+        let squarecontains = onsquare(currentsquare);  
+
+        /* checks left diagonal for black*/
+        let tempcurrentrank = currentrank - 1;
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile += 1;
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        moves.push(tempcurrentsquareid)
+
+        /* checks right diagonal for black*/
+        let tempcurrentrank2 = currentrank - 1;
+        let tempcurrentfile2 = currentfile.charCodeAt(0);
+        tempcurrentfile2 -= 1;
+        tempcurrentfile2 = String.fromCharCode(tempcurrentfile2);
+        let tempcurrentsquareid2 = tempcurrentfile2 + tempcurrentrank2;
+        let tempcurrentsquare2 = document.getElementById(tempcurrentsquareid2);
+        moves.push(tempcurrentsquareid2)
+    }
+    return moves
+}

@@ -847,7 +847,12 @@ function kingmoves(piececolour, startingsquareid){
                     legalmoves.push(tempcurrentsquareid);
                 }
             }else if(piececolour !== tempsquarecontains){
-                legalmoves.push(tempcurrentsquareid)
+                    if((tempsquarecontains == 'white') && (!whitemoves.includes(tempcurrentsquareid))){
+                        legalmoves.push(tempcurrentsquareid)
+                    }
+                    if((tempsquarecontains == 'black') && (!blackmoves.includes(tempcurrentsquareid))){
+                        legalmoves.push(tempcurrentsquareid)
+                    }
             }
     }});
     return legalmoves;

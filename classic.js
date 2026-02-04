@@ -110,6 +110,10 @@ function allowclick(e) {
         legalmoves.push(safemoves)
         legalmoves.push(blocks)
         legalmoves = legalmoves.flat()
+        if(legalmoves.length == 0){
+            const modal = document.getElementById("checkmateModal");
+            modal.classList.remove("hidden")
+        }
         console.log(legalmoves)
         highlight(startingsquareid);        /* function to highlight selected piece */
         if(urldata.includes('showmovescheck=on'))
@@ -846,7 +850,7 @@ function kingmoves(piececolour, startingsquareid){
                 if(!whitemoves.includes(tempcurrentsquareid)){
                     legalmoves.push(tempcurrentsquareid);
                 }
-            }else if(piececolour !== tempsquarecontains){
+            }else if((piececolour !== tempsquarecontains)){
                     if((tempsquarecontains == 'white') && (!whitemoves.includes(tempcurrentsquareid))){
                         legalmoves.push(tempcurrentsquareid)
                     }

@@ -404,7 +404,7 @@ html{
    box-shadow: inset 0 0 12px 6px red;
  }
 
- .modal {
+ .screen {
   position: fixed;
   top: 0;
   left: 0;
@@ -417,7 +417,7 @@ html{
   
 }
 
-.modal-content {
+.screen-content {
   background: #000000;
   padding: 120px 160px;
   border-radius: 10px;
@@ -426,7 +426,7 @@ html{
   box-shadow: 0 0 18px 6px var(--pulse-colour);
 }
 
-.modal-content h2 {
+.screen-content h2 {
   margin-top: 0;
   color: white;
 }
@@ -435,14 +435,14 @@ html{
   display: none;
 }
 
-.modal-content button {
+.screen-content button {
   margin-top: 20px;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
 }
 
-.modal-content {
+.screen-content {
   animation: pop 0.25s ease-out;
 }
 

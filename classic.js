@@ -111,7 +111,7 @@ function allowclick(e) {
         legalmoves.push(blocks)
         legalmoves = legalmoves.flat()
         if(legalmoves.length == 0){
-            const modal = document.getElementById("checkmateModal");
+            const modal = document.getElementById("checkmatescreen");
             modal.classList.remove("hidden")
         }
         console.log(legalmoves)
@@ -1504,4 +1504,33 @@ function pawncheck(coord){
         moves.push(tempcurrentsquareid2)
     }
     return moves
+}
+
+function pinning(){
+    let pins = []
+    let whitekingpos = getwhitekingposition()
+    let blackkingpos = getblackkingposition()
+    if(whiteturn == true){
+        col = 'white'
+        rmoves = rookmoves(col, whitekingpos)
+        bmoves = bishopmoves(col, whitekingpos)
+    }
+    if(whiteturn == false){
+        col = 'black'
+        rmoves = rookmoves(col, blackkingpos)
+        bmoves = bishopmoves(col, blackkingpos)
+    }
+    for(let i=0;i<rmoves.length;i++){
+        let tempcoord = rmoves[i]
+        let tempsquare = document.getElementById(tempcoord)
+        if(whatpiece(tempsquare) == 'rook' || whatpiece(tempsquare) == 'queen'){
+            pins.push(coord)
+        }}
+    for(let i=0;i<bmoves.length;i++){
+        let tempcoord = bmoves[i]
+        let tempsquare = document.getElementById(tempcoord)
+        if(whatpiece(tempsquare) == 'bishop' || whatpiece(tempsquare) == 'queen'){
+            pins.push(coord)
+        }}
+    
 }

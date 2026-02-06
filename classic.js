@@ -50,7 +50,7 @@ colourpickerD.addEventListener('input', (e) => {
   document.documentElement.style.setProperty('--pulse-colourD', chosenColour);
 });
 
-function setupboard() {
+function setupboard(){
     for (let i = 0; i < allsquares.length; i++) {    /* loops through all squares on the board and adds an event listener to each one*/
         allsquares[i].addEventListener('click', allowplace); /* loops through all squares on the board and adds an event listener to each one*/
         let row = 8 - Math.floor(i / 8);       /*adding row coordinates 1-8*/
@@ -1514,11 +1514,13 @@ function pinning(){
         col = 'white'
         rmoves = rookmoves(col, whitekingpos)
         bmoves = bishopmoves(col, whitekingpos)
+        kinglocation = whitekingpos
     }
     if(whiteturn == false){
         col = 'black'
         rmoves = rookmoves(col, blackkingpos)
         bmoves = bishopmoves(col, blackkingpos)
+        kinglocation = blackkingpos
     }
     for(let i=0;i<rmoves.length;i++){
         let tempcoord = rmoves[i]
@@ -1533,4 +1535,11 @@ function pinning(){
             pins.push(coord)
         }}
     
+    for(let i=0;i<pins.length;i++){
+        boardsquare = document.getElementById(pins[i])
+        pinner = pins[i]
+        if(whatpiece(boardsquare) == 'queen'|| whatpiece(boardsquare) == 'bishop'){
+            middlemoves = getdiagmiddlemoves(piececolour, startingsquareid, kinglocation , pinner, col)
+        }
+    }
 }

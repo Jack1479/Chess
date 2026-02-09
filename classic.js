@@ -1508,6 +1508,7 @@ function pawncheck(coord){
 
 function pinning(){
     let pins = []
+    let blockerdiag = []
     let whitekingpos = getwhitekingposition()
     let blackkingpos = getblackkingposition()
     if(whiteturn == true){
@@ -1540,6 +1541,13 @@ function pinning(){
         pinner = pins[i]
         if(whatpiece(boardsquare) == 'queen'|| whatpiece(boardsquare) == 'bishop'){
             middlemoves = getdiagmiddlemoves(piececolour, startingsquareid, kinglocation , pinner, col)
+            for(let i=1;middlemoves.length;i++){
+                temp = document.getElementById(middlemoves[i])
+                occupied = onsquare(temp)
+                if(occupied == col){
+                    blockerdiag.push(middlemoves[i])
+                }}
+            
         }
     }
 }

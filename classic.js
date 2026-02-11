@@ -87,12 +87,14 @@ function allowclick(e) {
         }
         unhighlight()
         selected = piece;
-        pinning()
+        let blockers = pinnedpieces()
+        if(blockers.includes(startingsquareid) !== true){
         legalmoves = getpossiblemoves(piece, startingsquareid, piececolour);
         console.log(legalmoves)
-        highlight(startingsquareid);        /* function to highlight selected piece */
         if(urldata.includes('showmovescheck=on'))
             highlightlegal();
+        }
+        highlight(startingsquareid);        /* function to highlight selected piece */
     }
     if((whiteturn && piececolour == 'white' && checks =='white') || (!whiteturn && piececolour == 'black'&& checks == 'black')){
         legalmoves = [];
@@ -1506,10 +1508,10 @@ function pawncheck(coord){
     return moves
 }
 
-function pinning(){
-    debugger
+function pinnedpieces(){
     let piecepinsquare = []
-    let blockerdiag = []
+    let blockers = []
+    let tempblocker = []
     let whitekingpos = getwhitekingposition()
     let blackkingpos = getblackkingposition()
     if(whiteturn == true){
@@ -1526,32 +1528,59 @@ function pinning(){
     for(let i=0;i<rmoves.length;i++){
         let tempcoord = rmoves[i]
         let tempsquare = document.getElementById(tempcoord)
-        if(whatpiece(tempsquare) == 'rook' || whatpiece(tempsquare) == 'queen'){
-            piecepinsquare.push(tempcoord)
+        if(whiteturn == true){
+            if((whatpiece(tempsquare) == 'rook') || (whatpiece(tempsquare) == 'queen')){
+                if((tempsquare.querySelector('.piece')).getAttribute('colour') == 'black')
+                    piecepinsquare.push(tempcoord)
         }}
+        if(whiteturn !== true){
+            if((whatpiece(tempsquare) == 'rook') || (whatpiece(tempsquare) == 'queen')){
+                if((tempsquare.querySelector('.piece')).getAttribute('colour') == 'white')
+                    piecepinsquare.push(tempcoord)
+        }}}
     for(let i=0;i<bmoves.length;i++){
         let tempcoord = bmoves[i]
         let tempsquare = document.getElementById(tempcoord)
-        if(whatpiece(tempsquare) == 'bishop' || whatpiece(tempsquare) == 'queen'){
-            piecepinsquare.push(tempcoord)
+        if(whiteturn == true){
+            if((whatpiece(tempsquare) == 'bishop') || (whatpiece(tempsquare) == 'queen')){
+                if((tempsquare.querySelector('.piece')).getAttribute('colour') == 'black')
+                    piecepinsquare.push(tempcoord)
         }}
+        if(whiteturn !== true){
+            if((whatpiece(tempsquare) == 'bishop') || (whatpiece(tempsquare) == 'queen')){
+                if((tempsquare.querySelector('.piece')).getAttribute('colour') == 'white')
+                    piecepinsquare.push(tempcoord)
+        }}};
     
+
     for(let i=0;i<piecepinsquare.length;i++){
-        boardsquare = document.getElementById(piecepinsquare[i])
-        pinner = piecepinsquare[i]
+        let boardsquare = document.getElementById(piecepinsquare[i])
+        let pinner = piecepinsquare[i]
         if(whatpiece(boardsquare) == 'queen'|| whatpiece(boardsquare) == 'bishop'){
             middlemoves = getdiagmiddlemoves(null, null, kinglocation , pinner, col)
-            for(let i=1;middlemoves.length;i++){
-                temp = document.getElementById(middlemoves[i])
+            for(let i=1;i<middlemoves.length;i++){
+                let temp = document.getElementById(middlemoves[i])
                 occupied = onsquare(temp)
                 if(occupied !== 'empty'){
-                    blockerdiag.push(middlemoves[i])
-                }}
-           if(blockerdiag.length == 1){
-                debugger
-           }
-        }
+                    tempblocker.push(middlemoves[i])
+                }}}
+                if(tempblocker.length > 1){
+                    tempblocker = []
+                }
+        if(whatpiece(boardsquare) == 'queen'|| whatpiece(boardsquare) == 'rook'){
+            middlemoves = getxymiddlemoves(null, null, kinglocation , pinner, col)
+            for(let i=1;i<middlemoves.length;i++){
+                let temp = document.getElementById(middlemoves[i])
+                occupied = onsquare(temp)
+                if(occupied !== 'empty'){
+                    tempblocker.push(middlemoves[i])
+                }}}
+                if(tempblocker.length > 1){
+                    tempblocker = []
+                }
     }
+    blockers = tempblocker
+    return blockers
 }
 
 function rookmovessim(piececolour, startingsquareid){
@@ -1873,4 +1902,5 @@ function bishopmovessim(piececolour, startingsquareid){
     return legalmoves;
 
 }
-    
+
+

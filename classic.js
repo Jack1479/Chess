@@ -1903,4 +1903,11 @@ function bishopmovessim(piececolour, startingsquareid){
 
 }
 
+function pinfilter(){
+    let blocks = pinnedpieces()
+    let whitekingpos = getwhitekingposition()
+    let blackkingpos = getblackkingposition()
+    for(let i=0;i<blocks.length;i++){
 
+    }
+}

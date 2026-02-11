@@ -88,13 +88,13 @@ function allowclick(e) {
         unhighlight()
         selected = piece;
         let blockers = pinnedpieces()
-        if(blockers.includes(startingsquareid) !== true){
         legalmoves = getpossiblemoves(piece, startingsquareid, piececolour);
+        if(blockers.includes(startingsquareid) == true){
+            legalmoves = pinfilterpawnforward()
+        }
         console.log(legalmoves)
         if(urldata.includes('showmovescheck=on'))
             highlightlegal();
-        }
-        legalmoves = pinfilterpawnforward()
         highlight(startingsquareid);        /* function to highlight selected piece */
     }
     if((whiteturn && piececolour == 'white' && checks =='white') || (!whiteturn && piececolour == 'black'&& checks == 'black')){
@@ -1953,13 +1953,14 @@ function pinfilterpawnforward(){
             kingfile = whitekingpos.charAt(0)
             pinfile = blocks[i].charAt(0)
             if(kingfile == pinfile){
-                legalmoves = simpawnforward('white', blocks[i])
+                legalmoves = simpawnforwards('white', blocks[i])
             }}
         if(whiteturn !== true){
             kingfile = blackkingpos.charAt(0)
             pinfile = blocks[i].charAt(0)
             if(kingfile == pinfile){
-                legalmoves = simpawnforward('black', blocks[i])
+                legalmoves = simpawnforwards('black', blocks[i])
             }}
     }
+    return legalmoves
 }

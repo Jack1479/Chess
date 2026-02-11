@@ -117,6 +117,7 @@ function allowclick(e) {
         if(legalmoves.length == 0){
             const modal = document.getElementById("checkmatescreen");
             modal.classList.remove("hidden")
+            audio('you just got checkmated.wav')
         }
         console.log(legalmoves)
         highlight(startingsquareid);        /* function to highlight selected piece */
@@ -137,6 +138,7 @@ function allowplace(e) {
         let whitekingpos = getwhitekingposition()
         let blackkingpos = getblackkingposition()
         square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
+        audio("move piece.wav")
         if(selected.classList[1] == 'king'){
             const thepiece = square.querySelector('.piece');
             let kcolour = thepiece.getAttribute('colour');
@@ -1963,4 +1965,9 @@ function pinfilterpawnforward(){
             }}
     }
     return legalmoves
+}
+
+function audio(path){
+    let audio = new Audio(path)
+    audio.play()
 }

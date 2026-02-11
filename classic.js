@@ -94,6 +94,7 @@ function allowclick(e) {
         if(urldata.includes('showmovescheck=on'))
             highlightlegal();
         }
+        legalmoves = pinfilterpawnforward()
         highlight(startingsquareid);        /* function to highlight selected piece */
     }
     if((whiteturn && piececolour == 'white' && checks =='white') || (!whiteturn && piececolour == 'black'&& checks == 'black')){
@@ -437,6 +438,47 @@ function pawnmoves(piececolour, startingsquareid) { /* A function which checks t
         return legalmoves;
     }
 }
+function simpawnforwards(piececolour, startingsquareid){
+    let legalmoves = [];
+    const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
+    const rank = startingsquareid.charAt(1);
+    const ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */
+    let currentfile = file;
+    let currentrank = ranknumber;
+    let currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
+    let currentsquare = document.getElementById(currentsquareid)
+    let squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
+    currentfile = file;
+    currentrank = ranknumber;
+    currentsquareid = currentfile + currentrank; /* makes square id e.g. A1 */
+    currentsquare = document.getElementById(currentsquareid)
+    squarecontains = onsquare(currentsquare);  /* runs onsquare function to see if theres anything on the target square */
+    const movedirection = piececolour == 'white' ? 1 : -1;  /* sets move direction to 1 or -1 depending on if the piececolour is white*/
+    currentrank += movedirection;             /* adds the move direction to get new currentrank*/
+    currentsquareid = currentfile + currentrank;  /* uses new current rank to make the currentsquareid of the square infront*/
+    currentsquare = document.getElementById(currentsquareid);
+    squarecontains = onsquare(currentsquare);
+    if (squarecontains !== 'empty') {  /* if the square infront is occupied then theres no legal moves*/
+        return legalmoves;
+    } else {
+        legalmoves.push(currentsquareid) /* square infront isnt occupied so can be moves and therefore added to legal moves*/
+        if ((ranknumber !== 2) && (ranknumber !== 7)) {
+        } else {
+            currentrank += movedirection;             /* adds the move direction to get new currentrank*/
+            currentsquareid = currentfile + currentrank;  /* uses new current rank to make the currentsquareid of the square infront*/
+            currentsquare = document.getElementById(currentsquareid);
+            squarecontains = onsquare(currentsquare);
+            if (squarecontains !== 'empty') {  /* if the square infront is occupied then theres no legal moves*/
+            } else {
+                legalmoves.push(currentsquareid) /* square infront isnt occupied so can be moves and therefore added to legal moves*/
+            }
+        }
+
+        return legalmoves;
+    }
+}
+
+
 
 function knightmoves(piececolour, startingsquareid) {
     let legalmoves = [];
@@ -1341,7 +1383,7 @@ function moverook(squareid){
     tosquare.appendChild(rook)
 }
 
-function simpawn(coord){
+function simpawndiag(coord){
     let moves = []
     if(whiteturn == true){
         const file = coord.charAt(0);   
@@ -1419,7 +1461,7 @@ function savingking(newpos){
     let rmoves = rookmoves(col, coord)
     let bmoves = bishopmoves(col, coord)
     let kmoves = knightmoves(col, coord)
-    let pmoves = simpawn(coord)
+    let pmoves = simpawndiag(coord)
     for(let i=0;i<kmoves.length;i++){
         let tempcoord = kmoves[i]
         let tempsquare = document.getElementById(tempcoord)
@@ -1900,14 +1942,24 @@ function bishopmovessim(piececolour, startingsquareid){
     });
         
     return legalmoves;
-
 }
 
-function pinfilter(){
+function pinfilterpawnforward(){
     let blocks = pinnedpieces()
     let whitekingpos = getwhitekingposition()
     let blackkingpos = getblackkingposition()
     for(let i=0;i<blocks.length;i++){
-
+        if(whiteturn == true){
+            kingfile = whitekingpos.charAt(0)
+            pinfile = blocks[i].charAt(0)
+            if(kingfile == pinfile){
+                legalmoves = simpawnforward('white', blocks[i])
+            }}
+        if(whiteturn !== true){
+            kingfile = blackkingpos.charAt(0)
+            pinfile = blocks[i].charAt(0)
+            if(kingfile == pinfile){
+                legalmoves = simpawnforward('black', blocks[i])
+            }}
     }
 }

@@ -149,7 +149,11 @@ function allowplace(e) {
             }
         }else{
             square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
-            /*audio("move piece.wav")*/
+            audio("move piece.wav")
+        }
+        if(urlatomic !== 'atomicmode'){
+            square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
+            audio("move piece.wav")
         }
         let whitekingpos = getwhitekingposition()
         let blackkingpos = getblackkingposition()

@@ -14,7 +14,7 @@ close.addEventListener('click', () => { /* adds event listener to close button*/
 
 var url = location.href
 var urldata = location.href.split('?')[1].split('&')
-
+var urlatomic = location.href.split('&')[1]
 
 const pieceimg = document.getElementsByTagName('img')
 const allsquares = document.getElementsByClassName('square')
@@ -90,8 +90,17 @@ function allowclick(e) {
         let blockers = pinnedpieces()
         legalmoves = getpossiblemoves(piece, startingsquareid, piececolour);
         if(blockers.includes(startingsquareid) == true){
-            legalmoves = pinfilterpawnforward()
-        }
+            legalmoves = []
+            temp = blockers.length - 1
+            pinner = blockers[temp]
+            pinnersquare = document.getElementById(pinner)
+            pawntaking = simpawndiag(blockers[0])
+            if(whatpiece(pinnersquare) == 'rook' || whatpiece(pinnersquare) == 'queen'){
+                legalmoves = pinfilterpawnforward()
+            }
+            if(legalmoves.length == 0 && pawntaking.includes(pinner) == true){
+                legalmoves.push(pinner)
+            }}
         console.log(legalmoves)
         if(urldata.includes('showmovescheck=on'))
             highlightlegal();
@@ -134,11 +143,16 @@ function allowplace(e) {
         const targetpiece = square.querySelector('.piece');  /* makes the constant targetpiece  whatever is current on that square e.g. if empty targetpiece = null*/
         if (targetpiece && targetpiece !== selected){         /* makes sure you cant put the piece you are moving ontop of itsself */
             targetpiece.remove();                           /* removes the current piece on that square */
+            if(urlatomic == 'atomicmode'){
+                audio('New_Project.wav')
+                atomiccapture(square)
+            }
+        }else{
+            square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
+            /*audio("move piece.wav")*/
         }
         let whitekingpos = getwhitekingposition()
         let blackkingpos = getblackkingposition()
-        square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
-        audio("move piece.wav")
         if(selected.classList[1] == 'king'){
             const thepiece = square.querySelector('.piece');
             let kcolour = thepiece.getAttribute('colour');
@@ -440,6 +454,7 @@ function pawnmoves(piececolour, startingsquareid) { /* A function which checks t
         return legalmoves;
     }
 }
+
 function simpawnforwards(piececolour, startingsquareid){
     let legalmoves = [];
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
@@ -479,8 +494,6 @@ function simpawnforwards(piececolour, startingsquareid){
         return legalmoves;
     }
 }
-
-
 
 function knightmoves(piececolour, startingsquareid) {
     let legalmoves = [];
@@ -1566,7 +1579,6 @@ function pinnedpieces(){
         col = 'black'
         kinglocation = blackkingpos
     }
-    
     let rmoves = rookmovessim(col, kinglocation)
     let bmoves = bishopmovessim(col, kinglocation)
     for(let i=0;i<rmoves.length;i++){
@@ -1624,7 +1636,8 @@ function pinnedpieces(){
                 }
     }
     blockers = tempblocker
-    return blockers
+    blockers.push(piecepinsquare)
+    return blockers.flat()
 }
 
 function rookmovessim(piececolour, startingsquareid){
@@ -1947,27 +1960,54 @@ function bishopmovessim(piececolour, startingsquareid){
 }
 
 function pinfilterpawnforward(){
+    let legalmoves = []
     let blocks = pinnedpieces()
     let whitekingpos = getwhitekingposition()
     let blackkingpos = getblackkingposition()
-    for(let i=0;i<blocks.length;i++){
+    for(let i=0;i<blocks.length - 1;i++){
         if(whiteturn == true){
             kingfile = whitekingpos.charAt(0)
             pinfile = blocks[i].charAt(0)
             if(kingfile == pinfile){
-                legalmoves = simpawnforwards('white', blocks[i])
+                legalmoves.push(simpawnforwards('white', blocks[i]))
             }}
         if(whiteturn !== true){
             kingfile = blackkingpos.charAt(0)
             pinfile = blocks[i].charAt(0)
             if(kingfile == pinfile){
-                legalmoves = simpawnforwards('black', blocks[i])
+                legalmoves.push(simpawnforwards('black', blocks[i]))
             }}
     }
-    return legalmoves
+    
+    return legalmoves.flat()
 }
 
 function audio(path){
     let audio = new Audio(path)
     audio.play()
 }
+
+function atomiccapture(square){ 
+    const movedirection = [
+        [1,0], [-1,0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]
+    ]; 
+    
+    let takenid = square.id
+    const file = takenid.charAt(0);    /*gets the file of the current square the piece is on */
+    const rank = takenid.charAt(1);
+    const ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */
+    let currentfile = file;
+    let currentrank = ranknumber;
+    movedirection.forEach((move) =>{
+        let tempcurrentfile = currentfile.charCodeAt(0);
+        tempcurrentfile = tempcurrentfile + move[1];
+        tempcurrentfile = String.fromCharCode(tempcurrentfile);
+        let tempcurrentrank = currentrank;
+        tempcurrentrank = tempcurrentrank + move[0];
+        let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
+        let tempcurrentsquare = document.getElementById(tempcurrentsquareid)
+        let tempsquarepiece = tempcurrentsquare.querySelector('.piece')
+        if(tempsquarepiece !== null){
+            tempsquarepiece.remove()
+        }
+})}

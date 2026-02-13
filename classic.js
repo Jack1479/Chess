@@ -15,6 +15,7 @@ close.addEventListener('click', () => { /* adds event listener to close button*/
 var url = location.href
 var urldata = location.href.split('?')[1].split('&')
 var urlatomic = location.href.split('&')[1]
+var urlcheck = location.href.split('&')[1]
 
 const pieceimg = document.getElementsByTagName('img')
 const allsquares = document.getElementsByClassName('square')
@@ -30,7 +31,8 @@ var legalmoves = [];
 let newpos = null
 let wkingmoved = false
 let bkingmoved = false;
-
+var threecheckblack = 0
+var threecheckwhite = 0
 
 const colourpicker = document.getElementById('colourpick');
 colourpicker.addEventListener('input', (e) => {
@@ -101,7 +103,7 @@ function allowclick(e) {
             if(legalmoves.length == 0 && pawntaking.includes(pinner) == true){
                 legalmoves.push(pinner)
             }}
-        console.log(legalmoves)
+        /*console.log(legalmoves)*/
         if(urldata.includes('showmovescheck=on'))
             highlightlegal();
         highlight(startingsquareid);        /* function to highlight selected piece */
@@ -123,12 +125,12 @@ function allowclick(e) {
         legalmoves.push(safemoves)
         legalmoves.push(blocks)
         legalmoves = legalmoves.flat()
-        if(legalmoves.length == 0){
+        if(legalmoves.length == 0 && blocks.length == 0 && urlatomic !== 'atomicmode'){
             const modal = document.getElementById("checkmatescreen");
             modal.classList.remove("hidden")
             audio('you just got checkmated.wav')
         }
-        console.log(legalmoves)
+        /*console.log(legalmoves)*/
         highlight(startingsquareid);        /* function to highlight selected piece */
         if(urldata.includes('showmovescheck=on'))
             highlightlegal();
@@ -143,6 +145,7 @@ function allowplace(e) {
         const targetpiece = square.querySelector('.piece');  /* makes the constant targetpiece  whatever is current on that square e.g. if empty targetpiece = null*/
         if (targetpiece && targetpiece !== selected){         /* makes sure you cant put the piece you are moving ontop of itsself */
             targetpiece.remove();                           /* removes the current piece on that square */
+            square.appendChild(selected);
             if(urlatomic == 'atomicmode'){
                 audio('New_Project.wav')
                 atomiccapture(square)
@@ -151,10 +154,13 @@ function allowplace(e) {
             square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
             audio("move piece.wav")
         }
-        if(urlatomic !== 'atomicmode'){
-            square.appendChild(selected);     /* appends your clicked piece onto the clicked square */
-            audio("move piece.wav")
-        }
+        if(urlatomic == 'atomicmode'){
+            let kings = manykings()
+            if(kings !== 2){
+            const modal = document.getElementById("checkmatescreen");
+            modal.classList.remove("hidden")
+            audio('you just got checkmated.wav')
+        }}
         let whitekingpos = getwhitekingposition()
         let blackkingpos = getblackkingposition()
         if(selected.classList[1] == 'king'){
@@ -183,6 +189,20 @@ function allowplace(e) {
         selected = null     /* resets once piece is moved */
     }
         incheck()
+        let whochecked = isincheck()
+        if(whochecked == 'white'){
+            threecheckblack +=1
+            console.log(threecheckblack)
+        }
+        if(whochecked == 'black'){
+            threecheckwhite +=1
+            console.log(threecheckwhite)
+        }
+        if(urlcheck == '3checkmode' && ((threecheckwhite == 3 || threecheckblack == 3) || legalmoves.length == 0)){
+            const modal = document.getElementById("checkmatescreen");
+            modal.classList.remove("hidden")
+            audio('you just got checkmated.wav')
+        }
 }
 
 function unhighlightlegal(){
@@ -1569,6 +1589,24 @@ function pawncheck(coord){
     return moves
 }
 
+function manykings(){
+    let count = 0
+    let tempallsquares = Array.from(document.getElementsByClassName('square'));
+    tempallsquares = tempallsquares.reverse()
+    for(let i=1;i<tempallsquares.length + 1;i++){
+        let row = 8 - Math.floor((i - 1) / 8);
+        let column = (i - 1) % 8;
+        let columnLetter = String.fromCharCode(97 + column);
+        let coord = columnLetter + row;
+        let currentcoord = document.getElementById(coord);
+        unhighlightcheck(currentcoord);
+        let whichpiece = whatpiece(currentcoord);
+        if(whichpiece == 'king'){
+            count +=1
+            }}
+    return count
+}
+
 function pinnedpieces(){
     let piecepinsquare = []
     let blockers = []
@@ -1995,13 +2033,13 @@ function atomiccapture(square){
     const movedirection = [
         [1,0], [-1,0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]
     ]; 
-    
     let takenid = square.id
     const file = takenid.charAt(0);    /*gets the file of the current square the piece is on */
     const rank = takenid.charAt(1);
     const ranknumber = parseInt(rank);    /*gets the rank of the current square the piece is on */
     let currentfile = file;
     let currentrank = ranknumber;
+
     movedirection.forEach((move) =>{
         let tempcurrentfile = currentfile.charCodeAt(0);
         tempcurrentfile = tempcurrentfile + move[1];
@@ -2010,8 +2048,10 @@ function atomiccapture(square){
         tempcurrentrank = tempcurrentrank + move[0];
         let tempcurrentsquareid = tempcurrentfile + tempcurrentrank;
         let tempcurrentsquare = document.getElementById(tempcurrentsquareid)
-        let tempsquarepiece = tempcurrentsquare.querySelector('.piece')
-        if(tempsquarepiece !== null){
+        if(tempcurrentsquare !== null){
+            let tempsquarepiece = tempcurrentsquare.querySelector('.piece')
+            if(tempsquarepiece !== null){
             tempsquarepiece.remove()
-        }
+        }}
+           
 })}

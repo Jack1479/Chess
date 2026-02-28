@@ -12,11 +12,13 @@ close.addEventListener('click', () => { /* adds event listener to close button*/
     menusett.style.display = 'none';
 });
 
+//Global variales for loading specific pages
 var url = location.href
 var urldata = location.href.split('?')[1].split('&')
 var urlatomic = location.href.split('&')[1]
 var urlcheck = location.href.split('&')[1]
 
+//Global Constants
 const pieceimg = document.getElementsByTagName('img')
 const allsquares = document.getElementsByClassName('square')
 const pieces = document.getElementsByClassName('piece')
@@ -24,7 +26,7 @@ const rows = document.getElementById('row')
 const columns = document.getElementById('column')
 const board = document.querySelector('.Chessboard')
 
-
+//Global variables
 let selected = null;
 let whiteturn = true;
 var legalmoves = [];
@@ -34,6 +36,7 @@ let bkingmoved = false;
 var threecheckblack = 0
 var threecheckwhite = 0
 
+//Allows the user to customise the colours of the board
 const colourpicker = document.getElementById('colourpick');
 colourpicker.addEventListener('input', (e) => {
     const chosenColour = e.target.value;
@@ -52,6 +55,7 @@ colourpickerD.addEventListener('input', (e) => {
     document.documentElement.style.setProperty('--pulse-colourD', chosenColour);
 });
 
+//Function to at a coordinate to each square
 function setupboard() {
     for (let i = 0; i < allsquares.length; i++) {    /* loops through all squares on the board and adds an event listener to each one*/
         allsquares[i].addEventListener('click', allowplace); /* loops through all squares on the board and adds an event listener to each one*/
@@ -61,18 +65,17 @@ function setupboard() {
         square.id = column + row;
     }
 }
-
 setupboard();
 
+//Adds the Allow click event listener to all squares
 function setuppieces() {
     for (let i = 0; i < pieces.length; i++) {      /* loops through all pieces on the board and adds an event listener to each one*/
         pieces[i].addEventListener('click', allowclick);     /* loops through all pieces on the board and adds an event listener to each one. when clicked will trigger allowclick function*/
     }
 }
-
 setuppieces();
 
-
+//The function that runs when a piece is clicked on, includes move validation and highlighting of moves
 function allowclick(e) {
     const piece = e.currentTarget;   /* sets variable piece to be the current target to be moved */
     const piececolour = piece.getAttribute('colour');
@@ -89,6 +92,7 @@ function allowclick(e) {
         }
         unhighlight()
         selected = piece;
+        //Move validation
         let blockers = pinnedpieces()
         legalmoves = getpossiblemoves(piece, startingsquareid, piececolour);
         if (blockers.includes(startingsquareid) == true) {
@@ -107,7 +111,7 @@ function allowclick(e) {
         console.log(legalmoves)
         if (urldata.includes('showmovescheck=on'))
             highlightlegal();
-        highlight(startingsquareid);        /* function to highlight selected piece */
+        highlight(startingsquareid);        
     }
     if ((whiteturn && piececolour == 'white' && checks == 'white') || (!whiteturn && piececolour == 'black' && checks == 'black')) {
         legalmoves = [];
@@ -121,6 +125,7 @@ function allowclick(e) {
         }
         unhighlight()
         selected = piece;
+        //Validation for king moves when in check
         safemoves = getsafekingmoves(piece, piececolour, startingsquareid);
         blocks = getblockingmoves(piececolour, piece, startingsquareid, newpos)
         legalmoves.push(safemoves)
@@ -137,7 +142,7 @@ function allowclick(e) {
             highlightlegal();
     }}
 
-
+//Function that runs when a piece is selected and a square is clicked on, also used for castling mechanic and promotion
 function allowplace(e) {
     const square = e.currentTarget;   /* sets the square you will place on to be the target */
     if (!selected) return;         /* makes sure a piece is selected */
@@ -162,6 +167,7 @@ function allowplace(e) {
                 audio('you just got checkmated.wav')
             }
         }
+        //Checks if the king has moved and updates global variable. Used for castling mechanic
         let whitekingpos = getwhitekingposition()
         let blackkingpos = getblackkingposition()
         if (selected.classList[1] == 'king') {
@@ -174,6 +180,7 @@ function allowplace(e) {
                 bkingmoved = true
             }
         }
+        //Promotion mechanic
         if (selected.classList[1] == 'king' && (square.id == 'g1' || square.id == 'c1' || square.id == 'g8' || square.id == 'c8') && (whitekingpos == 'e1' || blackkingpos == 'e8')) {
             moverook(square.id)
         }
@@ -189,6 +196,7 @@ function allowplace(e) {
         };
         selected = null     /* resets once piece is moved */
     }
+    //Keeps track of how many times the king has been checked for the 3-check mode
     incheck()
     let whochecked = isincheck()
     if (whochecked == 'white') {
@@ -206,12 +214,14 @@ function allowplace(e) {
     }
 }
 
+//Unhighlights the legal moves
 function unhighlightlegal() {
     document.querySelectorAll('.legalsquares').forEach((move) => {
         move.classList.remove('legalsquares');
     });
 }
 
+//Highlights the legal moves
 function highlightlegal() {
     unhighlightlegal();
     legalmoves.forEach((squareid) => {
@@ -222,32 +232,38 @@ function highlightlegal() {
     });
 }
 
+//Unhighlights when piece is clicked on
 function unhighlight() {
     if (selected) {
         selected.classList.remove('highlight');
     }
 }
 
+//Highlights piece when clicked on
 function highlight() {
     if (selected) {
         selected.classList.add('highlight');
     }
 }
 
+//Rotates the board 
 function rotate() {
     board.classList.toggle('flip')  /*toggles the flip css package  which rotates the board 180 degrees*/
 }
 
+//Highlights king when in check
 function highlightcheck(currentcoord) {
     currentcoord.classList.add('checkhighlight')
 
 }
 
+//Unhighlights king when king is not in check
 function unhighlightcheck(allsquares) {
     allsquares.classList.remove('checkhighlight')
 
 }
 
+//Gets all the valid moves of all the white pieces on the board
 function getallwhitemoves() {
     let allmoves = [];
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
@@ -281,6 +297,7 @@ function getallwhitemoves() {
     return allmoves.flat();
 }
 
+//Gets all the valid moves of all the black pieces on the board
 function getallblackmoves() {
     let allmoves = [];
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
@@ -314,6 +331,7 @@ function getallblackmoves() {
     return allmoves.flat();
 }
 
+//Depending on what piece is selected, it returns the valid moves for that piece
 function getpossiblemoves(piece, startingsquareid, piececolour) {
     if (piece.classList.contains('pawn')) {
         return pawnmoves(piececolour, startingsquareid);
@@ -347,15 +365,17 @@ function getpossiblemoves(piece, startingsquareid, piececolour) {
     }
 }
 
+//Checks if there is a piece on the square, if there is returns the colour of that piece. Else it returns 'empty' 
 function onsquare(square) {
-    if (square.querySelector('.piece') !== null) {               /* checks if anything is on the target square*/
-        const pcolour = (square.querySelector('.piece')).getAttribute('colour');     /* if there is something on the square then it gets the colour of it and returns it*/
+    if (square.querySelector('.piece') !== null) {               
+        const pcolour = (square.querySelector('.piece')).getAttribute('colour');     
         return pcolour;
     } else {
         return 'empty';
     }
 }
 
+//Returns what piece is on the square, else returns 'empty'
 function whatpiece(squared) {
     if (squared.querySelector('.piece') !== null) {
         const x = (squared.querySelector('.piece')).getAttribute('data-type');
@@ -365,6 +385,7 @@ function whatpiece(squared) {
     }
 }
 
+//Checks if a square is empty or occupied
 function isempty(coord) {
     let square = document.getElementById(coord)
     if (square.querySelector('.piece') == null) {
@@ -374,6 +395,7 @@ function isempty(coord) {
     }
 }
 
+//Returns all the legal moves for the pawn that is selected
 function pawnmoves(piececolour, startingsquareid) { /* A function which checks the square infront of the pawn. If occupied then no legal moves, if not then there is legal move forward 1 place. if on the 2nd or 7th rank then checks the next square.*/
     let legalmoves = [];
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
@@ -479,7 +501,7 @@ function pawnmoves(piececolour, startingsquareid) { /* A function which checks t
         return legalmoves;
     }
 }
-
+//returns only the forward legal moves for the pawn that is selected
 function simpawnforwards(piececolour, startingsquareid) {
     let legalmoves = [];
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
@@ -520,6 +542,7 @@ function simpawnforwards(piececolour, startingsquareid) {
     }
 }
 
+//Returns all valid knight moves
 function knightmoves(piececolour, startingsquareid) {
     let legalmoves = [];
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
@@ -561,6 +584,7 @@ function knightmoves(piececolour, startingsquareid) {
     return legalmoves;
 }
 
+//Returns all valid bishop moves
 function bishopmoves(piececolour, startingsquareid) {
     let legalmoves = [];
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
@@ -737,6 +761,7 @@ function bishopmoves(piececolour, startingsquareid) {
 
 }
 
+//Returns all valid rook moves
 function rookmoves(piececolour, startingsquareid) {
     let legalmoves = [];
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
@@ -897,6 +922,7 @@ function rookmoves(piececolour, startingsquareid) {
 
 }
 
+//Returns all valid queen moves
 function queenmoves(piececolour, startingsquareid) {
     let legalmoves = [];
 
@@ -912,6 +938,7 @@ function queenmoves(piececolour, startingsquareid) {
     return legalmoves;
 }
 
+//Returns all valid king moves including not moving into a check
 function kingmoves(piececolour, startingsquareid) {
     let blackmoves = getallblackmoves();
     let whitemoves = getallwhitemoves();
@@ -963,6 +990,7 @@ function kingmoves(piececolour, startingsquareid) {
     return legalmoves;
 }
 
+//Returns the coordinate of a pawn that is on a promotion square
 function promotion() {
     let allsquare = Array.from(document.getElementsByClassName('square'));
     for (let i = 1; i < allsquare.length + 1; i++) {
@@ -982,6 +1010,7 @@ function promotion() {
     }
 };
 
+//Changes the pawn to a queen with the queens valid moves
 function pawnpromote(square) {
     const changepawn = square.querySelector('.piece');
     const image = changepawn.querySelector('img');
@@ -995,7 +1024,8 @@ function pawnpromote(square) {
     }
 }
 
-function isincheck() { /* returns the colour of the king that is in check */
+//Returns the colour of the king that is in check
+function isincheck() { 
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
     for (let i = 1; i < tempallsquares.length + 1; i++) {
         let row = 8 - Math.floor((i - 1) / 8);
@@ -1022,7 +1052,8 @@ function isincheck() { /* returns the colour of the king that is in check */
     }
 }
 
-function incheck() { /* checks if the king is in check after every move */
+//Checks if the king is in check after each move
+function incheck() { 
     let allvalidwhite = getallwhitemoves();
     let allvalidblack = getallblackmoves();
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
@@ -1057,6 +1088,7 @@ function incheck() { /* checks if the king is in check after every move */
     }
 }
 
+//Gets the position of the king that is in check
 function getkingposcheck() {
     let kingcheck = isincheck();
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
@@ -1080,6 +1112,7 @@ function getkingposcheck() {
     }
 }
 
+//Gets the position of the black king
 function getblackkingposition() {
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
     for (let i = 1; i < tempallsquares.length + 1; i++) {
@@ -1098,6 +1131,7 @@ function getblackkingposition() {
     }
 }
 
+//Gets the position of the white king
 function getwhitekingposition() {
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
     tempallsquares = tempallsquares.reverse()
@@ -1117,6 +1151,7 @@ function getwhitekingposition() {
     }
 }
 
+//Depending on which piece is selected returns valid moves for that piece when king is in check
 function getsafekingmoves(piece, piececolour, startingsquareid) {
     if (piece.classList.contains('king')) {
         let kingsmoves = kingmoves(piececolour, startingsquareid);
@@ -1146,6 +1181,7 @@ function getsafekingmoves(piece, piececolour, startingsquareid) {
     }
 }
 
+//Filters the legal moves and only returns the ones that can be used to block a check
 function getblockingmoves(piececolour, piece, startingsquareid, newpos) {
     let kingpos = getkingposcheck();
     let kingcolour = isincheck();
@@ -1216,6 +1252,7 @@ function getblockingmoves(piececolour, piece, startingsquareid, newpos) {
     }
 }
 
+//Returns the coordinates of the x-axis and y-axis squares that are inbetween the king and another piece
 function getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour) {
     let middle = []
     let kfile = kingpos.charAt(0) /*position of king*/
@@ -1304,6 +1341,7 @@ function getxymiddlemoves(piececolour, startingsquareid, kingpos, startings, kin
     return middle
 }
 
+//Returns the coordinates of the diagonal squares that are inbetween the king and another piece
 function getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, kingcolour) {
     let middle = []
     let kfile = kingpos.charAt(0)
@@ -1383,6 +1421,7 @@ function getdiagmiddlemoves(piececolour, startingsquareid, kingpos, startings, k
     return middle
 }
 
+//Returns which castle is valid, including the colour and whether it is king or queen side
 function castlingvalid(piececolour, startingsquareid) {
     let valid = []
     let kingpos = startingsquareid
@@ -1410,6 +1449,7 @@ function castlingvalid(piececolour, startingsquareid) {
     return valid
 }
 
+//Returns the legal castle move
 function castlemoves(piececolour, startingsquareid) {
     let legalmoves = []
     let blackmoves = getallblackmoves();
@@ -1434,6 +1474,7 @@ function castlemoves(piececolour, startingsquareid) {
     return legalmoves
 }
 
+//Moves the rook depending on the position of the king after it has castled
 function moverook(squareid) {
     let kingto = squareid
     let rookfrom = null
@@ -1460,6 +1501,7 @@ function moverook(squareid) {
     tosquare.appendChild(rook)
 }
 
+//Returns only the diagonal capturing moves of the pawn that is selected
 function simpawndiag(coord) {
     let moves = []
     if (whiteturn == true) {
@@ -1527,6 +1569,7 @@ function simpawndiag(coord) {
     return moves
 }
 
+//Makes sure that the king can only have legal moves when in check
 function savingking(newpos) {
     let returnmoves = []
     let coord = newpos.id
@@ -1572,6 +1615,7 @@ function savingking(newpos) {
     return returnmoves
 }
 
+//Checks only the diagonal pawn moves for the pawn selected
 function pawncheck(coord) {
     let moves = []
     if (whiteturn == false) {
@@ -1632,6 +1676,7 @@ function pawncheck(coord) {
     return moves
 }
 
+//returns the number of kings on the board
 function manykings() {
     let count = 0
     let tempallsquares = Array.from(document.getElementsByClassName('square'));
@@ -1651,6 +1696,7 @@ function manykings() {
     return count
 }
 
+//Returns the coordinates of the pieces that are pinned to the king
 function pinnedpieces() {
     let piecepinsquare = []
     let blockers = []
@@ -1736,6 +1782,7 @@ function pinnedpieces() {
     return blockers.flat()
 }
 
+//Simulates and returns rook moves, where the legal moves dont stop when encountering a piece of the opposite colour
 function rookmovessim(piececolour, startingsquareid) {
     let legalmoves = [];
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
@@ -1896,6 +1943,7 @@ function rookmovessim(piececolour, startingsquareid) {
 
 }
 
+//Simulates and returns bishop moves, where the legal moves dont stop when encountering a piece of the opposite colour
 function bishopmovessim(piececolour, startingsquareid) {
     let legalmoves = [];
     const file = startingsquareid.charAt(0);    /*gets the file of the current square the piece is on */
@@ -2071,6 +2119,7 @@ function bishopmovessim(piececolour, startingsquareid) {
     return legalmoves;
 }
 
+//If the piece pinning the king and the king are on the same file, then the pinned piece can move forward if legal
 function pinfilterpawnforward() {
     let legalmoves = []
     let blocks = pinnedpieces()
@@ -2096,11 +2145,13 @@ function pinfilterpawnforward() {
     return legalmoves.flat()
 }
 
+//function to play audio
 function audio(path) {
     let audio = new Audio(path)
     audio.play()
 }
 
+//Function to remove all pieces around the taken piece in atomic mode
 function atomiccapture(square) {
     const movedirection = [
         [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]
